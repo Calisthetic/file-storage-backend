@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen();
 // DB context
 builder.Services.AddEntityFrameworkNpgsql()
     .AddDbContext<ApiDbContext>(opt => 
-        opt.UseNpgsql(builder.Configuration.GetConnectionString("SampleDbConnection")));
+        opt.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection")).UseSnakeCaseNamingConvention());
 
 var app = builder.Build();
 

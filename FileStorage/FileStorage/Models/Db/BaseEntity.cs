@@ -1,7 +1,6 @@
-﻿namespace FileStorage.Models.Db
+﻿namespace FileStorage.Models.Db;
+
+public class BaseEntity
 {
-    public class BaseEntity
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }

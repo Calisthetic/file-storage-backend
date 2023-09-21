@@ -41,3 +41,4 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStorage.pdb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStorage.genruntimeconfig.cache
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\ref\FileStorage.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\EFCore.NamingConventions.dll

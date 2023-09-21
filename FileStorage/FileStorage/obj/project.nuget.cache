@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "4pVn0YevyxrnECWcoLN0cPTmJzw3dDTbqF/ZJHU8zogonEfKWrotn+MeV9YpFBNFiHdTZVmMn2S6rlmbVGreOQ==",
+  "dgSpecHash": "tOOHYfvK1gzkKv02tYzpWJ5GzQL1xD9WD/rUGMs5Nx8KwO90CV15pqK7wDbAB4rfuxyOMaMg57otSlsOLNeK4g==",
   "success": true,
   "projectFilePath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\admin\\.nuget\\packages\\efcore.namingconventions\\7.0.2\\efcore.namingconventions.7.0.2.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.10\\microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.11\\microsoft.entityframeworkcore.7.0.11.nupkg.sha512",
