@@ -21,6 +21,7 @@ namespace FileStorage.Data
         public virtual DbSet<ElectedFolder> ElectedFolders { get; set; }
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<Models.Db.File> Files { get; set; }
+        public virtual DbSet<FileType> FileTypes { get; set; }
         public virtual DbSet<Folder> Folders { get; set; }
         public virtual DbSet<FolderLink> FolderLinks { get; set; }
         public virtual DbSet<Log> Logs { get; set; }
@@ -127,10 +128,19 @@ namespace FileStorage.Data
                     .HasForeignKey(d => d.FolderId)
                     .HasConstraintName("FK_Files_Folders");
 
+                entity.HasOne(d => d.FileType).WithMany(p => p.Files)
+                    .HasForeignKey(d => d.FileTypeId)
+                    .HasConstraintName("FK_Files_FileTypes");
+
                 entity.HasOne(d => d.User).WithMany(p => p.Files)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Files_Users");
+            });
+
+            modelBuilder.Entity<FileType>(entity =>
+            {
+                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Folder>(entity =>

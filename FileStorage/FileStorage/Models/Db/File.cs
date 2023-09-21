@@ -8,6 +8,8 @@ public partial class File : BaseEntity
 
     public int UserId { get; set; }
 
+    public int FileTypeId { get; set; }
+
     public bool IsDeleted { get; set; }
 
     public DateTime CreatedAt { get; set; }
@@ -19,6 +21,8 @@ public partial class File : BaseEntity
     public virtual Folder? Folder { get; set; }
 
     public virtual User User { get; set; } = null!;
+
+    public virtual FileType FileType { get; set; } = null!;
 
     public virtual ICollection<ViewOfFile> ViewsOfFiles { get; set; } = new List<ViewOfFile>();
 }
