@@ -1,4 +1,6 @@
-﻿using Mapster;
+﻿using FileStorage.Models.Db;
+using FileStorage.Models.Outcoming;
+using Mapster;
 
 namespace FileStorage.Utils.Mappers
 {
@@ -6,7 +8,10 @@ namespace FileStorage.Utils.Mappers
     {
         public void Register(TypeAdapterConfig config)
         {
-            
+            // Users
+            config.NewConfig<User, UserInfoDto>()
+                .Map(dto => dto.PrimaryEmail, res => res.PrimaryEmail == null ? "" : res.PrimaryEmail.Name)
+                .RequireDestinationMemberSource(true);
         }
     }
 }

@@ -42,7 +42,7 @@ var tokenValidationParameter = new TokenValidationParameters()
     ValidateIssuer = false, // for dev
     ValidateAudience = false, // for dev
     RequireExpirationTime = false, // no refresh tokens
-    ValidateLifetime = true,
+    ValidateLifetime = false,
     ClockSkew = TimeSpan.Zero,
 };
 

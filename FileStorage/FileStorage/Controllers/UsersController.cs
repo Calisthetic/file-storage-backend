@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using FileStorage.Models.Incoming;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace FileStorage.Controllers
 {
@@ -44,6 +45,7 @@ namespace FileStorage.Controllers
 
         // GET: api/Users
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
           if (_context.Users == null)
@@ -154,12 +156,12 @@ namespace FileStorage.Controllers
             if (_context.Users == null)
                 return new JsonResult("Something went wrong") { StatusCode = 500 };
 
+            // Search by (email || username) && password
             var existUser = await _context.Users.Include(x => x.PrimaryEmail)
-                .FirstOrDefaultAsync(x => (x.Username == user.Login || x.PrimaryEmail.Name == user.Login) && x.Password == user.Password);
+                .FirstOrDefaultAsync(x => (x.Username == user.Login || (x.PrimaryEmail != null && x.PrimaryEmail.Name == user.Login)) && x.Password == user.Password);
             if (existUser == null)
                 return NotFound();
 
-            //return Ok(existUser);
             return Ok(await GenerateToken(existUser));
         }
 
@@ -172,14 +174,40 @@ namespace FileStorage.Controllers
                 return new JsonResult("Something went wrong") { StatusCode = 500 };
 
             var existUser = await _context.Users.Include(x => x.PrimaryEmail)
-                .FirstOrDefaultAsync(x => x.PrimaryEmail.Name == user.Email && x.Password == user.Password);
-            if (existUser == null)
-                return BadRequest(new ErrorDto()
-                {
-                    Message = "User already exists"
-                });
+                .FirstOrDefaultAsync(x => x.PrimaryEmail != null && x.PrimaryEmail.Name == user.Email && x.Password == user.Password);
+            if (existUser != null)
+            {
+                return BadRequest(new ErrorDto() { Message = "User already exists" });
+            }
 
-            return Ok(await GenerateToken(existUser));
+            // Add user
+            var newUser = new User()
+            {
+                FirstName = user.FirstName,
+                SecondName = user.SecondName,
+                Password = user.Password,
+                About = user.About,
+                CreatedAt = DateTime.Now,
+                IsBlocked = false,
+            };
+            await _context.Users.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+
+            // Add email
+            var newEmail = new Email()
+            {
+                IsVerify = true,
+                Name = user.Email,
+                UserId = newUser.Id
+            };
+            await _context.Emails.AddAsync(newEmail);
+            await _context.SaveChangesAsync();
+
+            // Set primary email
+            newUser.PrimaryEmailId = newEmail.Id;
+            await _context.SaveChangesAsync();
+
+            return Ok(await GenerateToken(newUser));
         }
 
         private async Task<UserAuthResultDto> GenerateToken(User user)
@@ -190,7 +218,7 @@ namespace FileStorage.Controllers
             var claims = new List<Claim>()
             {
                 new Claim(type:"Id", value: user.Id.ToString()),
-                new Claim(ClaimTypes.Role, "Guest"),
+                new Claim(ClaimTypes.Role, "Client"),
                 new Claim(JwtRegisteredClaimNames.Sub, user.PrimaryEmail.Name),
                 new Claim(JwtRegisteredClaimNames.Email, user.PrimaryEmail.Name),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
