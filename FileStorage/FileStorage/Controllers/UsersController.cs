@@ -20,8 +20,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using FileStorage.Models.Incoming;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FileStorage.Models.Incoming.User;
+using FileStorage.Services;
 
 namespace FileStorage.Controllers
 {
@@ -29,33 +30,32 @@ namespace FileStorage.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly TokenValidationParameters _tokenValidationParameters;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly ApiDbContext _context;
 
         public UsersController(ApiDbContext context, IMapper mapper,
-            IConfiguration configuration, TokenValidationParameters tokenValidationParameters)
+            IConfiguration configuration, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
             _configuration = configuration;
-            _tokenValidationParameters = tokenValidationParameters;
+            _userService = userService;
         }
 
-        // GET: api/Users
+        // GET: api/users
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetUsers()
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            return await _context.Users.ToListAsync();
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            return await _mapper.From(_context.Users.Include(x => x.PrimaryEmail)).ProjectToType<UserInfoDto>().ToListAsync();
         }
 
-        // GET: api/Users/5
+        // GET: api/users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -73,7 +73,7 @@ namespace FileStorage.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
+        // PUT: api/users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
@@ -104,22 +104,52 @@ namespace FileStorage.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        [HttpPatch("username")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PathUserUsername(UserPatchUsernameDto newName)
         {
-          if (_context.Users == null)
-          {
-              return Problem("Entity set 'ApiDbContext.Users'  is null.");
-          }
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            currentUser.Username = newName.Username;
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
-        // DELETE: api/Users/5
+        [HttpPatch("birthday"), Authorize]
+        public async Task<IActionResult> PathUserBirthday(UserPatchBirthdayDto newBirthday)
+        {
+            if (!int.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id")?.Value, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            if (!DateTime.TryParse(newBirthday.Birthday, out DateTime result))
+            {
+                return BadRequest("Wrong data type");
+            }
+
+            var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
+            currentUser.Birthday = result;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // DELETE: api/users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -217,7 +247,7 @@ namespace FileStorage.Controllers
 
             var claims = new List<Claim>()
             {
-                new Claim(type:"Id", value: user.Id.ToString()),
+                new Claim(type:"id", value: user.Id.ToString()),
                 new Claim(ClaimTypes.Role, "Client"),
                 new Claim(JwtRegisteredClaimNames.Sub, user.PrimaryEmail.Name),
                 new Claim(JwtRegisteredClaimNames.Email, user.PrimaryEmail.Name),
@@ -251,21 +281,6 @@ namespace FileStorage.Controllers
                 Token = jwtToken,
                 UserInfo = user.Adapt<UserInfoDto>(),
             };
-        }
-
-        private DateTime UnixTimeStampToDateTime(long unixTimaStamp)
-        {
-            var dateTimeVal = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTimeVal = dateTimeVal.AddSeconds(unixTimaStamp).ToUniversalTime();
-            return dateTimeVal;
-        }
-
-        private string RandomStringGeneration(int length)
-        {
-            var random = new Random();
-            var chars = "ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890abcdefghijklmnoprstuvwxyz_";
-
-            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

@@ -1,6 +1,7 @@
 using FileStorage.Data;
+using FileStorage.Services;
+using FileStorage.Services.Mappers;
 using FileStorage.Utils;
-using FileStorage.Utils.Mappers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -60,7 +61,11 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddSingleton(tokenValidationParameter);
 
-// Created at... ???
+// Read user claims
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserService, UserService>();
+
+// Don't remove "Async" from names
 builder.Services.AddMvc(options =>
 {
     options.SuppressAsyncSuffixInActionNames = false;
