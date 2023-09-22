@@ -56,7 +56,7 @@ namespace FileStorage.Utils
 
             ErrorDto badResponse = new ErrorDto()
             {
-                Error = message,
+                Message = message,
                 Exception = ex.Message //ex.GetType().Name
             };
 
