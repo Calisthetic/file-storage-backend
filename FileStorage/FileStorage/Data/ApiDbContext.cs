@@ -223,6 +223,7 @@ namespace FileStorage.Data
                 entity.Property(e => e.Password).HasMaxLength(20);
                 entity.Property(e => e.SecondName).HasMaxLength(20);
                 entity.Property(e => e.Username).HasMaxLength(20);
+                entity.Property(e => e.Birthday).HasColumnType("timestamp");
 
                 entity.HasOne(d => d.PrimaryEmail).WithMany(p => p.Users)
                     .HasForeignKey(d => d.PrimaryEmailId)

@@ -2,11 +2,6 @@
 
 public class User : BaseEntity
 {
-    public User()
-    {
-        Emails = new HashSet<Email>();
-    }
-
     public string? Username { get; set; }
 
     public string FirstName { get; set; } = null!;
@@ -14,6 +9,8 @@ public class User : BaseEntity
     public string SecondName { get; set; } = null!;
 
     public string? About { get; set; }
+
+    public DateTime? Birthday { get; set; }
 
     public string Password { get; set; } = null!;
 
