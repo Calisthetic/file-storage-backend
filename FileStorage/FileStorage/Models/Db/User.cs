@@ -21,7 +21,7 @@ public class User : BaseEntity
 
     public DateTime CreatedAt { get; set; }
 
-    public int PrimaryEmailId { get; set; }
+    public int? PrimaryEmailId { get; set; }
 
     public bool IsBlocked { get; set; }
 
@@ -41,7 +41,7 @@ public class User : BaseEntity
 
     public virtual ICollection<Folder> Folders { get; set; } = new List<Folder>();
 
-    public virtual Email PrimaryEmail { get; set; } = null!;
+    public virtual Email? PrimaryEmail { get; set; }
 
     public virtual ICollection<TariffOfUser> TariffsOfUsers { get; set; } = new List<TariffOfUser>();
 
