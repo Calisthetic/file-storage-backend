@@ -2,7 +2,7 @@
 using FileStorage.Models.Outcoming;
 using Mapster;
 
-namespace FileStorage.Utils.Mappers
+namespace FileStorage.Services.Mappers
 {
     public class RegisterMapper : IRegister
     {

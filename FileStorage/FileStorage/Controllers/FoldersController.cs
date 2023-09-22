@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FileStorage.Data;
 using FileStorage.Models.Db;
+using FileStorage.Models.Incoming;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FileStorage.Controllers
 {
@@ -84,16 +86,30 @@ namespace FileStorage.Controllers
         // POST: api/Folders
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Folder>> PostFolder(Folder folder)
+        [Authorize]
+        public async Task<ActionResult<Folder>> PostFolder(FolderCreateDto folder)
         {
-          if (_context.Folders == null)
-          {
-              return Problem("Entity set 'ApiDbContext.Folders'  is null.");
-          }
-            _context.Folders.Add(folder);
+            if (_context.Folders == null)
+            {
+                return Problem("Entity set 'ApiDbContext.Folders'  is null.");
+            }
+            if (!int.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id")?.Value, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var newFolder = new Folder()
+            {
+                Name = folder.Name,
+                UpperFolderId = folder.UpperFolderId,
+                IsDeleted = false,
+                CreatedAt = DateTime.Now,
+                UserId = userId
+            };
+            _context.Folders.Add(newFolder);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetFolder", new { id = folder.Id }, folder);
+            return CreatedAtAction("GetFolder", new { id = newFolder.Id }, newFolder);
         }
 
         // DELETE: api/Folders/5
@@ -119,6 +135,14 @@ namespace FileStorage.Controllers
         private bool FolderExists(int id)
         {
             return (_context.Folders?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private string RandomStringGeneration(int length)
+        {
+            var random = new Random();
+            var chars = "ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890abcdefghijklmnoprstuvwxyz_";
+
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

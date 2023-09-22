@@ -125,15 +125,16 @@ namespace FileStorage.Controllers
             return NoContent();
         }
 
-        [HttpPatch("birthday"), Authorize]
+        [HttpPatch("birthday")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PathUserBirthday(UserPatchBirthdayDto newBirthday)
         {
-            if (!int.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id")?.Value, out int userId))
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
             {
                 return Unauthorized();
             }
 
-            if (!DateTime.TryParse(newBirthday.Birthday, out DateTime result))
+            if (!DateTime.TryParse(newBirthday.Birthday, out DateTime result)) // 22/12/2011
             {
                 return BadRequest("Wrong data type");
             }
@@ -278,7 +279,7 @@ namespace FileStorage.Controllers
 
             return new UserAuthResultDto()
             {
-                Token = jwtToken,
+                Token = "Bearer " + jwtToken,
                 UserInfo = user.Adapt<UserInfoDto>(),
             };
         }

@@ -1,4 +1,4 @@
-﻿namespace FileStorage.Models.Incoming
+﻿namespace FileStorage.Models.Incoming.User
 {
     public class UserSignInDto
     {

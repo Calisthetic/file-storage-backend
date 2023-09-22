@@ -2,7 +2,7 @@
 using MapsterMapper;
 using System.Reflection;
 
-namespace FileStorage.Utils.Mappers
+namespace FileStorage.Services.Mappers
 {
     public static class AddMappingDependency
     {
