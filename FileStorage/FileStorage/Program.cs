@@ -1,5 +1,6 @@
 using FileStorage.Data;
 using FileStorage.Utils;
+using FileStorage.Utils.Mappers;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -17,12 +18,18 @@ builder.Services.AddEntityFrameworkNpgsql()
     .AddDbContext<ApiDbContext>(opt => 
         opt.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection")).UseSnakeCaseNamingConvention());
 
+// Register mapper
+builder.Services.AddMappings();
+
 // Response compression
 builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
+
+// Response style
 builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // null
 });
+
 // CORS
 var MyAllowSpecificOrigins = "MyPolicy";
 builder.Services.AddCors(options =>
