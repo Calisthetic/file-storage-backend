@@ -1,5 +1,7 @@
 using FileStorage.Data;
+using FileStorage.Utils;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,23 @@ builder.Services.AddEntityFrameworkNpgsql()
     .AddDbContext<ApiDbContext>(opt => 
         opt.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection")).UseSnakeCaseNamingConvention());
 
+// Response compression
+builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
+builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
+{
+    opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // null
+});
+// CORS
+var MyAllowSpecificOrigins = "MyPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,5 +48,14 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Added
+app.UseAuthentication();
+
+app.UseMiddleware<ExceptionHandingMiddleware>();
+
+app.UseResponseCompression();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.Run();

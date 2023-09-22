@@ -22,4 +22,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Incoming\" />
+    <Folder Include="Models\Both\" />
+  </ItemGroup>
+
 </Project>
