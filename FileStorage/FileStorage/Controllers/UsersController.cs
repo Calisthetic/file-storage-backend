@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FileStorage.Data;
 using FileStorage.Models.Db;
 using FileStorage.Models.Outcoming;
-//using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -16,10 +10,6 @@ using System.IdentityModel.Tokens.Jwt;
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FileStorage.Models.Incoming.User;
 using FileStorage.Services;
@@ -104,9 +94,9 @@ namespace FileStorage.Controllers
             return NoContent();
         }
 
-        [HttpPatch("username")]
+        [HttpPatch("profile")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PathUserUsername(UserPatchUsernameDto newName)
+        public async Task<IActionResult> PathUserProfile(UserPatchProfileDto newData)
         {
 
             if (!int.TryParse(_userService.GetUserId(), out int userId))
@@ -120,23 +110,30 @@ namespace FileStorage.Controllers
                 return Unauthorized();
             }
 
-            currentUser.Username = newName.Username;
+            if (newData.Username != null)
+                currentUser.Username = newData.Username;
+            if (newData.PrimaryEmailId is not null)
+                if (EmailExists((int)newData.PrimaryEmailId))
+                    currentUser.PrimaryEmailId = newData.PrimaryEmailId;
+            if (newData.About is not null)
+                currentUser.About = newData.About;
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        [HttpPatch("birthday")]
+        [HttpPatch("account")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PathUserBirthday(UserPatchBirthdayDto newBirthday)
+        public async Task<IActionResult> PathUserBirthday(UserPatchAccountDto newData)
         {
             if (!int.TryParse(_userService.GetUserId(), out int userId))
             {
                 return Unauthorized();
             }
 
-            if (!DateTime.TryParse(newBirthday.Birthday, out DateTime result)) // 22/12/2011
+            if (!DateTime.TryParse(newData.Birthday, out DateTime result)) // 22/12/2011
             {
-                return BadRequest("Wrong data type");
+                return BadRequest("Wrong date type");
             }
 
             var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
@@ -145,7 +142,14 @@ namespace FileStorage.Controllers
                 return Unauthorized();
             }
 
-            currentUser.Birthday = result;
+            if (newData.Birthday != null)
+                currentUser.Birthday = result;
+            if (newData.FirstName != null)
+                currentUser.FirstName = newData.FirstName;
+            if (newData.SecondName != null)
+                currentUser.SecondName = newData.SecondName;
+            // work with emails !!!
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -173,6 +177,10 @@ namespace FileStorage.Controllers
         private bool UserExists(int id)
         {
             return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        private bool EmailExists(int id)
+        {
+            return (_context.Emails?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
 

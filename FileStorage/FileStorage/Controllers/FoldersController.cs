@@ -1,140 +1,246 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FileStorage.Data;
 using FileStorage.Models.Db;
-using FileStorage.Models.Incoming;
+using FileStorage.Services;
+using MapsterMapper;
+using FileStorage.Models.Incoming.Folder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/folders")]
     [ApiController]
     public class FoldersController : ControllerBase
     {
+        private readonly IUserService _userService;
         private readonly ApiDbContext _context;
+        private readonly IMapper _mapper;
 
-        public FoldersController(ApiDbContext context)
+        public FoldersController(ApiDbContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
+            _mapper = mapper;
+            _userService = userService;
         }
 
-        // GET: api/Folders
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Folder>>> GetFolders()
+        // GET: api/folders/{token}
+        [HttpGet("{token}")]
+        public async Task<ActionResult<Folder>> GetFolder(string token)
         {
-          if (_context.Folders == null)
-          {
-              return NotFound();
-          }
-            return await _context.Folders.ToListAsync();
-        }
-
-        // GET: api/Folders/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Folder>> GetFolder(int id)
-        {
-          if (_context.Folders == null)
-          {
-              return NotFound();
-          }
-            var folder = await _context.Folders.FindAsync(id);
-
-            if (folder == null)
+            if (_context.Folders == null)
             {
                 return NotFound();
             }
 
-            return folder;
+            // Search folder
+            var currentFolder = await _context.Folders.Include(x => x.AccessType).FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            if (userId != null)
+            {
+                // Owner check
+                if (userId == currentFolder.UserId)
+                {
+                    return Ok();
+                }
+            }
+            // (don't) Require auth check
+            if (currentFolder.AccessType != null && currentFolder.AccessType.RequireAuth == false)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
-        // PUT: api/Folders/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFolder(int id, Folder folder)
+        // PATCH: api/folders/name/{token}
+        [HttpPatch("name/{token}")]
+        public async Task<IActionResult> PatchFolderName(string token, FolderPatchNameDto folderData)
         {
-            if (id != folder.Id)
+            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
+                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
+            {
+                currentFolder.Name = folderData.Name;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
             {
                 return BadRequest();
             }
-
-            _context.Entry(folder).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FolderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
-        // POST: api/Folders
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        [Authorize]
-        public async Task<ActionResult<Folder>> PostFolder(FolderCreateDto folder)
+        // PATCH: api/folders/access/{token}
+        [HttpPatch("access/{token}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PatchFolderAccess(string token, FolderPatchAccessDto folderData)
         {
-            if (_context.Folders == null)
+            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
             {
-                return Problem("Entity set 'ApiDbContext.Folders'  is null.");
+                return NotFound();
             }
-            if (!int.TryParse(User.Claims.FirstOrDefault(x => x.Type == "Id")?.Value, out int userId))
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
             {
                 return Unauthorized();
             }
 
-            var newFolder = new Folder()
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFolder.UserId)
             {
-                Name = folder.Name,
-                UpperFolderId = folder.UpperFolderId,
+                if (AccessTypeExists(folderData.AccessTypeId))
+                {
+                    currentFolder.AccessTypeId = folderData.AccessTypeId;
+                    await _context.SaveChangesAsync();
+                    return NoContent();
+                }
+                return BadRequest();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        // POST: api/folders
+        [HttpPost]
+        public async Task<ActionResult<Folder>> PostFolder(FolderCreateDto folderData)
+        {
+            if (_context.Folders == null)
+            {
+                return Problem("Entity set 'ApiDbContext.Folders' is null.");
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // Upper folder check
+            if (!string.IsNullOrEmpty(folderData.UpperFolderToken) && folderData.UpperFolderToken != "main")
+            {
+                Folder? upperFolder = await _context.Folders.FirstOrDefaultAsync(x => x.UpperFolder != null && x.UpperFolder.Token == folderData.UpperFolderToken);
+                if (upperFolder == null)
+                {
+                    return BadRequest("Upper folder doesn't exits");
+                }
+                // (don't) Require auth and access check || owner check
+                else if (upperFolder.UserId == userId || (upperFolder.AccessType != null && 
+                    (upperFolder.AccessType.RequireAuth == false || userId != null) && upperFolder.AccessType.CanEdit == true))
+                {
+                    Folder newFolder = await CreateFolder(folderData.Name, userId != null ? (int)userId : upperFolder.UserId, upperFolder.Id);
+                    return CreatedAtAction("GetFolder", new { id = newFolder.Id }, newFolder);
+                }
+                else
+                {
+                    return BadRequest("You're not an owner or haven't acces to create folders");
+                }
+            }
+
+            if (userId != null)
+            {
+                Folder newFolder = await CreateFolder(folderData.Name, (int)userId, null);
+                return CreatedAtAction("GetFolder", new { id = newFolder.Id });
+            }
+            return Unauthorized();
+        }
+        private async Task<Folder> CreateFolder(string name, int userId, int? upperFolderId)
+        {
+            string token = string.Empty;
+            while (string.IsNullOrEmpty(token))
+            {
+                string temp = RandomStringGeneration(32);
+                if (await _context.Folders.Where(x => x.Token == temp).CountAsync() == 0)
+                {
+                    token = temp;
+                }
+            }
+            Folder newFolder = new Folder() {
+                Name = name,
+                UpperFolderId = upperFolderId,
                 IsDeleted = false,
                 CreatedAt = DateTime.Now,
                 UserId = userId
             };
-            _context.Folders.Add(newFolder);
+            await _context.Folders.AddAsync(newFolder);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetFolder", new { id = newFolder.Id }, newFolder);
+            return newFolder;
         }
 
-        // DELETE: api/Folders/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFolder(int id)
+        // DELETE: api/folders/{token}
+        [HttpDelete("{token}")]
+        public async Task<IActionResult> DeleteFolder(string token)
         {
             if (_context.Folders == null)
             {
                 return NotFound();
             }
-            var folder = await _context.Folders.FindAsync(id);
-            if (folder == null)
+            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
             {
                 return NotFound();
             }
+            
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
 
-            _context.Folders.Remove(folder);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
+                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
+            {
+                _context.Folders.Remove(currentFolder);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         private bool FolderExists(int id)
         {
             return (_context.Folders?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        private bool AccessTypeExists(int id)
+        {
+            return (_context.AccessTypes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         private string RandomStringGeneration(int length)
