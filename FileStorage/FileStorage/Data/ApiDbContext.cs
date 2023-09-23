@@ -148,6 +148,9 @@ namespace FileStorage.Data
                 entity.Property(e => e.Color)
                     .HasMaxLength(6)
                     .IsFixedLength();
+                entity.Property(e => e.Token)
+                    .HasMaxLength(32)
+                    .IsFixedLength();
                 entity.Property(e => e.CreatedAt).HasColumnType("timestamp");
                 entity.Property(e => e.Name).HasMaxLength(20);
 
@@ -159,6 +162,10 @@ namespace FileStorage.Data
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Folders_Users");
+
+                entity.HasOne(d => d.AccessType).WithMany(p => p.Folders)
+                    .HasForeignKey(d => d.AccessTypeId)
+                    .HasConstraintName("FK_Folders_AccessTypes");
             });
 
             modelBuilder.Entity<FolderLink>(entity =>
@@ -166,7 +173,7 @@ namespace FileStorage.Data
                 entity.Property(e => e.CreatedAt).HasColumnType("timestamp");
                 entity.Property(e => e.EndAt).HasColumnType("timestamp");
                 entity.Property(e => e.Token)
-                    .HasMaxLength(20)
+                    .HasMaxLength(40)
                     .IsFixedLength();
 
                 entity.HasOne(d => d.AccessType).WithMany(p => p.FolderLinks)

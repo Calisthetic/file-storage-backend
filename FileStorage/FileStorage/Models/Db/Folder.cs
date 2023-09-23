@@ -2,6 +2,8 @@
 
 public partial class Folder : BaseEntity
 {
+    public string Token { get; set; } = null!;
+
     public string Name { get; set; } = null!;
 
     public int? UpperFolderId { get; set; }
@@ -15,6 +17,8 @@ public partial class Folder : BaseEntity
     public bool IsDeleted { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public virtual AccessType? AccessType { get; set; }
 
     public virtual ICollection<DownloadOfFolder> DownloadsOfFolders { get; set; } = new List<DownloadOfFolder>();
 

@@ -11,4 +11,6 @@ public partial class AccessType : BaseEntity
     public bool RequireAuth { get; set; }
 
     public virtual ICollection<FolderLink> FolderLinks { get; set; } = new List<FolderLink>();
+
+    public virtual ICollection<Folder> Folders { get; set; } = new List<Folder>();
 }
