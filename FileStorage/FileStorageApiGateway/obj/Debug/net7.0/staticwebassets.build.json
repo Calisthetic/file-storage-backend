@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "wl8L23BqGsXK4ueT598C+pz1tR+tdpQy/TOb2uZgWU4=",
+  "Source": "FileStorageApiGateway",
+  "BasePath": "_content/FileStorageApiGateway",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
