@@ -7,6 +7,7 @@ using MapsterMapper;
 using FileStorage.Models.Incoming.Folder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 
 namespace FileStorage.Controllers
 {
@@ -196,6 +197,8 @@ namespace FileStorage.Controllers
         /// <returns></returns>
         // POST: api/folders
         [HttpPost]
+        [ActionName(nameof(PostFolder))]
+        [AllowAnonymous]
         public async Task<ActionResult<Folder>> PostFolder(FolderCreateDto folderData)
         {
             if (_context.Folders == null)
@@ -222,8 +225,8 @@ namespace FileStorage.Controllers
                 else if (upperFolder.UserId == userId || (upperFolder.AccessType != null && 
                     (upperFolder.AccessType.RequireAuth == false || userId != null) && upperFolder.AccessType.CanEdit == true))
                 {
-                    Folder newFolder = await CreateFolder(folderData.Name, userId != null ? (int)userId : upperFolder.UserId, upperFolder.Id);
-                    return CreatedAtAction("GetFolder", new { id = newFolder.Id }, newFolder);
+                    Folder newFolder = await CreateFolder(folderData.Name, upperFolder.UserId, upperFolder.Id);
+                    return CreatedAtAction(nameof(PostFolder), new { id = newFolder.Id });
                 }
                 else
                 {
@@ -234,7 +237,7 @@ namespace FileStorage.Controllers
             if (userId != null)
             {
                 Folder newFolder = await CreateFolder(folderData.Name, (int)userId, null);
-                return CreatedAtAction("GetFolder", new { id = newFolder.Id });
+                return CreatedAtAction(nameof(PostFolder), new { id = newFolder.Id });
             }
             return Unauthorized();
         }
@@ -254,7 +257,8 @@ namespace FileStorage.Controllers
                 UpperFolderId = upperFolderId,
                 IsDeleted = false,
                 CreatedAt = DateTime.Now,
-                UserId = userId
+                UserId = userId,
+                Token = token
             };
             await _context.Folders.AddAsync(newFolder);
             await _context.SaveChangesAsync();
