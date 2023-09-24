@@ -6,8 +6,5 @@ namespace FileStorage.Models.Outcoming
     {
         [JsonPropertyName("token")]
         public string Token { get; set; } = null!;
-
-        [JsonPropertyName("user_info")]
-        public UserInfoDto UserInfo { get; set; } = new UserInfoDto();
     }
 }

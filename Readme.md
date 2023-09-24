@@ -1,6 +1,18 @@
-#File storage backend
+# File storage backend
+
+## Project
+
+### Docs
+
+[Database in dbdiagram.io](https://dbdiagram.io/d/64bd4ad502bd1c4a5e8bf005)
 
 ## Dev
+
+### Useful links
+
+[API Gateway Ocelot](https://ocelot.readthedocs.io/en/latest/features/authorization.html)
+[XML tags](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags)
+[Documentation comments](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments)
 
 ### Guides
 

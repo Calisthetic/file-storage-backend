@@ -25,6 +25,11 @@ namespace FileStorage.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Files/Folder inside current folder
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         // GET: api/folders/{token}
         [HttpGet("{token}")]
         public async Task<ActionResult<Folder>> GetFolder(string token)
@@ -67,6 +72,12 @@ namespace FileStorage.Controllers
             }
         }
 
+        /// <summary>
+        /// Rename folder
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="folderData"></param>
+        /// <returns></returns>
         // PATCH: api/folders/name/{token}
         [HttpPatch("name/{token}")]
         public async Task<IActionResult> PatchFolderName(string token, FolderPatchNameDto folderData)
@@ -98,6 +109,52 @@ namespace FileStorage.Controllers
             }
         }
 
+        /// <summary>
+        /// Rename folder
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="folderData"></param>
+        /// <returns></returns>
+        // PATCH: api/folders/name/{token}
+        [HttpPatch("path")]
+        public async Task<IActionResult> PatchFolderPath(FolderPatchPathDto folderData)
+        {
+            // If current && destination folder exists
+            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == folderData.FromFolderToken);
+            Folder? destinationFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == folderData.ToFolderToken);
+            if (currentFolder == null || destinationFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // !!! change later
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
+                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
+            {
+                currentFolder.UpperFolderId = destinationFolder.Id;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Change access type of Folder
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="folderData"></param>
+        /// <returns></returns>
         // PATCH: api/folders/access/{token}
         [HttpPatch("access/{token}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -132,6 +189,11 @@ namespace FileStorage.Controllers
             }
         }
 
+        /// <summary>
+        /// Create Folder
+        /// </summary>
+        /// <param name="folderData"></param>
+        /// <returns></returns>
         // POST: api/folders
         [HttpPost]
         public async Task<ActionResult<Folder>> PostFolder(FolderCreateDto folderData)
@@ -199,6 +261,11 @@ namespace FileStorage.Controllers
             return newFolder;
         }
 
+        /// <summary>
+        /// Delete Folder
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         // DELETE: api/folders/{token}
         [HttpDelete("{token}")]
         public async Task<IActionResult> DeleteFolder(string token)
