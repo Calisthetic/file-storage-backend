@@ -7,39 +7,38 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FileStorage.Data;
 using FileStorage.Models.Db;
+using FileStorage.Models.Incoming.File;
+using FileStorage.Services;
+using System.Diagnostics;
+using System.Drawing;
+using Microsoft.VisualBasic.FileIO;
+using System.Configuration;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/files")]
     [ApiController]
     public class FilesController : ControllerBase
     {
         private readonly ApiDbContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
 
-        public FilesController(ApiDbContext context)
+        public FilesController(ApiDbContext context, IConfiguration configuration, IUserService userService)
         {
             _context = context;
-        }
-
-        // GET: api/Files
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Db.File>>> GetFiles()
-        {
-          if (_context.Files == null)
-          {
-              return NotFound();
-          }
-            return await _context.Files.ToListAsync();
+            _configuration = configuration;
+            _userService = userService;
         }
 
         // GET: api/Files/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Models.Db.File>> GetFile(int id)
         {
-          if (_context.Files == null)
-          {
-              return NotFound();
-          }
+            if (_context.Files == null)
+            {
+                return NotFound();
+            }
             var file = await _context.Files.FindAsync(id);
 
             if (file == null)
@@ -50,64 +49,109 @@ namespace FileStorage.Controllers
             return file;
         }
 
-        // PUT: api/Files/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFile(int id, Models.Db.File @file)
+        // POST: api/Files
+        [HttpPost]
+        [ActionName(nameof(PostFile))]
+        public async Task<IActionResult> PostFile([FromForm] FileCreateDto filesData)
         {
-            if (id != @file.Id)
+            if (_context.Files == null)
+            {
+                return Problem("Entity set 'ApiDbContext.Files' is null.");
+            }
+
+            // Configure path to save
+            string path = _configuration.GetSection("StoragePath").Value!;
+
+            // Check folder and files
+            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == filesData.FolderToken);
+            if (currentFolder == null || filesData.Files.Count == 0)
             {
                 return BadRequest();
             }
 
-            _context.Entry(@file).State = EntityState.Modified;
-
-            try
+            // Check auth user
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FileExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                userId = userIdResult;
             }
 
-            return NoContent();
-        }
-
-        // POST: api/Files
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Models.Db.File>> PostFile(Models.Db.File @file)
-        {
-          if (_context.Files == null)
-          {
-              return Problem("Entity set 'ApiDbContext.Files'  is null.");
-          }
-            _context.Files.Add(@file);
-            try
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
+                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (FileExists(@file.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                // Set path and create if not exists
+                path = path + "\\" + currentFolder.UserId.ToString();
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
 
-            return CreatedAtAction("GetFile", new { id = @file.Id }, @file);
+                long sizeSum = 0;
+                foreach (var file in filesData.Files)
+                {
+                    Debug.WriteLine(file.FileName);
+                    Debug.WriteLine(file.ContentType);
+                    Debug.WriteLine(file.Length);
+                    sizeSum += file.Length;
+                }
+
+                // Usage limits
+                // !!! change later
+                long currentSize = 0;
+                FileInfo[] files = new DirectoryInfo(path).GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    currentSize += file.Length;
+                }
+                if (currentSize + sizeSum > 1000000000)
+                {
+                    return BadRequest("Usage limit");
+                }
+
+                foreach (var file in filesData.Files)
+                {
+                    // Add new if filetype don't exist
+                    var currentFileType = await _context.FileTypes.FirstOrDefaultAsync(x => x.Name == file.ContentType);
+                    if (currentFileType == null)
+                    {
+                        currentFileType = new FileType() { Name = file.ContentType };
+                        _context.FileTypes.Add(currentFileType);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    // Add file to database
+                    var newFile = new Models.Db.File()
+                    {
+                        Name = file.FileName,
+                        FolderId = currentFolder.Id,
+                        UserId = userId ?? currentFolder.UserId,
+                        FileTypeId = currentFileType.Id,
+                        FileSize = file.Length,
+                        IsDeleted = false,
+                        CreatedAt = DateTime.Now
+                    };
+                    _context.Add(newFile);
+                    await _context.SaveChangesAsync();
+
+                    // If file already exists
+                    string newFilePath = path + "\\" + newFile.Id + file.FileName[file.FileName.IndexOf('.')..];
+                    if (Path.Exists(newFilePath))
+                    {
+                        System.IO.File.Delete(newFilePath);
+                    }
+                    // Create file at storage
+                    string filepath = Path.Combine(path, newFile.Id + file.FileName[file.FileName.IndexOf('.')..]);
+                    using (Stream stream = new FileStream(filepath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+
+                return CreatedAtAction(nameof(PostFile), filesData.Files.Count);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: api/Files/5

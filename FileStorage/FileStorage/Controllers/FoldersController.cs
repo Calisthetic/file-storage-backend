@@ -246,7 +246,7 @@ namespace FileStorage.Controllers
             string token = string.Empty;
             while (string.IsNullOrEmpty(token))
             {
-                string temp = RandomStringGeneration(32);
+                string temp = "8" + RandomStringGeneration(31);
                 if (await _context.Folders.Where(x => x.Token == temp).CountAsync() == 0)
                 {
                     token = temp;

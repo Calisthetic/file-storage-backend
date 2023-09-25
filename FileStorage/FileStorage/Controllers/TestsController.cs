@@ -37,5 +37,16 @@ namespace FileStorage.Controllers
             }
             return await _context.Folders.ToListAsync();
         }
+
+        // GET: api/Files
+        [HttpGet("fileTypes")]
+        public async Task<ActionResult<IEnumerable<FileType>>> GetFileTypes()
+        {
+            if (_context.FileTypes == null)
+            {
+                return NotFound();
+            }
+            return await _context.FileTypes.ToListAsync();
+        }
     }
 }
