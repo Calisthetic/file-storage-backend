@@ -61,10 +61,12 @@ namespace FileStorage.Controllers
 
             // Configure path to save
             string path = _configuration.GetSection("StoragePath").Value!;
+            Debug.WriteLine(filesData.FolderToken);
+            Debug.WriteLine(filesData.Files.Count);
 
             // Check folder and files
             var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == filesData.FolderToken);
-            if (currentFolder == null || filesData.Files.Count == 0)
+            if (((currentFolder == null || filesData.Files.Count == 0) && filesData.FolderToken != "main") || filesData.Files.Count == 0)
             {
                 return BadRequest();
             }
@@ -77,11 +79,11 @@ namespace FileStorage.Controllers
             }
 
             // (don't) Require auth and access check || owner check
-            if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
-                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
+            if ((currentFolder != null && (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
+                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))) || filesData.FolderToken == "main")
             {
                 // Set path and create if not exists
-                path = path + "\\" + currentFolder.UserId.ToString();
+                path = path + "\\" + userId.ToString();
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
@@ -122,7 +124,7 @@ namespace FileStorage.Controllers
                     var newFile = new Models.Db.File()
                     {
                         Name = file.FileName,
-                        FolderId = currentFolder.Id,
+                        FolderId = currentFolder?.Id,
                         UserId = userId ?? currentFolder.UserId,
                         FileTypeId = currentFileType.Id,
                         FileSize = file.Length,

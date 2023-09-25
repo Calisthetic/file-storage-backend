@@ -230,6 +230,47 @@ namespace FileStorage.Controllers
         }
 
         /// <summary>
+        /// Elect folder
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        // PATCH: api/folder/elect/{token}
+        [HttpPatch("elect/{token}")]
+        public async Task<IActionResult> PatchFolderElect(string token)
+        {
+            // If current && destination folder exists
+            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var currentElect = await _context.ElectedFolders.FirstOrDefaultAsync(x => x.UserId == userId && x.FolderId == currentFolder.Id);
+            // !!! change later
+            // owner check || access check
+            if (userId == currentFolder.UserId || currentFolder.AccessType != null)
+            {
+                if (currentElect == null)
+                {
+                    await _context.ElectedFolders.AddAsync(new ElectedFolder() { FolderId = currentFolder.Id, UserId = userId });
+                }
+                else
+                {
+                    _context.ElectedFolders.Remove(currentElect);
+                }
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            return BadRequest();
+        }
+
+        /// <summary>
         /// Change access type of Folder
         /// </summary>
         /// <param name="token"></param>
