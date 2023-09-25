@@ -16,7 +16,7 @@ using System.Configuration;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/files")]
+    [Route("api/file")]
     [ApiController]
     public class FilesController : ControllerBase
     {
@@ -31,7 +31,7 @@ namespace FileStorage.Controllers
             _userService = userService;
         }
 
-        // GET: api/Files/5
+        // GET: api/file/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Models.Db.File>> GetFile(int id)
         {
@@ -49,7 +49,7 @@ namespace FileStorage.Controllers
             return file;
         }
 
-        // POST: api/Files
+        // POST: api/file
         [HttpPost]
         [ActionName(nameof(PostFile))]
         public async Task<IActionResult> PostFile([FromForm] FileCreateDto filesData)
@@ -154,7 +154,7 @@ namespace FileStorage.Controllers
             }
         }
 
-        // DELETE: api/Files/5
+        // DELETE: api/file/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFile(int id)
         {

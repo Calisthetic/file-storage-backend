@@ -8,10 +8,14 @@ using FileStorage.Models.Incoming.Folder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
+using FileStorage.Models.Outcoming.Folder;
+using FileStorage.Models.Outcoming;
+using Mapster;
+using FileStorage.Models.Outcoming.File;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/folders")]
+    [Route("api/folder")]
     [ApiController]
     public class FoldersController : ControllerBase
     {
@@ -31,18 +35,11 @@ namespace FileStorage.Controllers
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        // GET: api/folders/{token}
+        // GET: api/folder/{token}
         [HttpGet("{token}")]
-        public async Task<ActionResult<Folder>> GetFolder(string token)
+        public async Task<ActionResult<FolderValuesDto>> GetFolder(string token)
         {
             if (_context.Folders == null)
-            {
-                return NotFound();
-            }
-
-            // Search folder
-            var currentFolder = await _context.Folders.Include(x => x.AccessType).FirstOrDefaultAsync(x => x.Token == token);
-            if (currentFolder == null)
             {
                 return NotFound();
             }
@@ -54,18 +51,63 @@ namespace FileStorage.Controllers
                 userId = userIdResult;
             }
 
-            if (userId != null)
+            if (userId != null && token == "main")
             {
-                // Owner check
-                if (userId == currentFolder.UserId)
+                var folders = await _mapper.From(
+                    _context.Folders.Where(x => x.UserId == userId && x.UpperFolderId == null && x.IsDeleted == false)
+                    .Include(x => x.Files)
+                    .Include(x => x.DownloadsOfFolders)
+                    .Include(x => x.ViewsOfFolders)
+                    .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
+                    .Include(x => x.AccessType)
+                ).ProjectToType<FolderInfoDto>().ToListAsync();
+
+                var files = await _mapper.From(
+                    _context.Files.Where(x => x.UserId == userId && x.FolderId == null && x.IsDeleted == false)
+                    .Include(x => x.DownloadsOfFiles)
+                    .Include(x => x.ViewsOfFiles)
+                    .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
+                    .Include(x => x.FileType)
+                ).ProjectToType<FileInfoDto>().ToListAsync();
+
+                return Ok(new FolderValuesDto()
                 {
-                    return Ok();
-                }
+                    Folders = folders,
+                    Files = files,
+                });
             }
-            // (don't) Require auth check
-            if (currentFolder.AccessType != null && currentFolder.AccessType.RequireAuth == false)
+
+            // Search folder
+            var currentFolder = await _context.Folders.Include(x => x.AccessType).FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
             {
-                return Ok();
+                return NotFound();
+            }
+
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null && currentFolder.AccessType.RequireAuth == false))
+            {
+                var folders = await _mapper.From(
+                    _context.Folders.Where(x => x.UpperFolderId == currentFolder.Id && x.IsDeleted == false)
+                    .Include(x => x.Files)
+                    .Include(x => x.DownloadsOfFolders)
+                    .Include(x => x.ViewsOfFolders)
+                    .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
+                    .Include(x => x.AccessType)
+                ).ProjectToType<FolderInfoDto>().ToListAsync();
+
+                var files = await _mapper.From(
+                    _context.Files.Where(x => x.FolderId == currentFolder.Id && x.IsDeleted == false)
+                    .Include(x => x.DownloadsOfFiles)
+                    .Include(x => x.ViewsOfFiles)
+                    .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
+                    .Include(x => x.FileType)
+                ).ProjectToType<FileInfoDto>().ToListAsync();
+
+                return Ok(new FolderValuesDto()
+                {
+                    Folders = folders,
+                    Files = files,
+                });
             }
             else
             {
@@ -79,7 +121,7 @@ namespace FileStorage.Controllers
         /// <param name="token"></param>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // PATCH: api/folders/name/{token}
+        // PATCH: api/folder/name/{token}
         [HttpPatch("name/{token}")]
         public async Task<IActionResult> PatchFolderName(string token, FolderPatchNameDto folderData)
         {
@@ -111,17 +153,54 @@ namespace FileStorage.Controllers
         }
 
         /// <summary>
-        /// Rename folder
+        /// Change color
         /// </summary>
         /// <param name="token"></param>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // PATCH: api/folders/name/{token}
-        [HttpPatch("path")]
-        public async Task<IActionResult> PatchFolderPath(FolderPatchPathDto folderData)
+        // PATCH: api/folder/color/{token}
+        [HttpPatch("color/{token}")]
+        public async Task<IActionResult> PatchFolderName(string token, FolderPatchColorDto folderData)
+        {
+            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
+                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
+            {
+                currentFolder.Color = folderData.Color;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Move folder
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="folderData"></param>
+        /// <returns></returns>
+        // PATCH: api/folder/path/{token}
+        [HttpPatch("path/{token}")]
+        public async Task<IActionResult> PatchFolderPath(string token, FolderPatchPathDto folderData)
         {
             // If current && destination folder exists
-            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == folderData.FromFolderToken);
+            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
             Folder? destinationFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == folderData.ToFolderToken);
             if (currentFolder == null || destinationFolder == null)
             {
@@ -156,7 +235,7 @@ namespace FileStorage.Controllers
         /// <param name="token"></param>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // PATCH: api/folders/access/{token}
+        // PATCH: api/folder/access/{token}
         [HttpPatch("access/{token}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchFolderAccess(string token, FolderPatchAccessDto folderData)
@@ -195,7 +274,7 @@ namespace FileStorage.Controllers
         /// </summary>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // POST: api/folders
+        // POST: api/folder
         [HttpPost]
         [ActionName(nameof(PostFolder))]
         [AllowAnonymous]
@@ -270,7 +349,7 @@ namespace FileStorage.Controllers
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        // DELETE: api/folders/{token}
+        // DELETE: api/folder/{token}
         [HttpDelete("{token}")]
         public async Task<IActionResult> DeleteFolder(string token)
         {
