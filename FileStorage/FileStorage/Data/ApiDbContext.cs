@@ -120,9 +120,8 @@ namespace FileStorage.Data
 
             modelBuilder.Entity<Models.Db.File>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.CreatedAt).HasColumnType("timestamp");
-                entity.Property(e => e.Name).HasMaxLength(20);
+                entity.Property(e => e.Name).HasColumnType("text");
 
                 entity.HasOne(d => d.Folder).WithMany(p => p.Files)
                     .HasForeignKey(d => d.FolderId)
@@ -140,7 +139,7 @@ namespace FileStorage.Data
 
             modelBuilder.Entity<FileType>(entity =>
             {
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.Name).HasColumnName("text");
             });
 
             modelBuilder.Entity<Folder>(entity =>
@@ -205,6 +204,7 @@ namespace FileStorage.Data
 
             modelBuilder.Entity<Tariff>(entity =>
             {
+                entity.Property(e => e.UploadLimitName).HasMaxLength(30);
                 entity.Property(e => e.Price).HasColumnType("money");
             });
 

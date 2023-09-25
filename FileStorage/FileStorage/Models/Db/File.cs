@@ -10,6 +10,8 @@ public partial class File : BaseEntity
 
     public int FileTypeId { get; set; }
 
+    public long FileSize { get; set; }
+
     public bool IsDeleted { get; set; }
 
     public DateTime CreatedAt { get; set; }

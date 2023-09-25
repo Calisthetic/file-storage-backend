@@ -4,6 +4,8 @@ public partial class Tariff : BaseEntity
 {
     public int Size { get; set; }
 
+    public string UploadLimitName { get; set; } = null!;
+
     public bool UploadLimit { get; set; }
 
     public bool Customizable { get; set; }

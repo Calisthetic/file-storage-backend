@@ -3,6 +3,7 @@ using System;
 using FileStorage.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FileStorage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230924143012_file size and types")]
+    partial class filesizeandtypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,18 +266,15 @@ namespace FileStorage.Migrations
             modelBuilder.Entity("FileStorage.Models.Db.File", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp")
                         .HasColumnName("created_at");
 
-                    b.Property<long>("FileSize")
-                        .HasColumnType("bigint")
+                    b.Property<int>("FileSize")
+                        .HasColumnType("integer")
                         .HasColumnName("file_size");
 
                     b.Property<int>("FileTypeId")
@@ -291,7 +291,8 @@ namespace FileStorage.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
                         .HasColumnName("name");
 
                     b.Property<int>("UserId")
@@ -324,8 +325,9 @@ namespace FileStorage.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("text");
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id")
                         .HasName("pk_file_types");
@@ -538,12 +540,6 @@ namespace FileStorage.Migrations
                     b.Property<bool>("UploadLimit")
                         .HasColumnType("boolean")
                         .HasColumnName("upload_limit");
-
-                    b.Property<string>("UploadLimitName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("character varying(30)")
-                        .HasColumnName("upload_limit_name");
 
                     b.HasKey("Id")
                         .HasName("pk_tariffs");
