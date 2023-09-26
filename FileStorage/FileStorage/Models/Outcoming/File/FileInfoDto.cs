@@ -4,13 +4,13 @@ namespace FileStorage.Models.Outcoming.File
 {
     public class FileInfoDto
     {
-        public string Token = null!;
+        public string Token { get; set; } = null!;
 
         public string Name { get; set; } = null!;
 
         public long FileSize { get; set; }
 
-        public string CreatedAt { get; set; }
+        public string CreatedAt { get; set; } = null!;
 
         public int? Downloads { get; set; }
 

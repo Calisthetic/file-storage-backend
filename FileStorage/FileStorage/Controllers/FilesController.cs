@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Microsoft.VisualBasic.FileIO;
 using System.Configuration;
+using System.IO;
 
 namespace FileStorage.Controllers
 {
@@ -156,7 +157,12 @@ namespace FileStorage.Controllers
             }
         }
 
-        // DELETE: api/file/5
+        /// <summary>
+        /// Delete File
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // DELETE: api/file/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFile(int id)
         {
@@ -164,17 +170,40 @@ namespace FileStorage.Controllers
             {
                 return NotFound();
             }
-            var @file = await _context.Files.FindAsync(id);
-            if (@file == null)
+            var currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id);
+            if (currentFile == null)
             {
                 return NotFound();
             }
 
-            _context.Files.Remove(@file);
-            await _context.SaveChangesAsync();
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
 
-            return NoContent();
+            // Configure path to delete
+            string path = _configuration.GetSection("StoragePath").Value!;
+
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFile.Folder?.UserId || (userId == currentFile.UserId && currentFile.FolderId == null) || 
+                (currentFile.Folder != null && currentFile.Folder.AccessType != null &&
+                (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanEdit == true))
+            {
+                _context.Files.Remove(currentFile);
+                await _context.SaveChangesAsync();
+
+                if (System.IO.File.Exists(path + "\\" + userId))
+                    System.IO.File.Delete(path + "\\" + userId);
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
+
 
         private bool FileExists(int id)
         {

@@ -2,7 +2,9 @@
 using FileStorage.Models.Outcoming;
 using FileStorage.Models.Outcoming.File;
 using FileStorage.Models.Outcoming.Folder;
+using FileStorage.Models.Outcoming.Statistic;
 using Mapster;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FileStorage.Services.Mappers
 {
@@ -23,7 +25,7 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.IsElected, r => r.ElectedFolders.Count != 0)
                 .Map(d => d.AccessType, r => r.AccessType == null ? null : r.AccessType.Name)
                 .Map(d => d.Size, r => r.IsDeleted ? 0 : 0)
-                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0,19).Replace('T',' '))
+                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
                 .RequireDestinationMemberSource(true);
 
             // Files
@@ -34,6 +36,16 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.FileType, r => r.FileType.Name)
                 .Map(d => d.IsElected, r => r.ElectedFiles.Count != 0)
                 .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
+                .RequireDestinationMemberSource(true);
+
+            // Statistic
+            config.NewConfig<Models.Db.File, FileTreeDto>()
+                .Map(d => d.Name, r => r.Name)
+                .RequireDestinationMemberSource(true);
+            config.NewConfig<Folder, FolderTreeDto>()
+                .Map(d => d.Name, r => r.Name)
+                .Map(d => d.Files, r => r.Files.Adapt<List<FileTreeDto>>())
+                .Map(d => d.Folders, r => r.InverseUpperFolder.Adapt<List<FolderTreeDto>>())
                 .RequireDestinationMemberSource(true);
         }
     }
