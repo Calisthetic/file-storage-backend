@@ -71,8 +71,8 @@ namespace FileStorage.Controllers
             } } };
             foreach (FileTreeDto f in folder.Files)
             {
-                result.Nodes.Add(new Node() { id = f.Name, height = 1, size = 18, color = "var(--treeFile)" });
-                result.Links.Add(new Link() { source = depth.ToString() + ": " + folder.Name, target = f.Name, distance = 40 });
+                result.Nodes.Add(new Node() { id = folder.Name + ": " + f.Name, height = 1, size = 18, color = "var(--treeFile)" });
+                result.Links.Add(new Link() { source = depth.ToString() + ": " + folder.Name, target = folder.Name + ": " + f.Name, distance = 40 });
             }
             foreach (FolderTreeDto f in folder.Folders)
             {
@@ -82,18 +82,18 @@ namespace FileStorage.Controllers
                 result.Links.Add(new Link() { 
                     source = depth.ToString() + ": " + folder.Name, 
                     target = (depth + 1).ToString() + ": " + f.Name, 
-                    distance = 80 
+                    distance = 100 
                 });
             }
             return result;
         }
 
-        // GET: api/statistic/pie
-        [HttpGet("pie")]
+        // GET: api/statistic/pie/{count}
+        [HttpGet("pie/{count}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<StatisticTreeDto>> GetFilesPie()
+        public async Task<ActionResult<List<PieDto>>> GetFilesPie(int count)
         {
-            if (_context.FileTypes == null)
+            if (_context.FileTypes == null || count < 2 || count > 12)
             {
                 return NotFound();
             }
@@ -110,8 +110,8 @@ namespace FileStorage.Controllers
             var result = new List<PieDto>();
             for (int i = 0; i < files.Count; i++)
             {
-                string type = files[i].Name[files[i].Name.LastIndexOf('.')..];
-                if (result.Where(x => x.Id == type).Count() == 0)
+                string type = files[i].Name[(files[i].Name.LastIndexOf('.') + 1)..];
+                if (!result.Where(x => x.Id == type).Any())
                 {
                     result.Add(new PieDto()
                     {
@@ -120,8 +120,26 @@ namespace FileStorage.Controllers
                         Value = files[i].FileSize
                     });
                 }
+                else
+                {
+                    var current = result.FirstOrDefault(x => x.Id == type);
+                    if (current != null)
+                        current.Value += files[i].FileSize;
+                }
             }
-            return Ok(files);
+
+            // convert to %
+            long summ = 0;
+            result = result.OrderByDescending(x => x.Value).Take(count).ToList();
+            for (int i = 0; i < result.Count; i++)
+            {
+                summ += result[i].Value;
+            }
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i].Value = (long)Math.Round(Convert.ToDecimal((decimal)result[i].Value / (decimal)summ * 100));
+            }
+            return Ok(result);
         }
     }
 }
