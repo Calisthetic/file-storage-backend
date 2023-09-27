@@ -32,13 +32,13 @@ namespace FileStorage.Controllers
         // GET: api/statistic/tree
         [HttpGet("tree")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<StatisticTreeDto>> GetFoldersTree()
+        public async Task<ActionResult<StatisticTreeDto>> GetFilesTree()
         {
             if (_context.Files == null || _context.Folders == null)
             {
                 return NotFound();
             }
-            
+
             // If user unauthorized
             if (!int.TryParse(_userService.GetUserId(), out int userId))
             {
@@ -63,12 +63,15 @@ namespace FileStorage.Controllers
         }
         private static StatisticTreeDto ConvertToTree(FolderTreeDto folder, int depth)
         {
-            var result = new StatisticTreeDto() { Nodes = new List<Node>() { new Node() { 
+            var result = new StatisticTreeDto()
+            {
+                Nodes = new List<Node>() { new Node() {
                 id = depth.ToString() + ": " + folder.Name,
                 height = 1,
                 size = folder.Name == "main" ? 32 : 24,
                 color = folder.Name == "main" ? "var(--treeMain)" : "var(--treeFolder)"
-            } } };
+            } }
+            };
             foreach (FileTreeDto f in folder.Files)
             {
                 result.Nodes.Add(new Node() { id = folder.Name + ": " + f.Name, height = 1, size = 18, color = "var(--treeFile)" });
@@ -79,10 +82,11 @@ namespace FileStorage.Controllers
                 var temp = ConvertToTree(f, depth + 1);
                 result.Nodes.AddRange(temp.Nodes);
                 result.Links.AddRange(temp.Links);
-                result.Links.Add(new Link() { 
-                    source = depth.ToString() + ": " + folder.Name, 
-                    target = (depth + 1).ToString() + ": " + f.Name, 
-                    distance = 100 
+                result.Links.Add(new Link()
+                {
+                    source = depth.ToString() + ": " + folder.Name,
+                    target = (depth + 1).ToString() + ": " + f.Name,
+                    distance = 100
                 });
             }
             return result;
@@ -93,7 +97,7 @@ namespace FileStorage.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<List<PieDto>>> GetFilesPie(int count)
         {
-            if (_context.FileTypes == null || count < 2 || count > 12)
+            if (_context.Files == null || count < 2 || count > 12)
             {
                 return NotFound();
             }
@@ -140,6 +144,44 @@ namespace FileStorage.Controllers
                 result[i].Value = (long)Math.Round(Convert.ToDecimal((decimal)result[i].Value / (decimal)summ * 100));
             }
             return Ok(result);
+        }
+
+        // GET: api/statistic/graph
+        [HttpGet("graph")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<List<PieDto>>> GetFilesGraph()
+        {
+            if (_context.FileTypes == null)
+            {
+                return NotFound();
+            }
+
+            // If user unauthorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            return Ok();
+        }
+
+        // GET: api/statistic/calendar
+        [HttpGet("calendar")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<List<PieDto>>> GetFilesCalendar()
+        {
+            if (_context.FileTypes == null)
+            {
+                return NotFound();
+            }
+
+            // If user unauthorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            return Ok();
         }
     }
 }
