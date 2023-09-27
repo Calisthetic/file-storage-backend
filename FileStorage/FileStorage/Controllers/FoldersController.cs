@@ -13,6 +13,9 @@ using FileStorage.Models.Outcoming;
 using Mapster;
 using FileStorage.Models.Outcoming.File;
 using FileStorage.Models.Outcoming.Statistic;
+using System.IO.Compression;
+using NuGet.Common;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace FileStorage.Controllers
 {
@@ -21,14 +24,125 @@ namespace FileStorage.Controllers
     public class FoldersController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ApiDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ApiDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public FoldersController(ApiDbContext context, IMapper mapper, IUserService userService)
+        public FoldersController(ApiDbContext context, IMapper mapper, 
+            IUserService userService, IConfiguration configuration)
         {
             _context = context;
             _mapper = mapper;
             _userService = userService;
+            _configuration = configuration;
+        }
+
+        // GET: api/folder/download/{token}
+        [HttpGet("download/{token}")]
+        public async Task<ActionResult> GetFolder(string token)
+        {
+            if (_context.Folders == null)
+            {
+                return NotFound();
+            }
+
+            // Search folder
+            var currentFolder = await _context.Folders.Where(x => x.Token == token).Include(x => x.Files.Where(x => x.IsDeleted == false))
+                .Include(x => x.InverseUpperFolder)
+                    .ThenInclude(x => x.Files)
+                //.Include(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //    .ThenInclude(x => x.Files)
+                //.Include(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //    .ThenInclude(x => x.Files)
+                //.Include(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //    .ThenInclude(x => x.Files)
+                //.Include(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //    .ThenInclude(x => x.Files)
+                //.Include(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //    .ThenInclude(x => x.Files)
+                //.Include(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //    .ThenInclude(x => x.Files)
+                //.Include(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //.ThenInclude(x => x.InverseUpperFolder)
+                //    .ThenInclude (x => x.Files)
+                    .FirstOrDefaultAsync();
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            string path = _configuration.GetSection("StoragePath").Value!;
+            string folderPath = path + @"\" + currentFolder.UserId;
+
+            if (Directory.Exists(folderPath))
+            {
+                if (System.IO.File.Exists(folderPath + "\\" + "archive.zip"))
+                    System.IO.File.Delete(folderPath + "\\" + "archive.zip");
+
+                var fs = new FileStream(folderPath + "\\" + "archive.zip", FileMode.Create, FileAccess.ReadWrite);
+                var zip = new ZipArchive(fs, ZipArchiveMode.Create);
+
+                foreach (var file in currentFolder.Files)
+                {
+                    zip.CreateEntryFromFile(folderPath + "\\" + file.Id + file.Name[file.Name.LastIndexOf('.')..], file.Name);
+                }
+                foreach (var folder in currentFolder.InverseUpperFolder)
+                {
+                    Debug.WriteLine(folder.Name);
+                    GetFolderData(folderPath, zip, folder);
+                }
+
+                zip.Dispose();
+                fs.Close();
+
+                return File(System.IO.File.OpenRead(folderPath + "\\" + "archive.zip"), "application/octet-stream", currentFolder.Name + ".zip");
+            }
+            return NotFound();
+        }
+        private static void GetFolderData(string path, ZipArchive zip, Folder folder)
+        {
+            string folderPath = GetFullPath(folder);
+            zip.CreateEntry(folderPath);
+            foreach (var file in folder.Files)
+            {
+                zip.CreateEntryFromFile(path + "\\" + file.Id + file.Name[file.Name.LastIndexOf('.')..], folderPath + file.Name);
+            }
+
+            foreach (var fold in folder.InverseUpperFolder)
+            {
+                GetFolderData(path, zip, fold);
+            }
+        }
+        private static string GetFullPath(Folder folder, string path = "")
+        {
+            return folder.UpperFolder == null ? folder.Name + "/" + path : GetFullPath(folder.UpperFolder, folder.Name + "/" + path);
         }
 
         /// <summary>
@@ -38,7 +152,7 @@ namespace FileStorage.Controllers
         /// <returns></returns>
         // GET: api/folder/{token}
         [HttpGet("{token}")]
-        public async Task<ActionResult<FolderValuesDto>> GetFolder(string token)
+        public async Task<ActionResult<FolderValuesDto>> GetFolderZip(string token)
         {
             if (_context.Folders == null)
             {
@@ -335,9 +449,14 @@ namespace FileStorage.Controllers
             }
 
             // Upper folder check
-            if (!string.IsNullOrEmpty(folderData.UpperFolderToken) && folderData.UpperFolderToken != "main")
+            if (folderData.UpperFolderToken == "main" && userId != null)
             {
-                Folder? upperFolder = await _context.Folders.FirstOrDefaultAsync(x => x.UpperFolder != null && x.UpperFolder.Token == folderData.UpperFolderToken);
+                Folder newFolder = await CreateFolder(folderData.Name, (int)userId, null);
+                return CreatedAtAction(nameof(PostFolder), new { id = newFolder.Id });
+            }
+            else if (!string.IsNullOrEmpty(folderData.UpperFolderToken))
+            {
+                Folder? upperFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == folderData.UpperFolderToken);
                 if (upperFolder == null)
                 {
                     return BadRequest("Upper folder doesn't exits");
@@ -368,7 +487,7 @@ namespace FileStorage.Controllers
             while (string.IsNullOrEmpty(token))
             {
                 string temp = "8" + RandomStringGeneration(31);
-                if (await _context.Folders.Where(x => x.Token == temp).CountAsync() == 0)
+                if (!await _context.Folders.Where(x => x.Token == temp).AnyAsync())
                 {
                     token = temp;
                 }
