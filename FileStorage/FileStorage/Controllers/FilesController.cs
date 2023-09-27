@@ -14,6 +14,10 @@ using System.Drawing;
 using Microsoft.VisualBasic.FileIO;
 using System.Configuration;
 using System.IO;
+using Microsoft.IdentityModel.Tokens;
+using System.Net;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FileStorage.Controllers
 {
@@ -32,22 +36,30 @@ namespace FileStorage.Controllers
             _userService = userService;
         }
 
-        // GET: api/file/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Models.Db.File>> GetFile(int id)
+        // GET: api/file/download/5
+        [HttpGet("download/{id}")]
+        public async Task<ActionResult> GetFile(int id)
         {
             if (_context.Files == null)
             {
                 return NotFound();
             }
-            var file = await _context.Files.FindAsync(id);
 
+            var file = await _context.Files.FindAsync(id);
             if (file == null)
             {
                 return NotFound();
             }
 
-            return file;
+            string path = _configuration.GetSection("StoragePath").Value!;
+            string localFilePath = path + @"\" + (file.Folder?.UserId ?? file.UserId) + @"\" + file.Id + file.Name[file.Name.LastIndexOf('.')..];
+
+            if (System.IO.File.Exists(localFilePath))
+            {
+                return File(System.IO.File.OpenRead(localFilePath), "application/octet-stream", file.Name);
+            }
+
+            return NotFound();
         }
 
         // POST: api/file
@@ -136,13 +148,13 @@ namespace FileStorage.Controllers
                     await _context.SaveChangesAsync();
 
                     // If file already exists
-                    string newFilePath = path + "\\" + newFile.Id + file.FileName[file.FileName.IndexOf('.')..];
+                    string newFilePath = path + "\\" + newFile.Id + file.FileName[file.FileName.LastIndexOf('.')..];
                     if (Path.Exists(newFilePath))
                     {
                         System.IO.File.Delete(newFilePath);
                     }
                     // Create file at storage
-                    string filepath = Path.Combine(path, newFile.Id + file.FileName[file.FileName.IndexOf('.')..]);
+                    string filepath = Path.Combine(path, newFile.Id + file.FileName[file.FileName.LastIndexOf('.')..]);
                     using (Stream stream = new FileStream(filepath, FileMode.Create))
                     {
                         file.CopyTo(stream);
@@ -194,8 +206,11 @@ namespace FileStorage.Controllers
                 _context.Files.Remove(currentFile);
                 await _context.SaveChangesAsync();
 
-                if (System.IO.File.Exists(path + "\\" + userId))
-                    System.IO.File.Delete(path + "\\" + userId);
+                if (System.IO.File.Exists(path + "\\" + userId + "\\" + currentFile.Id + "\\" + currentFile.Name[currentFile.Name.LastIndexOf('.')..]))
+                    System.IO.File.Delete(path + "\\" + userId + "\\" + currentFile.Id + "\\" + currentFile.Name[currentFile.Name.LastIndexOf('.')..]);
+                else
+                    return NotFound();
+
                 return NoContent();
             }
             else
