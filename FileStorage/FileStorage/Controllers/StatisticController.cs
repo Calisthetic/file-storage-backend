@@ -1,5 +1,4 @@
 ﻿using FileStorage.Data;
-using FileStorage.Models.Db;
 using FileStorage.Models.Outcoming.File;
 using FileStorage.Models.Outcoming.Folder;
 using FileStorage.Models.Outcoming.Statistic;
@@ -8,7 +7,6 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
