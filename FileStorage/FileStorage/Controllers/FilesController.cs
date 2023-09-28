@@ -5,6 +5,7 @@ using FileStorage.Models.Db;
 using FileStorage.Models.Incoming.File;
 using FileStorage.Services;
 using System.Diagnostics;
+using FileStorage.Models.Incoming.Folder;
 
 namespace FileStorage.Controllers
 {
@@ -206,6 +207,71 @@ namespace FileStorage.Controllers
             }
         }
 
+        // PATCH: api/file/name/{id}
+        [HttpPatch("name/{id}")]
+        public async Task<IActionResult> PatchFileName(int id, FilePatchNameDto fileData)
+        {
+            Models.Db.File? currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id);
+            if (currentFile == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // (don't) Require auth and access check || main folder check
+            if ((userId == currentFile.UserId && currentFile.Folder == null) || (currentFile.Folder != null && currentFile.Folder.AccessType != null &&
+                (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanEdit == true))
+            {
+                currentFile.Name = fileData.Name;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        // PATCH: api/file/elect/{id}
+        [HttpPatch("elect/{id}")]
+        public async Task<IActionResult> PatchFolderElect(int id)
+        {
+            // If current && destination folder exists
+            Models.Db.File? currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id);
+            if (currentFile == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            // owner check || access check
+            if ((currentFile.FolderId == null && currentFile.UserId == userId) || (currentFile.Folder != null && (userId == currentFile.Folder.UserId || currentFile.Folder.AccessType != null)))
+            {
+                var currentElect = await _context.ElectedFolders.FirstOrDefaultAsync(x => x.UserId == userId && x.FolderId == currentFile.Id);
+                if (currentElect == null)
+                {
+                    await _context.ElectedFiles.AddAsync(new ElectedFile() { FileId = currentFile.Id, UserId = userId });
+                }
+                else
+                {
+                    _context.ElectedFolders.Remove(currentElect);
+                }
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            return BadRequest();
+        }
 
         private bool FileExists(int id)
         {

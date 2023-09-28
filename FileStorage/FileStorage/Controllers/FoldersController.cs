@@ -362,11 +362,10 @@ namespace FileStorage.Controllers
                 return Unauthorized();
             }
 
-            var currentElect = await _context.ElectedFolders.FirstOrDefaultAsync(x => x.UserId == userId && x.FolderId == currentFolder.Id);
-            // !!! change later
             // owner check || access check
-            if (userId == currentFolder.UserId || currentFolder.AccessType != null)
+            if ((userId == currentFolder.UserId && currentFolder.UpperFolderId == null) || currentFolder.AccessType != null)
             {
+                var currentElect = await _context.ElectedFolders.FirstOrDefaultAsync(x => x.UserId == userId && x.FolderId == currentFolder.Id);
                 if (currentElect == null)
                 {
                     await _context.ElectedFolders.AddAsync(new ElectedFolder() { FolderId = currentFolder.Id, UserId = userId });
