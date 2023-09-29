@@ -271,10 +271,6 @@ namespace FileStorage.Controllers
             {
                 paths = GetPaths(folder.UpperFolder, paths);
             }
-            else
-            {
-                paths.Add(new FolderSinglePath() { Name = "Main", Token = "main" });
-            }
             return paths;
         }
 
