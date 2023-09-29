@@ -226,6 +226,58 @@ namespace FileStorage.Controllers
             }
         }
 
+        // GET: api/folder/path/{token}
+        [HttpGet("path/{token}")]
+        public async Task<ActionResult<List<FolderSinglePath>>> GetFolderPath(string token)
+        {
+            // If current && destination folder exists
+            Folder? currentFolder = await _context.Folders.Where(x => x.Token == token)
+                .Include(x => x.UpperFolder)
+                .ThenInclude(x => x.UpperFolder)
+                .ThenInclude(x => x.UpperFolder)
+                .ThenInclude(x => x.UpperFolder)
+                .ThenInclude(x => x.UpperFolder)
+                .FirstOrDefaultAsync();
+
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            if (userId == currentFolder.UserId)
+            {
+                var result = GetPaths(currentFolder);
+                result.Reverse();
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        private static List<FolderSinglePath> GetPaths(Folder folder, List<FolderSinglePath>? paths = null)
+        {
+            paths ??= new List<FolderSinglePath>();
+
+            paths.Add(new FolderSinglePath() { Name = folder.Name, Token = folder.Token });
+            if (folder.UpperFolder != null)
+            {
+                paths = GetPaths(folder.UpperFolder, paths);
+            }
+            else
+            {
+                paths.Add(new FolderSinglePath() { Name = "Main", Token = "main" });
+            }
+            return paths;
+        }
+
         /// <summary>
         /// Rename folder
         /// </summary>
