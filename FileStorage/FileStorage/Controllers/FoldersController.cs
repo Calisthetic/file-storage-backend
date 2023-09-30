@@ -150,7 +150,7 @@ namespace FileStorage.Controllers
         [HttpGet("{token}")]
         public async Task<ActionResult<FolderValuesDto>> GetFolderZip(string token)
         {
-            if (_context.Folders == null)
+            if (_context.Folders == null || _context.Files == null)
             {
                 return NotFound();
             }
@@ -578,7 +578,7 @@ namespace FileStorage.Controllers
             if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
                 (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
             {
-                _context.Folders.Remove(currentFolder);
+                currentFolder.IsDeleted = true;
                 await _context.SaveChangesAsync();
                 return NoContent();
             }

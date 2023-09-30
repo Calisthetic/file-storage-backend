@@ -6,6 +6,8 @@ using FileStorage.Models.Incoming.File;
 using FileStorage.Services;
 using System.Diagnostics;
 using FileStorage.Models.Incoming.Folder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FileStorage.Controllers
 {
@@ -183,22 +185,13 @@ namespace FileStorage.Controllers
                 userId = userIdResult;
             }
 
-            // Configure path to delete
-            string path = _configuration.GetSection("StoragePath").Value!;
-
             // (don't) Require auth and access check || owner check
             if (userId == currentFile.Folder?.UserId || (userId == currentFile.UserId && currentFile.FolderId == null) || 
                 (currentFile.Folder != null && currentFile.Folder.AccessType != null &&
                 (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanEdit == true))
             {
-                _context.Files.Remove(currentFile);
+                currentFile.IsDeleted = true;
                 await _context.SaveChangesAsync();
-
-                if (System.IO.File.Exists(path + "\\" + userId + "\\" + currentFile.Id + "\\" + currentFile.Name[currentFile.Name.LastIndexOf('.')..]))
-                    System.IO.File.Delete(path + "\\" + userId + "\\" + currentFile.Id + "\\" + currentFile.Name[currentFile.Name.LastIndexOf('.')..]);
-                else
-                    return NotFound();
-
                 return NoContent();
             }
             else
@@ -240,6 +233,7 @@ namespace FileStorage.Controllers
 
         // PATCH: api/file/elect/{id}
         [HttpPatch("elect/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchFolderElect(int id)
         {
             // If current && destination folder exists
