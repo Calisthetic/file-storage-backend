@@ -8,6 +8,7 @@ using System.Diagnostics;
 using FileStorage.Models.Incoming.Folder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 namespace FileStorage.Controllers
 {
@@ -158,6 +159,75 @@ namespace FileStorage.Controllers
                 return BadRequest();
             }
         }
+        
+        // PATCH: api/file/bin/{id}
+        [HttpPatch("bin/{id}")]
+        public async Task<IActionResult> PatchFileBin(int id)
+        {
+            if (_context.Files == null)
+            {
+                return NotFound();
+            }
+            var currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            if (currentFile == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFile.Folder?.UserId || (userId == currentFile.UserId && currentFile.FolderId == null) ||
+                (currentFile.Folder != null && currentFile.Folder.AccessType != null &&
+                (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanEdit == true))
+            {
+                currentFile.IsDeleted = true;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        // PATCH: api/file/restore/{id}
+        [HttpPatch("restore/{id}")]
+        public async Task<IActionResult> PatchFileRestore(int id)
+        {
+            if (_context.Files == null)
+            {
+                return NotFound();
+            }
+            var currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == true);
+            if (currentFile == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            // owner check
+            if (userId == currentFile.UserId)
+            {
+                currentFile.IsDeleted = false;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
         /// <summary>
         /// Delete File
@@ -185,13 +255,22 @@ namespace FileStorage.Controllers
                 userId = userIdResult;
             }
 
+            // Configure path to delete
+            string path = _configuration.GetSection("StoragePath").Value!;
+
             // (don't) Require auth and access check || owner check
             if (userId == currentFile.Folder?.UserId || (userId == currentFile.UserId && currentFile.FolderId == null) || 
                 (currentFile.Folder != null && currentFile.Folder.AccessType != null &&
                 (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanEdit == true))
             {
-                currentFile.IsDeleted = true;
+                _context.Files.Remove(currentFile);
                 await _context.SaveChangesAsync();
+
+                if (System.IO.File.Exists(path + "\\" + userId + "\\" + currentFile.Id + currentFile.Name[currentFile.Name.LastIndexOf('.')..]))
+                    System.IO.File.Delete(path + "\\" + userId + "\\" + currentFile.Id + currentFile.Name[currentFile.Name.LastIndexOf('.')..]);
+                else
+                    return NotFound();
+
                 return NoContent();
             }
             else

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Common;
 using System.Configuration;
 using System.IO;
 
@@ -32,39 +33,84 @@ namespace FileStorage.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/bin
-        [HttpGet]
+        // GET: api/bin/{token}
+        [HttpGet("{token}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetBin()
+        public async Task<IActionResult> GetBin(string token)
         {
+            if (_context.Folders == null || _context.Files == null)
+            {
+                return NotFound();
+            }
+
             // If user authorized
             if (!int.TryParse(_userService.GetUserId(), out int userId))
             {
                 return Unauthorized();
             }
 
-            var folders = await _mapper.From(
-                _context.Folders.Where(x => x.UserId == userId && x.IsDeleted == true)
-                .Include(x => x.Files)
-                .Include(x => x.DownloadsOfFolders)
-                .Include(x => x.ViewsOfFolders)
-                .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
-                .Include(x => x.AccessType)
-            ).ProjectToType<FolderInfoDto>().ToListAsync();
-
-            var files = await _mapper.From(
-                _context.Files.Where(x => x.UserId == userId && x.IsDeleted == true)
-                .Include(x => x.DownloadsOfFiles)
-                .Include(x => x.ViewsOfFiles)
-                .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
-                .Include(x => x.FileType)
-            ).ProjectToType<FileInfoDto>().ToListAsync();
-
-            return Ok(new FolderValuesDto()
+            if (token == "main")
             {
-                Folders = folders,
-                Files = files,
-            });
+                var folders = await _mapper.From(
+                    _context.Folders.Where(x => x.UserId == userId && x.IsDeleted == true)
+                    .Include(x => x.Files)
+                    .Include(x => x.DownloadsOfFolders)
+                    .Include(x => x.ViewsOfFolders)
+                    .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
+                    .Include(x => x.AccessType)
+                ).ProjectToType<FolderInfoDto>().ToListAsync();
+
+                var files = await _mapper.From(
+                    _context.Files.Where(x => x.UserId == userId && x.FolderId == null && x.IsDeleted == true)
+                    .Include(x => x.DownloadsOfFiles)
+                    .Include(x => x.ViewsOfFiles)
+                    .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
+                    .Include(x => x.FileType)
+                ).ProjectToType<FileInfoDto>().ToListAsync();
+
+                return Ok(new FolderValuesDto()
+                {
+                    Folders = folders,
+                    Files = files,
+                });
+            }
+
+            // Search folder
+            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token && x.IsDeleted == true);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            if (userId == currentFolder.UserId)
+            {
+                var folders = await _mapper.From(
+                    _context.Folders.Where(x => x.UpperFolderId == currentFolder.Id)
+                    .Include(x => x.Files)
+                    .Include(x => x.DownloadsOfFolders)
+                    .Include(x => x.ViewsOfFolders)
+                    .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
+                    .Include(x => x.AccessType)
+                ).ProjectToType<FolderInfoDto>().ToListAsync();
+
+                var files = await _mapper.From(
+                    _context.Files.Where(x => x.FolderId == currentFolder.Id)
+                    .Include(x => x.DownloadsOfFiles)
+                    .Include(x => x.ViewsOfFiles)
+                    .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
+                    .Include(x => x.FileType)
+                ).ProjectToType<FileInfoDto>().ToListAsync();
+
+                return Ok(new FolderValuesDto()
+                {
+                    Folders = folders,
+                    Files = files,
+                });
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // DELETE: api/bin
@@ -104,8 +150,8 @@ namespace FileStorage.Controllers
                 _context.Files.Remove(file);
                 await _context.SaveChangesAsync();
 
-                if (System.IO.File.Exists(path + "\\" + userId + "\\" + file.Id + "\\" + file.Name[file.Name.LastIndexOf('.')..]))
-                    System.IO.File.Delete(path + "\\" + userId + "\\" + file.Id + "\\" + file.Name[file.Name.LastIndexOf('.')..]);
+                if (System.IO.File.Exists(path + "\\" + userId + "\\" + file.Id + file.Name[file.Name.LastIndexOf('.')..]))
+                    System.IO.File.Delete(path + "\\" + userId + "\\" + file.Id + file.Name[file.Name.LastIndexOf('.')..]);
                 else
                     return NotFound();
             }

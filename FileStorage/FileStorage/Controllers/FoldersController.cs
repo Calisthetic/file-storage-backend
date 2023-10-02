@@ -195,7 +195,7 @@ namespace FileStorage.Controllers
                 return NotFound();
             }
 
-            if (userId == currentFolder.UserId || (currentFolder.AccessType != null && currentFolder.AccessType.RequireAuth == false))
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null && (currentFolder.AccessType.RequireAuth == false || userId != null)))
             {
                 var folders = await _mapper.From(
                     _context.Folders.Where(x => x.UpperFolderId == currentFolder.Id && x.IsDeleted == false)
@@ -272,6 +272,39 @@ namespace FileStorage.Controllers
                 paths = GetPaths(folder.UpperFolder, paths);
             }
             return paths;
+        }
+
+        // GET: api/folder/name/{token}
+        [HttpGet("name/{token")]
+        public async Task<ActionResult> GetFolderName(string token)
+        {
+            if (_context.Folders == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // Search folder
+            var currentFolder = await _context.Folders.Include(x => x.AccessType).FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null && (currentFolder.AccessType.RequireAuth == false || userId != null)))
+            {
+                return Ok(new { Name = currentFolder.Name });
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         /// <summary>
@@ -548,6 +581,75 @@ namespace FileStorage.Controllers
             return newFolder;
         }
 
+        // PATCH: api/folder/bin/{token}
+        [HttpPatch("bin/{token}")]
+        public async Task<IActionResult> PatchFolderBin(string token)
+        {
+            if (_context.Folders == null)
+            {
+                return NotFound();
+            }
+            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token && x.IsDeleted == false);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
+                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
+            {
+                currentFolder.IsDeleted = true;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        // PATCH: api/folder/restore/{token}
+        [HttpPatch("restore/{token}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PatchFolderRestore(string token)
+        {
+            if (_context.Folders == null)
+            {
+                return NotFound();
+            }
+            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token && x.IsDeleted == true);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return NotFound();
+            }
+
+            // owner check
+            if (userId == currentFolder.UserId)
+            {
+                currentFolder.IsDeleted = false;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         /// <summary>
         /// Delete Folder
         /// </summary>
@@ -578,7 +680,7 @@ namespace FileStorage.Controllers
             if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
                 (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
             {
-                currentFolder.IsDeleted = true;
+                _context.Remove(currentFolder);
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -597,7 +699,7 @@ namespace FileStorage.Controllers
             return (_context.AccessTypes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private string RandomStringGeneration(int length)
+        private static string RandomStringGeneration(int length)
         {
             var random = new Random();
             var chars = "ABCDEFGHIJKLMNOPRSTUVWXYZ1234567890abcdefghijklmnoprstuvwxyz_";
