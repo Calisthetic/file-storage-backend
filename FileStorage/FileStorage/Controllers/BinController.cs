@@ -18,6 +18,7 @@ namespace FileStorage.Controllers
 {
     [Route("api/bin")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BinController : ControllerBase
     {
         private readonly ApiDbContext _context;
@@ -35,7 +36,6 @@ namespace FileStorage.Controllers
 
         // GET: api/bin/{token}
         [HttpGet("{token}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetBin(string token)
         {
             if (_context.Folders == null || _context.Files == null)
@@ -68,7 +68,7 @@ namespace FileStorage.Controllers
                     .Include(x => x.FileType)
                 ).ProjectToType<FileInfoDto>().ToListAsync();
 
-                return Ok(new FolderValuesDto()
+                return Ok(new
                 {
                     Folders = folders,
                     Files = files,
@@ -76,10 +76,14 @@ namespace FileStorage.Controllers
             }
 
             // Search folder
-            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token && x.IsDeleted == true);
+            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
             if (currentFolder == null)
             {
                 return NotFound();
+            }
+            if (currentFolder.IsDeleted == false)
+            {
+                return Forbid();
             }
 
             if (userId == currentFolder.UserId)
@@ -101,7 +105,7 @@ namespace FileStorage.Controllers
                     .Include(x => x.FileType)
                 ).ProjectToType<FileInfoDto>().ToListAsync();
 
-                return Ok(new FolderValuesDto()
+                return Ok(new
                 {
                     Folders = folders,
                     Files = files,
@@ -113,10 +117,9 @@ namespace FileStorage.Controllers
             }
         }
 
-        // DELETE: api/bin
-        [HttpDelete]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> DeleteBin()
+        // DELETE: api/bin/clean
+        [HttpDelete("clean")]
+        public async Task<IActionResult> DeleteBinClean()
         {
             // If user authorized
             if (!int.TryParse(_userService.GetUserId(), out int userId))
@@ -155,6 +158,41 @@ namespace FileStorage.Controllers
                 else
                     return NotFound();
             }
+            return NoContent();
+        }
+
+        // DELETE: api/bin/restore
+        [HttpDelete("restore")]
+        public async Task<IActionResult> DeleteBinRestore()
+        {
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var folders = await _context.Folders.Where(x => x.UserId == userId && x.IsDeleted == true)
+                .Include(x => x.Files)
+                .Include(x => x.DownloadsOfFolders)
+                .Include(x => x.ViewsOfFolders)
+                .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
+                .Include(x => x.AccessType).ToListAsync();
+
+            var files = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == true)
+                .Include(x => x.DownloadsOfFiles)
+                .Include(x => x.ViewsOfFiles)
+                .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
+                .Include(x => x.FileType).ToListAsync();
+
+            foreach (var folder in folders)
+            {
+                folder.IsDeleted = false;
+            }
+            foreach (var file in files)
+            {
+                file.IsDeleted = false;
+            }
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }

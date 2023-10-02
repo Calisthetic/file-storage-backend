@@ -275,7 +275,7 @@ namespace FileStorage.Controllers
         }
 
         // GET: api/folder/name/{token}
-        [HttpGet("name/{token")]
+        [HttpGet("name/{token}")]
         public async Task<ActionResult> GetFolderName(string token)
         {
             if (_context.Folders == null)

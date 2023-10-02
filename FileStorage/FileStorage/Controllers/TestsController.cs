@@ -50,8 +50,7 @@ namespace FileStorage.Controllers
             ).ProjectToType<FileTreeDto>().ToListAsync();
             var folders = await _mapper.From(
                 _context.Folders.Include(x => x.InverseUpperFolder).Include(x => x.Files)
-                .Where(x => x.IsDeleted == false && x.UpperFolderId == null)
-            ).ProjectToType<FolderTreeDto>().ToListAsync();
+            ).ProjectToType<FolderInfoDto>().ToListAsync();
             if (folders == null) { return NotFound(); }
 
             return Ok(new { files = files, folders = folders });

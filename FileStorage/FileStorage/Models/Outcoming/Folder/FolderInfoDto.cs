@@ -10,7 +10,7 @@
 
         public string? Color { get; set; }
 
-        public string CreatedAt { get; set; }
+        public string CreatedAt { get; set; } = null!;
 
         public int? Downloads { get; set; }
 
