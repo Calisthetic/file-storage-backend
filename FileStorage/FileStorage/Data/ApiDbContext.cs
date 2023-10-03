@@ -125,6 +125,7 @@ namespace FileStorage.Data
 
                 entity.HasOne(d => d.Folder).WithMany(p => p.Files)
                     .HasForeignKey(d => d.FolderId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Files_Folders");
 
                 entity.HasOne(d => d.FileType).WithMany(p => p.Files)
@@ -155,6 +156,7 @@ namespace FileStorage.Data
 
                 entity.HasOne(d => d.UpperFolder).WithMany(p => p.InverseUpperFolder)
                     .HasForeignKey(d => d.UpperFolderId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Folders_Folders");
 
                 entity.HasOne(d => d.User).WithMany(p => p.Folders)
