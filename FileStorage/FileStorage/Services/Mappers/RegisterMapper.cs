@@ -39,7 +39,8 @@ namespace FileStorage.Services.Mappers
                 .RequireDestinationMemberSource(true);
 
             // Elected
-            config.NewConfig<ElectedFolder, FolderInfoDto>()
+            config.NewConfig<ElectedFolder, FolderElectedInfoDto>()
+                .Map(d => d.IsDeleted, r => r.Folder.IsDeleted)
                 .Map(d => d.Token, r => r.Folder.Token)
                 .Map(d => d.Name, r => r.Folder.Name)
                 .Map(d => d.Color, r => r.Folder.Color)
@@ -51,7 +52,8 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.Size, r => r.Folder.IsDeleted ? 0 : 0)
                 .Map(d => d.CreatedAt, r => r.Folder.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
                 .RequireDestinationMemberSource(true);
-            config.NewConfig<ElectedFile, FileInfoDto>()
+            config.NewConfig<ElectedFile, FileElectedInfoDto>()
+                .Map(d => d.FolderToken, r => r.File.Folder == null ? "main" : r.File.Folder.Token)
                 .Map(d => d.Name, r => r.File.Name)
                 .Map(d => d.FileSize, r => r.File.FileSize)
                 .Map(d => d.Token, r => r.File.Id)

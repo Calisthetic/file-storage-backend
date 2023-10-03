@@ -11,6 +11,7 @@ using FileStorage.Models.Outcoming.Folder;
 using Mapster;
 using FileStorage.Models.Outcoming.File;
 using System.IO.Compression;
+using System.Net;
 
 namespace FileStorage.Controllers
 {
@@ -192,6 +193,10 @@ namespace FileStorage.Controllers
             {
                 return NotFound();
             }
+            if (currentFolder.IsDeleted == true)
+            {
+                return Forbid();
+            }
 
             if (userId == currentFolder.UserId || (currentFolder.AccessType != null && (currentFolder.AccessType.RequireAuth == false || userId != null)))
             {
@@ -227,7 +232,7 @@ namespace FileStorage.Controllers
         // GET: api/folders/elected
         [HttpGet("elected")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<FolderValuesDto>> GetFolderElected()
+        public async Task<ActionResult> GetFolderElected()
         {
             if (_context.Folders == null || _context.Files == null)
             {
@@ -249,7 +254,7 @@ namespace FileStorage.Controllers
                 .Include(x => x.Folder)
                     .ThenInclude(x => x.ViewsOfFolders)
                 .Where(x => x.UserId == userId)
-            ).ProjectToType<FolderInfoDto>().ToListAsync();
+            ).ProjectToType<FolderElectedInfoDto>().ToListAsync();
 
             var files = await _mapper.From(
                 _context.ElectedFiles
@@ -260,9 +265,9 @@ namespace FileStorage.Controllers
                 .Include(x => x.File)
                     .ThenInclude(x => x.FileType)
                 .Where(x => x.UserId == userId)
-            ).ProjectToType<FileInfoDto>().ToListAsync();
+            ).ProjectToType<FileElectedInfoDto>().ToListAsync();
 
-            return Ok(new FolderValuesDto()
+            return Ok(new
             {
                 Folders = folders,
                 Files = files,
@@ -478,7 +483,7 @@ namespace FileStorage.Controllers
         public async Task<IActionResult> PatchFolderElect(string token)
         {
             // If current folder exists
-            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
+            Folder? currentFolder = await _context.Folders.Include(x => x.AccessType).FirstOrDefaultAsync(x => x.Token == token);
             if (currentFolder == null)
             {
                 return NotFound();
@@ -491,7 +496,7 @@ namespace FileStorage.Controllers
             }
 
             // owner check || access check
-            if ((userId == currentFolder.UserId && currentFolder.UpperFolderId == null) || currentFolder.AccessType != null)
+            if (userId == currentFolder.UserId || currentFolder.UpperFolderId == null || currentFolder.AccessType != null)
             {
                 var currentElect = await _context.ElectedFolders.FirstOrDefaultAsync(x => x.UserId == userId && x.FolderId == currentFolder.Id);
                 if (currentElect == null)

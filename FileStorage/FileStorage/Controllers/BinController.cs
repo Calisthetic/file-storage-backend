@@ -1,5 +1,4 @@
 ﻿using FileStorage.Data;
-using FileStorage.Models.Db;
 using FileStorage.Models.Outcoming.File;
 using FileStorage.Models.Outcoming.Folder;
 using FileStorage.Services;
@@ -7,12 +6,8 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Common;
-using System.Configuration;
-using System.IO;
 
 namespace FileStorage.Controllers
 {
@@ -143,8 +138,8 @@ namespace FileStorage.Controllers
             foreach (var folder in folders)
             {
                 _context.Folders.Remove(folder);
-                await _context.SaveChangesAsync();
             }
+            await _context.SaveChangesAsync();
 
             // Configure path to delete
             string path = _configuration.GetSection("StoragePath").Value!;
@@ -161,9 +156,9 @@ namespace FileStorage.Controllers
             return NoContent();
         }
 
-        // DELETE: api/bin/restore
-        [HttpDelete("restore")]
-        public async Task<IActionResult> DeleteBinRestore()
+        // PATCH: api/bin/restore
+        [HttpPatch("restore")]
+        public async Task<IActionResult> PatchBinRestore()
         {
             // If user authorized
             if (!int.TryParse(_userService.GetUserId(), out int userId))
