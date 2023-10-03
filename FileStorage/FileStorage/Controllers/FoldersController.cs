@@ -7,7 +7,6 @@ using MapsterMapper;
 using FileStorage.Models.Incoming.Folder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using System.Diagnostics;
 using FileStorage.Models.Outcoming.Folder;
 using Mapster;
 using FileStorage.Models.Outcoming.File;
@@ -15,7 +14,7 @@ using System.IO.Compression;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/folder")]
+    [Route("api/folders")]
     [ApiController]
     public class FoldersController : ControllerBase
     {
@@ -33,7 +32,7 @@ namespace FileStorage.Controllers
             _configuration = configuration;
         }
 
-        // GET: api/folder/download/{token}
+        // GET: api/folders/download/{token}
         [HttpGet("download/{token}")]
         public async Task<ActionResult> GetFolder(string token)
         {
@@ -111,7 +110,6 @@ namespace FileStorage.Controllers
                 }
                 foreach (var folder in currentFolder.InverseUpperFolder)
                 {
-                    Debug.WriteLine(folder.Name);
                     GetFolderData(folderPath, zip, folder);
                 }
 
@@ -146,9 +144,9 @@ namespace FileStorage.Controllers
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        // GET: api/folder/{token}
+        // GET: api/folders/{token}
         [HttpGet("{token}")]
-        public async Task<ActionResult<FolderValuesDto>> GetFolderZip(string token)
+        public async Task<ActionResult<FolderValuesDto>> GetFolderData(string token)
         {
             if (_context.Folders == null || _context.Files == null)
             {
@@ -226,7 +224,52 @@ namespace FileStorage.Controllers
             }
         }
 
-        // GET: api/folder/path/{token}
+        // GET: api/folders/elected
+        [HttpGet("elected")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<FolderValuesDto>> GetFolderElected()
+        {
+            if (_context.Folders == null || _context.Files == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var folders = await _mapper.From(
+                _context.ElectedFolders
+                .Include(x => x.Folder)
+                    .ThenInclude(x => x.Files)
+                .Include(x => x.Folder)
+                    .ThenInclude(x => x.DownloadsOfFolders)
+                .Include(x => x.Folder)
+                    .ThenInclude(x => x.ViewsOfFolders)
+                .Where(x => x.UserId == userId)
+            ).ProjectToType<FolderInfoDto>().ToListAsync();
+
+            var files = await _mapper.From(
+                _context.ElectedFiles
+                .Include(x => x.File)
+                    .ThenInclude(x => x.DownloadsOfFiles)
+                .Include(x => x.File)
+                    .ThenInclude(x => x.ViewsOfFiles)
+                .Include(x => x.File)
+                    .ThenInclude(x => x.FileType)
+                .Where(x => x.UserId == userId)
+            ).ProjectToType<FileInfoDto>().ToListAsync();
+
+            return Ok(new FolderValuesDto()
+            {
+                Folders = folders,
+                Files = files,
+            });
+        }
+
+        // GET: api/folders/path/{token}
         [HttpGet("path/{token}")]
         public async Task<ActionResult<List<FolderSinglePath>>> GetFolderPath(string token)
         {
@@ -274,9 +317,9 @@ namespace FileStorage.Controllers
             return paths;
         }
 
-        // GET: api/folder/name/{token}
-        [HttpGet("name/{token}")]
-        public async Task<ActionResult> GetFolderName(string token)
+        // GET: api/folders/binName/{token}
+        [HttpGet("binName/{token}")]
+        public async Task<ActionResult> GetFolderBinName(string token)
         {
             if (_context.Folders == null)
             {
@@ -296,6 +339,10 @@ namespace FileStorage.Controllers
             {
                 return NotFound();
             }
+            if (currentFolder.IsDeleted == false)
+            {
+                return Forbid();
+            }
 
             if (userId == currentFolder.UserId || (currentFolder.AccessType != null && (currentFolder.AccessType.RequireAuth == false || userId != null)))
             {
@@ -313,7 +360,7 @@ namespace FileStorage.Controllers
         /// <param name="token"></param>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // PATCH: api/folder/name/{token}
+        // PATCH: api/folders/name/{token}
         [HttpPatch("name/{token}")]
         public async Task<IActionResult> PatchFolderName(string token, FolderPatchNameDto folderData)
         {
@@ -350,7 +397,7 @@ namespace FileStorage.Controllers
         /// <param name="token"></param>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // PATCH: api/folder/color/{token}
+        // PATCH: api/folders/color/{token}
         [HttpPatch("color/{token}")]
         public async Task<IActionResult> PatchFolderName(string token, FolderPatchColorDto folderData)
         {
@@ -387,7 +434,7 @@ namespace FileStorage.Controllers
         /// <param name="token"></param>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // PATCH: api/folder/path/{token}
+        // PATCH: api/folders/path/{token}
         [HttpPatch("path/{token}")]
         public async Task<IActionResult> PatchFolderPath(string token, FolderPatchPathDto folderData)
         {
@@ -426,11 +473,11 @@ namespace FileStorage.Controllers
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        // PATCH: api/folder/elect/{token}
+        // PATCH: api/folders/elect/{token}
         [HttpPatch("elect/{token}")]
         public async Task<IActionResult> PatchFolderElect(string token)
         {
-            // If current && destination folder exists
+            // If current folder exists
             Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
             if (currentFolder == null)
             {
@@ -467,7 +514,7 @@ namespace FileStorage.Controllers
         /// <param name="token"></param>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // PATCH: api/folder/access/{token}
+        // PATCH: api/folders/access/{token}
         [HttpPatch("access/{token}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchFolderAccess(string token, FolderPatchAccessDto folderData)
@@ -506,7 +553,7 @@ namespace FileStorage.Controllers
         /// </summary>
         /// <param name="folderData"></param>
         /// <returns></returns>
-        // POST: api/folder
+        // POST: api/folders
         [HttpPost]
         [ActionName(nameof(PostFolder))]
         [AllowAnonymous]
@@ -581,7 +628,7 @@ namespace FileStorage.Controllers
             return newFolder;
         }
 
-        // PATCH: api/folder/bin/{token}
+        // PATCH: api/folders/bin/{token}
         [HttpPatch("bin/{token}")]
         public async Task<IActionResult> PatchFolderBin(string token)
         {
@@ -616,7 +663,7 @@ namespace FileStorage.Controllers
             }
         }
 
-        // PATCH: api/folder/restore/{token}
+        // PATCH: api/folders/restore/{token}
         [HttpPatch("restore/{token}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchFolderRestore(string token)
@@ -655,7 +702,7 @@ namespace FileStorage.Controllers
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        // DELETE: api/folder/{token}
+        // DELETE: api/folders/{token}
         [HttpDelete("{token}")]
         public async Task<IActionResult> DeleteFolder(string token)
         {

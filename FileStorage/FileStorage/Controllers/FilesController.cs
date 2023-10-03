@@ -4,32 +4,34 @@ using FileStorage.Data;
 using FileStorage.Models.Db;
 using FileStorage.Models.Incoming.File;
 using FileStorage.Services;
-using System.Diagnostics;
-using FileStorage.Models.Incoming.Folder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using System.IO;
+using FileStorage.Models.Outcoming.File;
+using MapsterMapper;
+using Mapster;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/file")]
+    [Route("api/files")]
     [ApiController]
     public class FilesController : ControllerBase
     {
         private readonly ApiDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public FilesController(ApiDbContext context, IConfiguration configuration, IUserService userService)
+        public FilesController(ApiDbContext context, IConfiguration configuration, IUserService userService, IMapper mapper)
         {
             _context = context;
             _configuration = configuration;
             _userService = userService;
+            _mapper = mapper;
         }
 
-        // GET: api/file/download/5
+        // GET: api/files/download/5
         [HttpGet("download/{id}")]
-        public async Task<ActionResult> GetFile(int id)
+        public async Task<ActionResult> GetDownloadFile(int id)
         {
             if (_context.Files == null)
             {
@@ -53,7 +55,33 @@ namespace FileStorage.Controllers
             return NotFound();
         }
 
-        // POST: api/file
+        // GET: api/files
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<List<FileInfoDto>>> GetFiles()
+        {
+            if (_context.Files == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var files = await _mapper.From(
+                _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false)
+                .Include(x => x.DownloadsOfFiles)
+                .Include(x => x.ViewsOfFiles)
+                .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
+                .Include(x => x.FileType)
+            ).ProjectToType<FileInfoDto>().ToListAsync();
+            return Ok(files);
+        }
+
+        // POST: api/files
         [HttpPost]
         [ActionName(nameof(PostFile))]
         public async Task<IActionResult> PostFile([FromForm] FileCreateDto filesData)
@@ -65,8 +93,6 @@ namespace FileStorage.Controllers
 
             // Configure path to save
             string path = _configuration.GetSection("StoragePath").Value!;
-            Debug.WriteLine(filesData.FolderToken);
-            Debug.WriteLine(filesData.Files.Count);
 
             // Check folder and files
             var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == filesData.FolderToken);
@@ -94,9 +120,6 @@ namespace FileStorage.Controllers
                 long sizeSum = 0;
                 foreach (var file in filesData.Files)
                 {
-                    Debug.WriteLine(file.FileName);
-                    Debug.WriteLine(file.ContentType);
-                    Debug.WriteLine(file.Length);
                     sizeSum += file.Length;
                 }
 
@@ -160,7 +183,7 @@ namespace FileStorage.Controllers
             }
         }
         
-        // PATCH: api/file/bin/{id}
+        // PATCH: api/files/bin/{id}
         [HttpPatch("bin/{id}")]
         public async Task<IActionResult> PatchFileBin(int id)
         {
@@ -196,7 +219,7 @@ namespace FileStorage.Controllers
             }
         }
 
-        // PATCH: api/file/restore/{id}
+        // PATCH: api/files/restore/{id}
         [HttpPatch("restore/{id}")]
         public async Task<IActionResult> PatchFileRestore(int id)
         {
@@ -234,7 +257,7 @@ namespace FileStorage.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        // DELETE: api/file/{id}
+        // DELETE: api/files/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFile(int id)
         {
@@ -279,7 +302,7 @@ namespace FileStorage.Controllers
             }
         }
 
-        // PATCH: api/file/name/{id}
+        // PATCH: api/files/name/{id}
         [HttpPatch("name/{id}")]
         public async Task<IActionResult> PatchFileName(int id, FilePatchNameDto fileData)
         {
@@ -310,12 +333,12 @@ namespace FileStorage.Controllers
             }
         }
 
-        // PATCH: api/file/elect/{id}
+        // PATCH: api/files/elect/{id}
         [HttpPatch("elect/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchFolderElect(int id)
         {
-            // If current && destination folder exists
+            // If current file exists
             Models.Db.File? currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id);
             if (currentFile == null)
             {
@@ -331,14 +354,14 @@ namespace FileStorage.Controllers
             // owner check || access check
             if ((currentFile.FolderId == null && currentFile.UserId == userId) || (currentFile.Folder != null && (userId == currentFile.Folder.UserId || currentFile.Folder.AccessType != null)))
             {
-                var currentElect = await _context.ElectedFolders.FirstOrDefaultAsync(x => x.UserId == userId && x.FolderId == currentFile.Id);
+                var currentElect = await _context.ElectedFiles.FirstOrDefaultAsync(x => x.UserId == userId && x.FileId == currentFile.Id);
                 if (currentElect == null)
                 {
                     await _context.ElectedFiles.AddAsync(new ElectedFile() { FileId = currentFile.Id, UserId = userId });
                 }
                 else
                 {
-                    _context.ElectedFolders.Remove(currentElect);
+                    _context.ElectedFiles.Remove(currentElect);
                 }
                 await _context.SaveChangesAsync();
                 return NoContent();
