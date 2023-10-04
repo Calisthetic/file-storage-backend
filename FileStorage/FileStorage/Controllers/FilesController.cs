@@ -75,7 +75,7 @@ namespace FileStorage.Controllers
                 _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false && (x.Folder == null || x.Folder.IsDeleted == false))
                 .Include(x => x.Folder)
                 .Include(x => x.DownloadsOfFiles)
-                .Include(x => x.ViewsOfFiles)
+                .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                 .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
                 .Include(x => x.FileType)
             ).ProjectToType<FileWithFolderInfoDto>().ToListAsync();

@@ -50,7 +50,7 @@ namespace FileStorage.Controllers
                     _context.Folders.Where(x => x.UserId == userId && x.IsDeleted == true)
                     .Include(x => x.Files)
                     .Include(x => x.DownloadsOfFolders)
-                    .Include(x => x.ViewsOfFolders)
+                    .Include(x => x.ViewsOfFolders.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
                     .Include(x => x.AccessType)
                 ).ProjectToType<FolderInfoDto>().ToListAsync();
@@ -58,7 +58,7 @@ namespace FileStorage.Controllers
                 var files = await _mapper.From(
                     _context.Files.Where(x => x.UserId == userId && x.FolderId == null && x.IsDeleted == true)
                     .Include(x => x.DownloadsOfFiles)
-                    .Include(x => x.ViewsOfFiles)
+                    .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
                     .Include(x => x.FileType)
                 ).ProjectToType<FileInfoDto>().ToListAsync();
@@ -87,7 +87,7 @@ namespace FileStorage.Controllers
                     _context.Folders.Where(x => x.UpperFolderId == currentFolder.Id)
                     .Include(x => x.Files)
                     .Include(x => x.DownloadsOfFolders)
-                    .Include(x => x.ViewsOfFolders)
+                    .Include(x => x.ViewsOfFolders.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
                     .Include(x => x.AccessType)
                 ).ProjectToType<FolderInfoDto>().ToListAsync();
@@ -95,7 +95,7 @@ namespace FileStorage.Controllers
                 var files = await _mapper.From(
                     _context.Files.Where(x => x.FolderId == currentFolder.Id)
                     .Include(x => x.DownloadsOfFiles)
-                    .Include(x => x.ViewsOfFiles)
+                    .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
                     .Include(x => x.FileType)
                 ).ProjectToType<FileInfoDto>().ToListAsync();
@@ -122,18 +122,8 @@ namespace FileStorage.Controllers
                 return Unauthorized();
             }
 
-            var folders = await _context.Folders.Where(x => x.UserId == userId && x.IsDeleted == true)
-                .Include(x => x.Files)
-                .Include(x => x.DownloadsOfFolders)
-                .Include(x => x.ViewsOfFolders)
-                .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
-                .Include(x => x.AccessType).ToListAsync();
-
-            var files = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == true)
-                .Include(x => x.DownloadsOfFiles)
-                .Include(x => x.ViewsOfFiles)
-                .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
-                .Include(x => x.FileType).ToListAsync();
+            var folders = await _context.Folders.Where(x => x.UserId == userId && x.IsDeleted == true).ToListAsync();
+            var files = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == true).ToListAsync();
 
             foreach (var folder in folders)
             {
@@ -166,18 +156,8 @@ namespace FileStorage.Controllers
                 return Unauthorized();
             }
 
-            var folders = await _context.Folders.Where(x => x.UserId == userId && x.IsDeleted == true)
-                .Include(x => x.Files)
-                .Include(x => x.DownloadsOfFolders)
-                .Include(x => x.ViewsOfFolders)
-                .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
-                .Include(x => x.AccessType).ToListAsync();
-
-            var files = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == true)
-                .Include(x => x.DownloadsOfFiles)
-                .Include(x => x.ViewsOfFiles)
-                .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
-                .Include(x => x.FileType).ToListAsync();
+            var folders = await _context.Folders.Where(x => x.UserId == userId && x.IsDeleted == true).ToListAsync();
+            var files = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == true).ToListAsync();
 
             foreach (var folder in folders)
             {

@@ -32,7 +32,7 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-//builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
+
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value!);
 

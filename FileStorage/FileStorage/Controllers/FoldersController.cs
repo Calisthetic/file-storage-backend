@@ -167,7 +167,7 @@ namespace FileStorage.Controllers
                     _context.Folders.Where(x => x.UserId == userId && x.UpperFolderId == null && x.IsDeleted == false)
                     .Include(x => x.Files)
                     .Include(x => x.DownloadsOfFolders)
-                    .Include(x => x.ViewsOfFolders)
+                    .Include(x => x.ViewsOfFolders.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
                     .Include(x => x.AccessType)
                 ).ProjectToType<FolderInfoDto>().ToListAsync();
@@ -175,7 +175,7 @@ namespace FileStorage.Controllers
                 var files = await _mapper.From(
                     _context.Files.Where(x => x.UserId == userId && x.FolderId == null && x.IsDeleted == false)
                     .Include(x => x.DownloadsOfFiles)
-                    .Include(x => x.ViewsOfFiles)
+                    .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
                     .Include(x => x.FileType)
                 ).ProjectToType<FileInfoDto>().ToListAsync();
@@ -200,7 +200,7 @@ namespace FileStorage.Controllers
                     _context.Folders.Where(x => x.UpperFolderId == currentFolder.Id && x.IsDeleted == false)
                     .Include(x => x.Files)
                     .Include(x => x.DownloadsOfFolders)
-                    .Include(x => x.ViewsOfFolders)
+                    .Include(x => x.ViewsOfFolders.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
                     .Include(x => x.AccessType)
                 ).ProjectToType<FolderInfoDto>().ToListAsync();
@@ -208,7 +208,7 @@ namespace FileStorage.Controllers
                 var files = await _mapper.From(
                     _context.Files.Where(x => x.FolderId == currentFolder.Id && x.IsDeleted == false)
                     .Include(x => x.DownloadsOfFiles)
-                    .Include(x => x.ViewsOfFiles)
+                    .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
                     .Include(x => x.FileType)
                 ).ProjectToType<FileInfoDto>().ToListAsync();
@@ -248,7 +248,7 @@ namespace FileStorage.Controllers
                 .Include(x => x.Folder)
                     .ThenInclude(x => x.DownloadsOfFolders)
                 .Include(x => x.Folder)
-                    .ThenInclude(x => x.ViewsOfFolders)
+                    .ThenInclude(x => x.ViewsOfFolders.Where(x => x.UserId != userId))
                 .Where(x => x.UserId == userId)
             ).ProjectToType<FolderElectedInfoDto>().ToListAsync();
 
@@ -257,7 +257,7 @@ namespace FileStorage.Controllers
                 .Include(x => x.File)
                     .ThenInclude(x => x.DownloadsOfFiles)
                 .Include(x => x.File)
-                    .ThenInclude(x => x.ViewsOfFiles)
+                    .ThenInclude(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                 .Include(x => x.File)
                     .ThenInclude(x => x.FileType)
                 .Where(x => x.UserId == userId)
