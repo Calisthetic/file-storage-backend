@@ -1,22 +1,28 @@
-﻿namespace FileStorage.Services
+﻿namespace FileStorage.Services;
+
+public interface IUserService
 {
-    public class UserService : IUserService
+    string? GetUserId();
+}
+
+
+
+public class UserService : IUserService
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public UserService(IHttpContextAccessor httpContextAccessor)
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        public UserService(IHttpContextAccessor httpContextAccessor)
+    public string? GetUserId()
+    {
+        var result = string.Empty;
+        if (_httpContextAccessor.HttpContext is not null)
         {
-            _httpContextAccessor = httpContextAccessor;
+            result = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "id")?.Value;
         }
-
-        public string? GetUserId()
-        {
-            var result = string.Empty;
-            if (_httpContextAccessor.HttpContext is not null)
-            {
-                result = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == "id")?.Value;
-            }
-            return result;
-        }
+        return result;
     }
 }
