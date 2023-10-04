@@ -3,6 +3,7 @@ using System;
 using FileStorage.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FileStorage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231004141534_delete cascade")]
+    partial class deletecascade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -623,10 +626,8 @@ namespace FileStorage.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_blocked");
 
-                    b.Property<bool>("IsImageExists")
-                        .ValueGeneratedOnAdd()
+                    b.Property<bool?>("IsImageExists")
                         .HasColumnType("boolean")
-                        .HasDefaultValue(false)
                         .HasColumnName("is_image_exists");
 
                     b.Property<string>("Password")

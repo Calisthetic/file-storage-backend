@@ -69,6 +69,7 @@ namespace FileStorage.Data
             {
                 entity.HasOne(d => d.File).WithMany(p => p.DownloadsOfFiles)
                     .HasForeignKey(d => d.FileId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_DownloadsOfFiles_Files");
 
                 entity.HasOne(d => d.User).WithMany(p => p.DownloadsOfFiles)
@@ -80,6 +81,7 @@ namespace FileStorage.Data
             {
                 entity.HasOne(d => d.Folder).WithMany(p => p.DownloadsOfFolders)
                     .HasForeignKey(d => d.FolderId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_DownloadsOfFolders_Folders");
 
                 entity.HasOne(d => d.User).WithMany(p => p.DownloadsOfFolders)
@@ -91,6 +93,7 @@ namespace FileStorage.Data
             {
                 entity.HasOne(d => d.File).WithMany(p => p.ElectedFiles)
                     .HasForeignKey(d => d.FileId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ElectedFiles_Files");
 
                 entity.HasOne(d => d.User).WithMany(p => p.ElectedFiles)
@@ -102,6 +105,7 @@ namespace FileStorage.Data
             {
                 entity.HasOne(d => d.Folder).WithMany(p => p.ElectedFolders)
                     .HasForeignKey(d => d.FolderId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ElectedFolders_Folders");
 
                 entity.HasOne(d => d.User).WithMany(p => p.ElectedFolders)
@@ -226,6 +230,7 @@ namespace FileStorage.Data
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.Property(e => e.IsImageExists).HasDefaultValue(false);
                 entity.Property(e => e.About).HasColumnType("text");
                 entity.Property(e => e.CreatedAt).HasColumnType("timestamp");
                 entity.Property(e => e.FirstName).HasMaxLength(20);
@@ -241,8 +246,11 @@ namespace FileStorage.Data
 
             modelBuilder.Entity<ViewOfFile>(entity =>
             {
+                entity.Property(e => e.CreatedAt).HasColumnType("timestamp");
+
                 entity.HasOne(d => d.File).WithMany(p => p.ViewsOfFiles)
                     .HasForeignKey(d => d.FileId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ViewsOfFiles_Files");
 
                 entity.HasOne(d => d.User).WithMany(p => p.ViewsOfFiles)
@@ -252,8 +260,11 @@ namespace FileStorage.Data
 
             modelBuilder.Entity<ViewOfFolder>(entity =>
             {
+                entity.Property(e => e.CreatedAt).HasColumnType("timestamp");
+
                 entity.HasOne(d => d.Folder).WithMany(p => p.ViewsOfFolders)
                     .HasForeignKey(d => d.FolderId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_ViewsOfFolders_Folders");
 
                 entity.HasOne(d => d.User).WithMany(p => p.ViewsOfFolders)

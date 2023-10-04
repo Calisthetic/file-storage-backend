@@ -22,6 +22,8 @@ public class User : BaseEntity
 
     public bool IsBlocked { get; set; }
 
+    public bool IsImageExists { get; set; }
+
     public virtual ICollection<Action> Actions { get; set; } = new List<Action>();
 
     public virtual ICollection<DownloadOfFile> DownloadsOfFiles { get; set; } = new List<DownloadOfFile>();
