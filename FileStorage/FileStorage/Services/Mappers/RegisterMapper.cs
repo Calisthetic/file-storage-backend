@@ -37,6 +37,16 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.IsElected, r => r.ElectedFiles.Count != 0)
                 .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
                 .RequireDestinationMemberSource(true);
+            config.NewConfig<Models.Db.File, FileWithFolderInfoDto>()
+                .Map(d => d.FolderName, r => r.Folder == null ? "Main" : r.Folder.Name)
+                .Map(d => d.FolderToken, r => r.Folder == null ? "main" : r.Folder.Token)
+                .Map(d => d.Token, r => r.Id)
+                .Map(d => d.Downloads, r => r.DownloadsOfFiles.Count)
+                .Map(d => d.Views, r => r.ViewsOfFiles.Count)
+                .Map(d => d.FileType, r => r.FileType.Name)
+                .Map(d => d.IsElected, r => r.ElectedFiles.Count != 0)
+                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
+                .RequireDestinationMemberSource(true);
 
             // Elected
             config.NewConfig<ElectedFolder, FolderElectedInfoDto>()

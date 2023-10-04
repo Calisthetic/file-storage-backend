@@ -72,12 +72,13 @@ namespace FileStorage.Controllers
             }
 
             var files = await _mapper.From(
-                _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false)
+                _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false && (x.Folder == null || x.Folder.IsDeleted == false))
+                .Include(x => x.Folder)
                 .Include(x => x.DownloadsOfFiles)
                 .Include(x => x.ViewsOfFiles)
                 .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
                 .Include(x => x.FileType)
-            ).ProjectToType<FileInfoDto>().ToListAsync();
+            ).ProjectToType<FileWithFolderInfoDto>().ToListAsync();
             return Ok(files);
         }
 
@@ -320,7 +321,7 @@ namespace FileStorage.Controllers
             }
 
             // (don't) Require auth and access check || main folder check
-            if ((userId == currentFile.UserId && currentFile.Folder == null) || (currentFile.Folder != null && currentFile.Folder.AccessType != null &&
+            if ((userId == currentFile.UserId && (currentFile.Folder == null || currentFile.Folder.UserId == userId)) || (currentFile.Folder != null && currentFile.Folder.AccessType != null &&
                 (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanEdit == true))
             {
                 currentFile.Name = fileData.Name;

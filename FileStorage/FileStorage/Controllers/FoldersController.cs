@@ -188,14 +188,10 @@ namespace FileStorage.Controllers
             }
 
             // Search folder
-            var currentFolder = await _context.Folders.Include(x => x.AccessType).FirstOrDefaultAsync(x => x.Token == token);
+            var currentFolder = await _context.Folders.Include(x => x.AccessType).FirstOrDefaultAsync(x => x.Token == token && x.IsDeleted == false);
             if (currentFolder == null)
             {
                 return NotFound();
-            }
-            if (currentFolder.IsDeleted == true)
-            {
-                return Forbid();
             }
 
             if (userId == currentFolder.UserId || (currentFolder.AccessType != null && (currentFolder.AccessType.RequireAuth == false || userId != null)))
