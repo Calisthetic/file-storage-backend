@@ -1,4 +1,5 @@
 using FileStorage.Data;
+using FileStorage.Jobs;
 using FileStorage.Services;
 using FileStorage.Services.Mappers;
 using FileStorage.Utils;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Quartz;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using System.Text.Json;
@@ -32,7 +34,25 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+// schedule jobs
+builder.Services.AddQuartzHostedService(options =>
+{
+    options.WaitForJobsToComplete = true;
+});
 
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+
+    var jobKey = new JobKey(nameof(CalculateUsageJob));
+
+    q.AddJob<CalculateUsageJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+    .ForJob(jobKey)
+    .WithIdentity($"{jobKey}-trigger")
+    .WithCronSchedule(builder.Configuration.GetSection("CalculateUsageJob:CronSchedule").Value ?? "0 0 * * * ?"));
+});
 
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value!);
 

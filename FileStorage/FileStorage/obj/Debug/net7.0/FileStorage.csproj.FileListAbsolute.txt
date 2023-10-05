@@ -248,3 +248,6 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Scrutor.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Quartz.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Quartz.Extensions.DependencyInjection.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Quartz.Extensions.Hosting.dll
