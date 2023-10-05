@@ -21,6 +21,7 @@
 
 [connect to psql](https://youtu.be/z7G6HV7WWz0?si=cHTbdEOE16KJ5W0O)
 [read user claims](https://youtu.be/7vqAHD9DlIA?si=KhJ1cYMce9Fa0GRs)
+[Quartz background jobs](https://youtu.be/iD3jrj3RBuc?si=wSZ_Okv8HND8j9cA)
 
 </details>
 
