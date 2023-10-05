@@ -66,5 +66,16 @@ namespace FileStorage.Controllers
             }
             return await _context.FileTypes.ToListAsync();
         }
+
+        // GET: api/Files
+        [HttpGet("be")]
+        public async Task<IActionResult> GetFileBe()
+        {
+            if (_context.FileTypes == null)
+            {
+                return NotFound();
+            }
+            return Ok(await _context.ViewsOfFiles.Where(x => x.UserId == 1).OrderBy(x => x.FileId).ToListAsync());
+        }
     }
 }

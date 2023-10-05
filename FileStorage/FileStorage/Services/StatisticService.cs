@@ -6,7 +6,9 @@ namespace FileStorage.Services;
 
 public interface IStatisticService
 {
-    Task CalculateViews(int? userId, List<Folder> folders, List<Models.Db.File> files);
+    Task CalculateFileDownload(int userId, Models.Db.File file);
+    Task CalculateFolderDownloads(int userId, Folder folder);
+    Task CalculateViews(int? userId, Folder? folders = null, List<Models.Db.File>? files = null);
 }
 
 public class StatisticService : IStatisticService
@@ -18,6 +20,16 @@ public class StatisticService : IStatisticService
     }
 
 
+
+    public async Task CalculateFileDownload(int userId, Models.Db.File file)
+    {
+        var currentFile = await _context.DownloadsOfFiles.FirstOrDefaultAsync(x => x.UserId == userId && x.FileId == file.Id);
+        if (currentFile == null)
+        {
+            await _context.AddAsync(new DownloadOfFile() { Id = userId, FileId = file.Id });
+            await _context.SaveChangesAsync();
+        }
+    }
 
     public async Task CalculateFolderDownloads(int userId, Folder folder)
     {
@@ -45,22 +57,21 @@ public class StatisticService : IStatisticService
         }
     }
 
-    public async Task CalculateViews(int? userId, List<Folder> folders, List<Models.Db.File> files)
+
+
+    public async Task CalculateViews(int? userId, Folder? folder = null, List<Models.Db.File>? files = null)
     {
         if (userId == null) return;
-        if (folders is not null)
+        if (folder is not null)
         {
-            for (int i = 0; i < folders.Count; i++)
+            ViewOfFolder? currentFolderView = await _context.ViewsOfFolders.FirstOrDefaultAsync(x => x.UserId == userId && x.FolderId == folder.Id);
+            if (currentFolderView == null)
             {
-                ViewOfFolder? currentFolderView = await _context.ViewsOfFolders.FirstOrDefaultAsync(x => x.UserId == userId);
-                if (currentFolderView == null)
-                {
-                    await _context.ViewsOfFolders.AddAsync(new ViewOfFolder() { UserId = (int)userId, FolderId = folders[i].Id, CreatedAt = DateTime.Now });
-                }
-                else if (currentFolderView != null)
-                {
-                    currentFolderView.CreatedAt = DateTime.Now;
-                }
+                await _context.ViewsOfFolders.AddAsync(new ViewOfFolder() { UserId = (int)userId, FolderId = folder.Id, CreatedAt = DateTime.Now });
+            }
+            else if (currentFolderView != null)
+            {
+                currentFolderView.CreatedAt = DateTime.Now;
             }
             await _context.SaveChangesAsync();
         }
@@ -68,7 +79,7 @@ public class StatisticService : IStatisticService
         {
             for (int i = 0; i < files.Count; i++)
             {
-                ViewOfFile? currentFileView = await _context.ViewsOfFiles.FirstOrDefaultAsync(x => x.UserId == userId);
+                ViewOfFile? currentFileView = await _context.ViewsOfFiles.FirstOrDefaultAsync(x => x.UserId == userId && x.FileId == files[i].Id);
                 if (currentFileView == null)
                 {
                     await _context.ViewsOfFiles.AddAsync(new ViewOfFile() { UserId = (int)userId, FileId = files[i].Id, CreatedAt = DateTime.Now });

@@ -84,6 +84,8 @@ builder.Services.AddSingleton(tokenValidationParameter);
 // Read user claims
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
+// Other services
+builder.Services.AddScoped<IStatisticService, StatisticService>();
 
 // Don't remove "Async" from names
 builder.Services.AddMvc(options =>

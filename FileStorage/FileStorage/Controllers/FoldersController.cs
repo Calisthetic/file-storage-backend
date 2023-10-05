@@ -23,14 +23,16 @@ namespace FileStorage.Controllers
         private readonly IMapper _mapper;
         private readonly ApiDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IStatisticService _statisticService;
 
         public FoldersController(ApiDbContext context, IMapper mapper, 
-            IUserService userService, IConfiguration configuration)
+            IUserService userService, IConfiguration configuration, IStatisticService statisticService)
         {
             _context = context;
             _mapper = mapper;
             _userService = userService;
             _configuration = configuration;
+            _statisticService = statisticService;
         }
 
         // GET: api/folders/download/{token}
@@ -163,27 +165,25 @@ namespace FileStorage.Controllers
 
             if (userId != null && token == "main")
             {
-                var folders = await _mapper.From(
-                    _context.Folders.Where(x => x.UserId == userId && x.UpperFolderId == null && x.IsDeleted == false)
+                var folders = await _context.Folders.Where(x => x.UserId == userId && x.UpperFolderId == null && x.IsDeleted == false)
                     .Include(x => x.Files)
                     .Include(x => x.DownloadsOfFolders)
                     .Include(x => x.ViewsOfFolders.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
-                    .Include(x => x.AccessType)
-                ).ProjectToType<FolderInfoDto>().ToListAsync();
+                    .Include(x => x.AccessType).ToListAsync();
 
-                var files = await _mapper.From(
-                    _context.Files.Where(x => x.UserId == userId && x.FolderId == null && x.IsDeleted == false)
+                var files = await _context.Files.Where(x => x.UserId == userId && x.FolderId == null && x.IsDeleted == false)
                     .Include(x => x.DownloadsOfFiles)
                     .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
-                    .Include(x => x.FileType)
-                ).ProjectToType<FileInfoDto>().ToListAsync();
+                    .Include(x => x.FileType).ToListAsync();
+
+                await _statisticService.CalculateViews(userId, files: files);
 
                 return Ok(new FolderValuesDto()
                 {
-                    Folders = folders,
-                    Files = files,
+                    Folders = folders.Adapt<List<FolderInfoDto>>(),
+                    Files = files.Adapt<List<FileInfoDto>>(),
                 });
             }
 
@@ -196,27 +196,25 @@ namespace FileStorage.Controllers
 
             if (userId == currentFolder.UserId || (currentFolder.AccessType != null && (currentFolder.AccessType.RequireAuth == false || userId != null)))
             {
-                var folders = await _mapper.From(
-                    _context.Folders.Where(x => x.UpperFolderId == currentFolder.Id && x.IsDeleted == false)
+                var folders = await _context.Folders.Where(x => x.UpperFolderId == currentFolder.Id && x.IsDeleted == false)
                     .Include(x => x.Files)
                     .Include(x => x.DownloadsOfFolders)
                     .Include(x => x.ViewsOfFolders.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFolders.Where(x => x.UserId == userId))
-                    .Include(x => x.AccessType)
-                ).ProjectToType<FolderInfoDto>().ToListAsync();
+                    .Include(x => x.AccessType).ToListAsync();
 
-                var files = await _mapper.From(
-                    _context.Files.Where(x => x.FolderId == currentFolder.Id && x.IsDeleted == false)
+                var files = await _context.Files.Where(x => x.FolderId == currentFolder.Id && x.IsDeleted == false)
                     .Include(x => x.DownloadsOfFiles)
                     .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
-                    .Include(x => x.FileType)
-                ).ProjectToType<FileInfoDto>().ToListAsync();
+                    .Include(x => x.FileType).ToListAsync();
 
-                return Ok(new FolderValuesDto()
+                await _statisticService.CalculateViews(userId, currentFolder, files);
+
+                return Ok(new
                 {
-                    Folders = folders,
-                    Files = files,
+                    Folders = folders.Adapt<List<FolderInfoDto>>(),
+                    Files = files.Adapt<List<FileInfoDto>>(),
                 });
             }
             else
@@ -268,6 +266,37 @@ namespace FileStorage.Controllers
                 Folders = folders,
                 Files = files,
             });
+        }
+
+        // GET: api/folders/recent
+        [HttpGet("recent")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> GetFolderrecent()
+        {
+            if (_context.Folders == null || _context.Files == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var folders = await _mapper.From(
+                _context.ViewsOfFolders
+                .Include(x => x.Folder)
+                    .ThenInclude(x => x.Files)
+                .Include(x => x.Folder)
+                    .ThenInclude(x => x.DownloadsOfFolders)
+                .Include(x => x.Folder)
+                    .ThenInclude(x => x.ViewsOfFolders.Where(x => x.UserId != userId))
+                .OrderByDescending(x => x.CreatedAt)
+                .Where(x => x.UserId == userId && x.CreatedAt != null)
+            ).ProjectToType<FolderInfoDto>().ToListAsync();
+
+            return Ok(folders);
         }
 
         // GET: api/folders/path/{token}
@@ -546,6 +575,36 @@ namespace FileStorage.Controllers
             else
             {
                 return Unauthorized();
+            }
+        }
+
+        // PATCH: api/folders/view/{token}
+        [HttpPatch("view/{token}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PatchFolderView(string token)
+        {
+            Folder? currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token);
+            if (currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            ViewOfFolder? currentView = await _context.ViewsOfFolders.FirstOrDefaultAsync(x => x.UserId == userId && x.FolderId == currentFolder.Id);
+            if (currentView == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                currentView.CreatedAt = null;
+                await _context.SaveChangesAsync();
+                return NoContent();
             }
         }
 

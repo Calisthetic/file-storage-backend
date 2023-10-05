@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using FileStorage.Models.Outcoming.File;
 using MapsterMapper;
 using Mapster;
+using System.Diagnostics;
 
 namespace FileStorage.Controllers
 {
@@ -20,13 +21,16 @@ namespace FileStorage.Controllers
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IStatisticService _statisticService;
 
-        public FilesController(ApiDbContext context, IConfiguration configuration, IUserService userService, IMapper mapper)
+        public FilesController(ApiDbContext context, IConfiguration configuration, 
+            IUserService userService, IMapper mapper, IStatisticService statisticService)
         {
             _context = context;
             _configuration = configuration;
             _userService = userService;
             _mapper = mapper;
+            _statisticService = statisticService;
         }
 
         // GET: api/files/download/5
@@ -75,10 +79,26 @@ namespace FileStorage.Controllers
                 _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false && (x.Folder == null || x.Folder.IsDeleted == false))
                 .Include(x => x.Folder)
                 .Include(x => x.DownloadsOfFiles)
-                .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
+                .Include(x => x.ViewsOfFiles.Where(x => !(x.UserId == userId) == true))
                 .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
                 .Include(x => x.FileType)
             ).ProjectToType<FileWithFolderInfoDto>().ToListAsync();
+
+            var files1 = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false && (x.Folder == null || x.Folder.IsDeleted == false))
+                .Include(x => x.Folder)
+                .Include(x => x.DownloadsOfFiles)
+                .Include(x => x.ViewsOfFiles.Where(x => !(x.UserId == userId) == true))
+                .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
+                .Include(x => x.FileType).ToListAsync();
+            foreach ( var file in files1 )
+            {
+                Debug.WriteLine("File " + file.Name);
+                foreach ( var el in file.ViewsOfFiles)
+                {
+                    Debug.WriteLine(el.UserId + " | " + userId);
+                    Debug.WriteLine((el.UserId == userId).ToString());
+                }
+            }
             return Ok(files);
         }
 
