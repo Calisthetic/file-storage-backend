@@ -91,35 +91,47 @@ namespace FileStorage.Controllers
                 .ThenInclude(x => x.InverseUpperFolder.Where(x => x.IsDeleted == false))
                     .ThenInclude(x => x.Files.Where(x => x.IsDeleted == false))
                     .FirstOrDefaultAsync();
+            
             if (currentFolder == null)
             {
                 return NotFound();
             }
-
-            string path = _configuration.GetSection("StoragePath").Value!;
-            string folderPath = path + @"\" + currentFolder.UserId;
-
-            if (Directory.Exists(folderPath))
+            
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
             {
-                if (System.IO.File.Exists(folderPath + "\\" + "archive.zip"))
-                    System.IO.File.Delete(folderPath + "\\" + "archive.zip");
+                userId = userIdResult;
+            }
 
-                var fs = new FileStream(folderPath + "\\" + "archive.zip", FileMode.Create, FileAccess.ReadWrite);
-                var zip = new ZipArchive(fs, ZipArchiveMode.Create);
-
-                foreach (var file in currentFolder.Files)
+            if (currentFolder.UserId == userId ||
+                (currentFolder.AccessType != null &&
+                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanDownload == true))
+            {
+                string path = _configuration.GetSection("StoragePath").Value!;
+                string folderPath = path + @"\" + currentFolder.UserId;
+                if (Directory.Exists(folderPath))
                 {
-                    zip.CreateEntryFromFile(folderPath + "\\" + file.Id + file.Name[file.Name.LastIndexOf('.')..], file.Name);
-                }
-                foreach (var folder in currentFolder.InverseUpperFolder)
-                {
-                    GetFolderData(folderPath, zip, folder);
-                }
+                    if (System.IO.File.Exists(folderPath + "\\" + "archive.zip"))
+                        System.IO.File.Delete(folderPath + "\\" + "archive.zip");
 
-                zip.Dispose();
-                fs.Close();
+                    var fs = new FileStream(folderPath + "\\" + "archive.zip", FileMode.Create, FileAccess.ReadWrite);
+                    var zip = new ZipArchive(fs, ZipArchiveMode.Create);
 
-                return File(System.IO.File.OpenRead(folderPath + "\\" + "archive.zip"), "application/octet-stream", currentFolder.Name + ".zip");
+                    foreach (var file in currentFolder.Files)
+                    {
+                        zip.CreateEntryFromFile(folderPath + "\\" + file.Id + file.Name[file.Name.LastIndexOf('.')..], file.Name);
+                    }
+                    foreach (var folder in currentFolder.InverseUpperFolder)
+                    {
+                        GetFolderData(folderPath, zip, folder);
+                    }
+
+                    zip.Dispose();
+                    fs.Close();
+
+                    return File(System.IO.File.OpenRead(folderPath + "\\" + "archive.zip"), "application/octet-stream", currentFolder.Name + ".zip");
+                }
             }
             return NotFound();
         }

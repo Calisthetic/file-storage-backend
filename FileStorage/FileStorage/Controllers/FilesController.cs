@@ -42,18 +42,30 @@ namespace FileStorage.Controllers
                 return NotFound();
             }
 
-            var file = await _context.Files.FindAsync(id);
-            if (file == null)
+            var currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id);
+            if (currentFile == null)
             {
                 return NotFound();
             }
 
-            string path = _configuration.GetSection("StoragePath").Value!;
-            string localFilePath = path + @"\" + (file.Folder?.UserId ?? file.UserId) + @"\" + file.Id + file.Name[file.Name.LastIndexOf('.')..];
-
-            if (System.IO.File.Exists(localFilePath))
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
             {
-                return File(System.IO.File.OpenRead(localFilePath), "application/octet-stream", file.Name);
+                userId = userIdResult;
+            }
+
+            if ((userId == currentFile.UserId && currentFile.Folder == null) || (currentFile.Folder is not null && currentFile.Folder.UserId == userId) ||
+                (currentFile.Folder is not null && currentFile.Folder.AccessType != null &&
+                (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanDownload == true))
+            {
+                string path = _configuration.GetSection("StoragePath").Value!;
+                string localFilePath = path + @"\" + (currentFile.Folder?.UserId ?? currentFile.UserId) + @"\" + currentFile.Id + currentFile.Name[currentFile.Name.LastIndexOf('.')..];
+                
+                if (System.IO.File.Exists(localFilePath))
+                {
+                    return File(System.IO.File.OpenRead(localFilePath), "application/octet-stream", currentFile.Name);
+                }
             }
 
             return NotFound();
