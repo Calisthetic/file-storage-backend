@@ -151,7 +151,7 @@ namespace FileStorage.Controllers
         }
         private static string GetFullPath(Folder folder, string path = "")
         {
-            return folder.UpperFolder == null ? folder.Name + "/" + path : GetFullPath(folder.UpperFolder, folder.Name + "/" + path);
+            return folder.UpperFolder == null ? path : GetFullPath(folder.UpperFolder, folder.Name + "/" + path);
         }
 
         /// <summary>
