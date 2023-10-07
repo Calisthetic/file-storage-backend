@@ -11,9 +11,9 @@
           "MMLib.SwaggerForOcelot": "7.0.1",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.11",
           "Microsoft.AspNetCore.OpenApi": "7.0.10",
-          "Ocelot": "19.0.3",
-          "Swashbuckle.AspNetCore": "6.5.0",
-          "Swashbuckle.AspNetCore.Filters": "7.0.11"
+          "Ocelot": "19.0.4",
+          "Ocelot.Provider.Polly": "19.0.4",
+          "Swashbuckle.AspNetCore": "6.5.0"
         },
         "runtime": {
           "FileStorageApiGateway.dll": {}
@@ -58,6 +58,14 @@
           "lib/net7.0/FluentValidation.dll": {
             "assemblyVersion": "11.0.0.0",
             "fileVersion": "11.5.2.0"
+          }
+        }
+      },
+      "IPAddressRange/6.0.0": {
+        "runtime": {
+          "lib/net7.0/IPAddressRange.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
           }
         }
       },
@@ -209,17 +217,6 @@
         }
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions/7.0.0": {},
-      "Microsoft.Extensions.DependencyModel/3.1.6": {
-        "dependencies": {
-          "System.Text.Json": "4.7.2"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Extensions.DependencyModel.dll": {
-            "assemblyVersion": "3.1.6.0",
-            "fileVersion": "3.100.620.31604"
-          }
-        }
-      },
       "Microsoft.Extensions.DiagnosticAdapter/3.1.32": {
         "dependencies": {
           "System.Diagnostics.DiagnosticSource": "6.0.0"
@@ -391,7 +388,7 @@
         "dependencies": {
           "Kros.Utils": "2.1.0",
           "Microsoft.Extensions.Http": "7.0.0",
-          "Ocelot": "19.0.3",
+          "Ocelot": "19.0.4",
           "Swashbuckle.AspNetCore.SwaggerGen": "6.5.0",
           "Swashbuckle.AspNetCore.SwaggerUI": "6.5.0"
         },
@@ -421,17 +418,38 @@
           }
         }
       },
-      "Ocelot/19.0.3": {
+      "Ocelot/19.0.4": {
         "dependencies": {
           "FluentValidation": "11.5.2",
+          "IPAddressRange": "6.0.0",
           "Microsoft.AspNetCore.MiddlewareAnalysis": "7.0.5",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "7.0.5",
           "Microsoft.Extensions.DiagnosticAdapter": "3.1.32"
         },
         "runtime": {
           "lib/net7.0/Ocelot.dll": {
-            "assemblyVersion": "19.0.3.0",
-            "fileVersion": "19.0.3.0"
+            "assemblyVersion": "19.0.4.0",
+            "fileVersion": "19.0.4.0"
+          }
+        }
+      },
+      "Ocelot.Provider.Polly/19.0.4": {
+        "dependencies": {
+          "Ocelot": "19.0.4",
+          "Polly": "7.2.3"
+        },
+        "runtime": {
+          "lib/net7.0/Ocelot.Provider.Polly.dll": {
+            "assemblyVersion": "19.0.4.0",
+            "fileVersion": "19.0.4.0"
+          }
+        }
+      },
+      "Polly/7.2.3": {
+        "runtime": {
+          "lib/netstandard2.0/Polly.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.2.3.0"
           }
         }
       },
@@ -477,47 +495,12 @@
       "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
       "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {},
-      "Scrutor/3.3.0": {
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
-          "Microsoft.Extensions.DependencyModel": "3.1.6"
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/Scrutor.dll": {
-            "assemblyVersion": "3.0.2.0",
-            "fileVersion": "3.0.2.0"
-          }
-        }
-      },
       "Swashbuckle.AspNetCore/6.5.0": {
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "6.0.5",
           "Swashbuckle.AspNetCore.Swagger": "6.5.0",
           "Swashbuckle.AspNetCore.SwaggerGen": "6.5.0",
           "Swashbuckle.AspNetCore.SwaggerUI": "6.5.0"
-        }
-      },
-      "Swashbuckle.AspNetCore.Filters/7.0.11": {
-        "dependencies": {
-          "Microsoft.Extensions.DependencyInjection": "7.0.0",
-          "Microsoft.OpenApi": "1.4.3",
-          "Scrutor": "3.3.0",
-          "Swashbuckle.AspNetCore.Filters.Abstractions": "7.0.11",
-          "Swashbuckle.AspNetCore.SwaggerGen": "6.5.0"
-        },
-        "runtime": {
-          "lib/net5.0/Swashbuckle.AspNetCore.Filters.dll": {
-            "assemblyVersion": "7.0.11.0",
-            "fileVersion": "7.0.11.0"
-          }
-        }
-      },
-      "Swashbuckle.AspNetCore.Filters.Abstractions/7.0.11": {
-        "runtime": {
-          "lib/net5.0/Swashbuckle.AspNetCore.Filters.Abstractions.dll": {
-            "assemblyVersion": "7.0.11.0",
-            "fileVersion": "7.0.11.0"
-          }
         }
       },
       "Swashbuckle.AspNetCore.Swagger/6.5.0": {
@@ -1059,6 +1042,13 @@
       "path": "fluentvalidation/11.5.2",
       "hashPath": "fluentvalidation.11.5.2.nupkg.sha512"
     },
+    "IPAddressRange/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3vLppw2bi+LjM/M5TRQBrQ2kRYFge3+aphf5FiKefEImBG/sUM5sYV2TVYbWnZTHTnW24Gc5CucsohGu/GN9gQ==",
+      "path": "ipaddressrange/6.0.0",
+      "hashPath": "ipaddressrange.6.0.0.nupkg.sha512"
+    },
     "Kros.Utils/2.1.0": {
       "type": "package",
       "serviceable": true,
@@ -1149,13 +1139,6 @@
       "sha512": "sha512-h3j/QfmFN4S0w4C2A6X7arXij/M/OVw3uQHSOFxnND4DyAzO1F9eMX7Eti7lU/OkSthEE0WzRsfT/Dmx86jzCw==",
       "path": "microsoft.extensions.dependencyinjection.abstractions/7.0.0",
       "hashPath": "microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.DependencyModel/3.1.6": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-/UlDKULIVkLQYn1BaHcy/rc91ApDxJb7T75HcCbGdqwvxhnRQRKM2di1E70iCPMF9zsr6f4EgQTotBGxFIfXmw==",
-      "path": "microsoft.extensions.dependencymodel/3.1.6",
-      "hashPath": "microsoft.extensions.dependencymodel.3.1.6.nupkg.sha512"
     },
     "Microsoft.Extensions.DiagnosticAdapter/3.1.32": {
       "type": "package",
@@ -1318,12 +1301,26 @@
       "path": "newtonsoft.json.bson/1.0.2",
       "hashPath": "newtonsoft.json.bson.1.0.2.nupkg.sha512"
     },
-    "Ocelot/19.0.3": {
+    "Ocelot/19.0.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-S5h5SPfvk/x2md6zIIInLtgaAGwskDKh1T44KQuvxUXjzqiE60w0KRiP6X90KBVJ1HKQ3TS60NkUf7pRuyivuA==",
-      "path": "ocelot/19.0.3",
-      "hashPath": "ocelot.19.0.3.nupkg.sha512"
+      "sha512": "sha512-Kb9Dj4XEFdzdw+wN2uY5pwvVsOgCOfyuE8ZUXmZ2JFq/4ZxrW/Fy/C3428zBbDEvoVtQr1Leu0H5du2ITLN7WQ==",
+      "path": "ocelot/19.0.4",
+      "hashPath": "ocelot.19.0.4.nupkg.sha512"
+    },
+    "Ocelot.Provider.Polly/19.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-aLhuO4ZW8Bq9VQhkdE8sk8wc3zd+oQGSi152ktSo5r+ajE6B7Tp4IaqF7kz1z9cJSR1h9JzsMTaxIs6jLmWFHw==",
+      "path": "ocelot.provider.polly/19.0.4",
+      "hashPath": "ocelot.provider.polly.19.0.4.nupkg.sha512"
+    },
+    "Polly/7.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DeCY0OFbNdNxsjntr1gTXHJ5pKUwYzp04Er2LLeN3g6pWhffsGuKVfMBLe1lw7x76HrPkLxKEFxBlpRxS2nDEQ==",
+      "path": "polly/7.2.3",
+      "hashPath": "polly.7.2.3.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.2": {
       "type": "package",
@@ -1430,33 +1427,12 @@
       "path": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.2",
       "hashPath": "runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512"
     },
-    "Scrutor/3.3.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-BwqCnFzp2/Z+pq17iztxlIkR/ZANyPRR4PdE57WL1w/JW4AM/2imoxBWTL3+G+YXA46ce4s9OUgwWqTXYrtI8A==",
-      "path": "scrutor/3.3.0",
-      "hashPath": "scrutor.3.3.0.nupkg.sha512"
-    },
     "Swashbuckle.AspNetCore/6.5.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-FK05XokgjgwlCI6wCT+D4/abtQkL1X1/B9Oas6uIwHFmYrIO9WUD5aLC9IzMs9GnHfUXOtXZ2S43gN1mhs5+aA==",
       "path": "swashbuckle.aspnetcore/6.5.0",
       "hashPath": "swashbuckle.aspnetcore.6.5.0.nupkg.sha512"
-    },
-    "Swashbuckle.AspNetCore.Filters/7.0.11": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-cuErEOqAHpO2NlQeufuQAhLHnVgRbi+ypK5kloZfjiyeep4nyJ4NsYUXXWaBr/3ScYJOM1Zb+1G+3W9gfz+Hgw==",
-      "path": "swashbuckle.aspnetcore.filters/7.0.11",
-      "hashPath": "swashbuckle.aspnetcore.filters.7.0.11.nupkg.sha512"
-    },
-    "Swashbuckle.AspNetCore.Filters.Abstractions/7.0.11": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-onq5ATdHW9qYX8WwZXzNQ0dgiyn9pjmFHQNVMOxLFol4+06SJEPcifiP42P/a1a/1A+7uMpvTptC0d1H0h9nnQ==",
-      "path": "swashbuckle.aspnetcore.filters.abstractions/7.0.11",
-      "hashPath": "swashbuckle.aspnetcore.filters.abstractions.7.0.11.nupkg.sha512"
     },
     "Swashbuckle.AspNetCore.Swagger/6.5.0": {
       "type": "package",

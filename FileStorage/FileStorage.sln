@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorage", "FileStorage\FileStorage.csproj", "{725CD581-AF99-4F06-805F-76387A1E7DC3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorageApiGateway", "FileStorageApiGateway\FileStorageApiGateway.csproj", "{28D09F35-9552-417E-A4AA-A24B558FCB74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorage.Web", "FileStorageApiGateway\FileStorage.Web.csproj", "{28D09F35-9552-417E-A4AA-A24B558FCB74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

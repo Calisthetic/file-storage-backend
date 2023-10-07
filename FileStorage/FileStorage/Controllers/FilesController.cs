@@ -71,6 +71,26 @@ namespace FileStorage.Controllers
             return NotFound();
         }
 
+        [HttpGet("download/all")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DoanloadAllFiles()
+        {
+            if (_context.Files == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var files = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false).ToListAsync();
+
+            return Ok();
+        }
+
         // GET: api/files
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
