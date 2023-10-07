@@ -10,6 +10,7 @@ using FileStorage.Models.Outcoming.File;
 using MapsterMapper;
 using Mapster;
 using System.Diagnostics;
+using System.IO.Compression;
 
 namespace FileStorage.Controllers
 {
@@ -73,7 +74,7 @@ namespace FileStorage.Controllers
 
         [HttpGet("download/all")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> DoanloadAllFiles()
+        public async Task<IActionResult> DownloadAllFiles()
         {
             if (_context.Files == null)
             {
@@ -88,7 +89,28 @@ namespace FileStorage.Controllers
 
             var files = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false).ToListAsync();
 
-            return Ok();
+            string path = _configuration.GetSection("StoragePath").Value!;
+            string folderPath = path + @"\" + userId;
+            if (Directory.Exists(folderPath))
+            {
+                if (System.IO.File.Exists(folderPath + "\\" + "archive.zip"))
+                    System.IO.File.Delete(folderPath + "\\" + "archive.zip");
+
+                var fs = new FileStream(folderPath + "\\" + "archive.zip", FileMode.Create, FileAccess.ReadWrite);
+                var zip = new ZipArchive(fs, ZipArchiveMode.Create);
+
+                foreach (var file in files)
+                {
+                    zip.CreateEntryFromFile(folderPath + "\\" + file.Id + file.Name[file.Name.LastIndexOf('.')..], file.Name);
+                }
+
+                zip.Dispose();
+                fs.Close();
+
+                return File(System.IO.File.OpenRead(folderPath + "\\" + "archive.zip"), "application/octet-stream", "files.zip");
+            }
+
+            return NotFound();
         }
 
         // GET: api/files
@@ -274,6 +296,7 @@ namespace FileStorage.Controllers
 
         // PATCH: api/files/restore/{id}
         [HttpPatch("restore/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchFileRestore(int id)
         {
             if (_context.Files == null)
@@ -312,6 +335,7 @@ namespace FileStorage.Controllers
         /// <returns></returns>
         // DELETE: api/files/{id}
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteFile(int id)
         {
             if (_context.Files == null)
@@ -389,7 +413,7 @@ namespace FileStorage.Controllers
         // PATCH: api/files/elect/{id}
         [HttpPatch("elect/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PatchFolderElect(int id)
+        public async Task<IActionResult> PatchFileElect(int id)
         {
             // If current file exists
             Models.Db.File? currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id);

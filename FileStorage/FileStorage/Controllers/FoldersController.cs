@@ -12,6 +12,7 @@ using Mapster;
 using FileStorage.Models.Outcoming.File;
 using System.IO.Compression;
 using System.Net;
+using NuGet.Common;
 
 namespace FileStorage.Controllers
 {
@@ -517,6 +518,7 @@ namespace FileStorage.Controllers
         /// <returns></returns>
         // PATCH: api/folders/elect/{token}
         [HttpPatch("elect/{token}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchFolderElect(string token)
         {
             // If current folder exists
@@ -548,6 +550,32 @@ namespace FileStorage.Controllers
                 return NoContent();
             }
             return BadRequest();
+        }
+
+
+        /// <summary>
+        /// UnElect folders && files
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        // PATCH: api/folders/elect/all
+        [HttpPatch("elect/all")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PatchAllFoldersElect()
+        {
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var currentFolders = await _context.ElectedFolders.Where(x => x.UserId == userId).ToListAsync();
+            var currentFiles = await _context.ElectedFiles.Where(x => x.UserId == userId).ToListAsync();
+
+            _context .ElectedFolders.RemoveRange(currentFolders);
+            _context.ElectedFiles.RemoveRange(currentFiles);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         /// <summary>
@@ -628,7 +656,6 @@ namespace FileStorage.Controllers
         // POST: api/folders
         [HttpPost]
         [ActionName(nameof(PostFolder))]
-        [AllowAnonymous]
         public async Task<ActionResult<Folder>> PostFolder(FolderCreateDto folderData)
         {
             if (_context.Folders == null)
@@ -776,6 +803,7 @@ namespace FileStorage.Controllers
         /// <returns></returns>
         // DELETE: api/folders/{token}
         [HttpDelete("{token}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteFolder(string token)
         {
             if (_context.Folders == null)
