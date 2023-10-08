@@ -3,6 +3,7 @@ using FileStorage.Jobs;
 using FileStorage.Services;
 using FileStorage.Services.Mappers;
 using FileStorage.Utils;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -54,6 +55,11 @@ builder.Services.AddQuartz(q =>
     .WithCronSchedule(builder.Configuration.GetSection("CalculateUsageJob:CronSchedule").Value ?? "0 0 * * * ?"));
 });
 
+// Health check
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DatabaseConnection")!);
+
+// JWT
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value!);
 
 var tokenValidationParameter = new TokenValidationParameters()
@@ -143,6 +149,11 @@ app.MapControllers();
 
 // Added
 app.UseAuthentication();
+
+app.MapHealthChecks("/healthz", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.UseMiddleware<ExceptionHandingMiddleware>();
 
