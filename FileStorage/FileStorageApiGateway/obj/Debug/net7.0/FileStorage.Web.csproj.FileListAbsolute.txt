@@ -82,4 +82,4 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGatew
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\FileStorage.Web.genruntimeconfig.cache
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\ref\FileStorage.Web.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\ocelot.json
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\Routes\ocelot.api.json
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\Routes\ocelot.api.main.json
