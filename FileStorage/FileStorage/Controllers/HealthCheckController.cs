@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileStorage.Controllers
@@ -7,7 +9,8 @@ namespace FileStorage.Controllers
     [ApiController]
     public class HealthCheckController : ControllerBase
     {
-        [HttpGet]
+        [HttpOptions]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> HealthCheck()
         {
             return Redirect("../healthz");

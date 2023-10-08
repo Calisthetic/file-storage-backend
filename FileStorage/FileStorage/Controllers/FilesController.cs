@@ -14,7 +14,8 @@ using System.IO.Compression;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/files")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/files")]
     [ApiController]
     public class FilesController : ControllerBase
     {
@@ -138,21 +139,6 @@ namespace FileStorage.Controllers
                 .Include(x => x.FileType)
             ).ProjectToType<FileWithFolderInfoDto>().ToListAsync();
 
-            var files1 = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false && (x.Folder == null || x.Folder.IsDeleted == false))
-                .Include(x => x.Folder)
-                .Include(x => x.DownloadsOfFiles)
-                .Include(x => x.ViewsOfFiles.Where(x => !(x.UserId == userId) == true))
-                .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))
-                .Include(x => x.FileType).ToListAsync();
-            foreach ( var file in files1 )
-            {
-                Debug.WriteLine("File " + file.Name);
-                foreach ( var el in file.ViewsOfFiles)
-                {
-                    Debug.WriteLine(el.UserId + " | " + userId);
-                    Debug.WriteLine((el.UserId == userId).ToString());
-                }
-            }
             return Ok(files);
         }
 
@@ -257,10 +243,10 @@ namespace FileStorage.Controllers
                 return BadRequest();
             }
         }
-        
+
         // PATCH: api/files/bin/{id}
         [HttpPatch("bin/{id}")]
-        public async Task<IActionResult> PatchFileBin(int id)
+        public async Task<IActionResult> PatchFilesBin(int id)
         {
             if (_context.Files == null)
             {
@@ -292,6 +278,32 @@ namespace FileStorage.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        // PATCH: api/files/bin/all
+        [HttpPatch("bin/all")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PatchAllFilesBin()
+        {
+            if (_context.Files == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var files = await _context.Files.Where(x => x.UserId == userId && x.IsDeleted == false && (x.Folder == null || x.Folder.IsDeleted == false)).ToListAsync();
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                files[i].IsDeleted = true;
+            }
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         // PATCH: api/files/restore/{id}

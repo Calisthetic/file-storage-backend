@@ -12,13 +12,13 @@
       ]
     },
     {
-      "Key": "api",
+      "Key": "api/main",
       "TransformByOcelotConfig": true,
       "Config": [
         {
           "Name": "FileStorage",
           "Version": "1.0",
-          "Url": "http://localhost:5246/api/swagger/v1/swagger.json"
+          "Url": "http://localhost:5246/api/main/swagger/v1/swagger.json"
         }
       ]
     }

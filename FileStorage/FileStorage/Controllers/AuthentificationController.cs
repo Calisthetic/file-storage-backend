@@ -12,7 +12,8 @@ using System.Text;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/auth")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/auth")]
     [ApiController]
     public class AuthentificationController : ControllerBase
     {

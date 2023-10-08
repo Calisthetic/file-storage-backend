@@ -258,3 +258,4 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\HealthChecks.NpgSql.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.dll

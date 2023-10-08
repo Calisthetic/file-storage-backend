@@ -12,7 +12,8 @@ using FileStorage.Services;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/users")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {

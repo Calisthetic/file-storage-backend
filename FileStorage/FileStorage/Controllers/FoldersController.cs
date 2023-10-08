@@ -16,7 +16,8 @@ using NuGet.Common;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/folders")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/folders")]
     [ApiController]
     public class FoldersController : ControllerBase
     {
@@ -26,7 +27,7 @@ namespace FileStorage.Controllers
         private readonly IConfiguration _configuration;
         private readonly IStatisticService _statisticService;
 
-        public FoldersController(ApiDbContext context, IMapper mapper, 
+        public FoldersController(ApiDbContext context, IMapper mapper,
             IUserService userService, IConfiguration configuration, IStatisticService statisticService)
         {
             _context = context;
@@ -92,12 +93,12 @@ namespace FileStorage.Controllers
                 .ThenInclude(x => x.InverseUpperFolder.Where(x => x.IsDeleted == false))
                     .ThenInclude(x => x.Files.Where(x => x.IsDeleted == false))
                     .FirstOrDefaultAsync();
-            
+
             if (currentFolder == null)
             {
                 return NotFound();
             }
-            
+
             // If user authorized
             int? userId = null;
             if (int.TryParse(_userService.GetUserId(), out int userIdResult))
@@ -572,7 +573,7 @@ namespace FileStorage.Controllers
             var currentFolders = await _context.ElectedFolders.Where(x => x.UserId == userId).ToListAsync();
             var currentFiles = await _context.ElectedFiles.Where(x => x.UserId == userId).ToListAsync();
 
-            _context .ElectedFolders.RemoveRange(currentFolders);
+            _context.ElectedFolders.RemoveRange(currentFolders);
             _context.ElectedFiles.RemoveRange(currentFiles);
             await _context.SaveChangesAsync();
             return NoContent();
@@ -684,7 +685,7 @@ namespace FileStorage.Controllers
                     return BadRequest("Upper folder doesn't exits");
                 }
                 // (don't) Require auth and access check || owner check
-                else if (upperFolder.UserId == userId || (upperFolder.AccessType != null && 
+                else if (upperFolder.UserId == userId || (upperFolder.AccessType != null &&
                     (upperFolder.AccessType.RequireAuth == false || userId != null) && upperFolder.AccessType.CanEdit == true))
                 {
                     Folder newFolder = await CreateFolder(folderData.Name, upperFolder.UserId, upperFolder.Id);
@@ -714,7 +715,8 @@ namespace FileStorage.Controllers
                     token = temp;
                 }
             }
-            Folder newFolder = new Folder() {
+            Folder newFolder = new Folder()
+            {
                 Name = name,
                 UpperFolderId = upperFolderId,
                 IsDeleted = false,
@@ -815,7 +817,7 @@ namespace FileStorage.Controllers
             {
                 return NotFound();
             }
-            
+
             // If user authorized
             int? userId = null;
             if (int.TryParse(_userService.GetUserId(), out int userIdResult))

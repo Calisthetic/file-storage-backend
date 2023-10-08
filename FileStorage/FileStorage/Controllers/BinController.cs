@@ -11,7 +11,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/bin")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/bin")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BinController : ControllerBase

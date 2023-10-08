@@ -1,16 +1,16 @@
 ﻿{
   "Routes": [
     {
+      "SwaggerKey": "api/main",
       "DownstreamPathTemplate": "/{everything}",
       "DownstreamScheme": "https",
-      "SwaggerKey": "api",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": "7089"
         }
       ],
-      "UpstreamPathTemplate": "/api/{everything}",
+      "UpstreamPathTemplate": "/api/main/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",

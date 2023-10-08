@@ -5,6 +5,7 @@ using FileStorage.Services.Mappers;
 using FileStorage.Utils;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -35,31 +36,6 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-// schedule jobs
-builder.Services.AddQuartzHostedService(options =>
-{
-    options.WaitForJobsToComplete = true;
-});
-
-builder.Services.AddQuartz(q =>
-{
-    q.UseMicrosoftDependencyInjectionJobFactory();
-
-    var jobKey = new JobKey(nameof(CalculateUsageJob));
-
-    q.AddJob<CalculateUsageJob>(opts => opts.WithIdentity(jobKey));
-
-    q.AddTrigger(opts => opts
-    .ForJob(jobKey)
-    .WithIdentity($"{jobKey}-trigger")
-    .WithCronSchedule(builder.Configuration.GetSection("CalculateUsageJob:CronSchedule").Value ?? "0 0 * * * ?"));
-});
-
-// Health check
-builder.Services.AddHealthChecks()
-    .AddNpgSql(builder.Configuration.GetConnectionString("DatabaseConnection")!);
-
-// JWT
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value!);
 
 var tokenValidationParameter = new TokenValidationParameters()
@@ -86,6 +62,39 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddSingleton(tokenValidationParameter);
+
+// Versioning
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+    options.UseApiBehavior = true;
+});
+
+// Schedule jobs
+builder.Services.AddQuartzHostedService(options =>
+{
+    options.WaitForJobsToComplete = true;
+});
+
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+
+    var jobKey = new JobKey(nameof(CalculateUsageJob));
+
+    q.AddJob<CalculateUsageJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+    .ForJob(jobKey)
+    .WithIdentity($"{jobKey}-trigger")
+    .WithCronSchedule(builder.Configuration.GetSection("CalculateUsageJob:CronSchedule").Value ?? "0 0 * * * ?"));
+});
+
+// Health check
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DatabaseConnection")!);
 
 // Read user claims
 builder.Services.AddHttpContextAccessor();

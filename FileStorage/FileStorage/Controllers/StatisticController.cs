@@ -13,7 +13,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/statistic")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/statistic")]
     [ApiController]
     public class StatisticController : ControllerBase
     {

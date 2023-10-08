@@ -10,7 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FileStorage.Controllers
 {
-    [Route("api/tests")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/tests")]
     [ApiController]
     public class TestsController : ControllerBase
     {
