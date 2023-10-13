@@ -90,7 +90,7 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.11": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.12": {
         "type": "package",
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.15.1"
@@ -166,7 +166,7 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Microsoft.AspNetCore.OpenApi/7.0.10": {
+      "Microsoft.AspNetCore.OpenApi/7.0.12": {
         "type": "package",
         "dependencies": {
           "Microsoft.OpenApi": "1.4.3"
@@ -686,7 +686,7 @@
           }
         }
       },
-      "Ocelot/19.0.4": {
+      "Ocelot/20.0.0": {
         "type": "package",
         "dependencies": {
           "FluentValidation": "11.5.2",
@@ -706,10 +706,10 @@
           }
         }
       },
-      "Ocelot.Provider.Polly/19.0.4": {
+      "Ocelot.Provider.Polly/20.0.0": {
         "type": "package",
         "dependencies": {
-          "Ocelot": "19.0.4",
+          "Ocelot": "20.0.0",
           "Polly": "7.2.3"
         },
         "compile": {
@@ -2037,10 +2037,10 @@
         "lib/netstandard2.0/Kros.Utils.xml"
       ]
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.11": {
-      "sha512": "xFLgrIjh9DsfSpSRmfb8PWswYSLxkdU/3y2d3yrSA9v+sajnqYP2BARKrxZlO/RlKKMboosAIYP2MajPJilv5w==",
+    "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.12": {
+      "sha512": "KlSupL6h5oUwjMAoNJO2vp0MrqGYeO6nfdGjAEriK8xUccQndmQW9zQwF7d1R80abrZD/T9b01hmhk3v3LX05g==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/7.0.11",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/7.0.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2048,7 +2048,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll",
         "lib/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
-        "microsoft.aspnetcore.authentication.jwtbearer.7.0.11.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.jwtbearer.7.0.12.nupkg.sha512",
         "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
       ]
     },
@@ -2101,10 +2101,10 @@
         "microsoft.aspnetcore.mvc.newtonsoftjson.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.OpenApi/7.0.10": {
-      "sha512": "p5LiYt1mFJdS70zyHoydahohko2pLIoXiXwANRZGYYyTXcYNQpNUOt+At+lUgGgRwta28sUKVhy2W/93j0qwhA==",
+    "Microsoft.AspNetCore.OpenApi/7.0.12": {
+      "sha512": "KWfmBcvglieWin4srGSPiREh8/8+qCJpME9MPbsN2OVOwKkMXKta2K82Xk0BcZrZCk9tftMBO6qYfJgz0goQpg==",
       "type": "package",
-      "path": "microsoft.aspnetcore.openapi/7.0.10",
+      "path": "microsoft.aspnetcore.openapi/7.0.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2112,7 +2112,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net7.0/Microsoft.AspNetCore.OpenApi.dll",
         "lib/net7.0/Microsoft.AspNetCore.OpenApi.xml",
-        "microsoft.aspnetcore.openapi.7.0.10.nupkg.sha512",
+        "microsoft.aspnetcore.openapi.7.0.12.nupkg.sha512",
         "microsoft.aspnetcore.openapi.nuspec"
       ]
     },
@@ -3122,29 +3122,29 @@
         "newtonsoft.json.bson.nuspec"
       ]
     },
-    "Ocelot/19.0.4": {
-      "sha512": "Kb9Dj4XEFdzdw+wN2uY5pwvVsOgCOfyuE8ZUXmZ2JFq/4ZxrW/Fy/C3428zBbDEvoVtQr1Leu0H5du2ITLN7WQ==",
+    "Ocelot/20.0.0": {
+      "sha512": "cvk2vti1hILD2MeEWuxWUxp5tx9Bx8y4YZa6lOc6T+Y5GXbkWsO6og7F+8MIolp140TKLyvsAim1XYirPdN3dw==",
       "type": "package",
-      "path": "ocelot/19.0.4",
+      "path": "ocelot/20.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/net7.0/Ocelot.dll",
         "lib/net7.0/Ocelot.xml",
-        "ocelot.19.0.4.nupkg.sha512",
+        "ocelot.20.0.0.nupkg.sha512",
         "ocelot.nuspec"
       ]
     },
-    "Ocelot.Provider.Polly/19.0.4": {
-      "sha512": "aLhuO4ZW8Bq9VQhkdE8sk8wc3zd+oQGSi152ktSo5r+ajE6B7Tp4IaqF7kz1z9cJSR1h9JzsMTaxIs6jLmWFHw==",
+    "Ocelot.Provider.Polly/20.0.0": {
+      "sha512": "ZJUGgUBm7kp5wJF9XmMJrR7zZBddPiIfJRvzMzx9WGC2dQ4nk/5/nd4QA93ZCVOsKigrN70TLG7p8Jo5zP085w==",
       "type": "package",
-      "path": "ocelot.provider.polly/19.0.4",
+      "path": "ocelot.provider.polly/20.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/net7.0/Ocelot.Provider.Polly.dll",
         "lib/net7.0/Ocelot.Provider.Polly.xml",
-        "ocelot.provider.polly.19.0.4.nupkg.sha512",
+        "ocelot.provider.polly.20.0.0.nupkg.sha512",
         "ocelot.provider.polly.nuspec"
       ]
     },
@@ -5932,10 +5932,10 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "MMLib.SwaggerForOcelot >= 7.0.1",
-      "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.11",
-      "Microsoft.AspNetCore.OpenApi >= 7.0.10",
-      "Ocelot >= 19.0.4",
-      "Ocelot.Provider.Polly >= 19.0.4",
+      "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.12",
+      "Microsoft.AspNetCore.OpenApi >= 7.0.12",
+      "Ocelot >= 20.0.0",
+      "Ocelot.Provider.Polly >= 20.0.0",
       "Swashbuckle.AspNetCore >= 6.5.0"
     ]
   },
@@ -5989,19 +5989,19 @@
           },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
-            "version": "[7.0.11, )"
+            "version": "[7.0.12, )"
           },
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
-            "version": "[7.0.10, )"
+            "version": "[7.0.12, )"
           },
           "Ocelot": {
             "target": "Package",
-            "version": "[19.0.4, )"
+            "version": "[20.0.0, )"
           },
           "Ocelot.Provider.Polly": {
             "target": "Package",
-            "version": "[19.0.4, )"
+            "version": "[20.0.0, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
