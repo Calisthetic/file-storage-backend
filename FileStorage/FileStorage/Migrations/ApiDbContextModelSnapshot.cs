@@ -477,6 +477,46 @@ namespace FileStorage.Migrations
                     b.ToTable("logs", (string)null);
                 });
 
+            modelBuilder.Entity("FileStorage.Models.Db.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("answer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("RespondedAt")
+                        .HasColumnType("timestamp")
+                        .HasColumnName("responded_at");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_questions");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_questions_user_id");
+
+                    b.ToTable("questions", (string)null);
+                });
+
             modelBuilder.Entity("FileStorage.Models.Db.SharedFolder", b =>
                 {
                     b.Property<int>("Id")
@@ -903,6 +943,18 @@ namespace FileStorage.Migrations
                         .HasConstraintName("FK_FolderLinks_AccessTypes");
 
                     b.Navigation("AccessType");
+                });
+
+            modelBuilder.Entity("FileStorage.Models.Db.Question", b =>
+                {
+                    b.HasOne("FileStorage.Models.Db.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Questions_Users");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FileStorage.Models.Db.SharedFolder", b =>
