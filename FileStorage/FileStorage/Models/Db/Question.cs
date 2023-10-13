@@ -8,7 +8,7 @@
 
         public DateTime CreatedAt { get; set; }
 
-        public string Answer { get; set; } = null!;
+        public string? Answer { get; set; }
 
         public DateTime? RespondedAt { get; set; }
 
