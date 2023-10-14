@@ -13,6 +13,7 @@ using Quartz;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -109,14 +110,26 @@ builder.Services.AddMvc(options =>
 });
 
 // Don't send nullable values
-//builder.Services.AddControllers().AddJsonOptions(
-//    options => options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-//);
+bool EnableNulls = false;
+builder.Configuration.GetSection("EnableNulls").Bind(EnableNulls);
+builder.Services.AddControllers().AddJsonOptions(
+    options => options.JsonSerializerOptions.DefaultIgnoreCondition = EnableNulls ? JsonIgnoreCondition.Never : JsonIgnoreCondition.WhenWritingNull
+);
+
+// Get config
+var dbConfig = new DatabaseConfig();
+builder.Configuration.GetSection("DatabaseConfig").Bind(dbConfig);
 
 // DB context
 builder.Services.AddEntityFrameworkNpgsql()
-    .AddDbContext<ApiDbContext>(opt => 
-        opt.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection")).UseSnakeCaseNamingConvention());
+    .AddDbContext<ApiDbContext>(opt => {
+        opt.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"), action =>
+        {
+            action.CommandTimeout(dbConfig.TimeoutTime);
+        }).UseSnakeCaseNamingConvention();
+        opt.EnableDetailedErrors(dbConfig.DetailedError);
+        opt.EnableSensitiveDataLogging(dbConfig.SensitiveDataLogging);
+    });
 
 // Register mapper
 builder.Services.AddMappings();

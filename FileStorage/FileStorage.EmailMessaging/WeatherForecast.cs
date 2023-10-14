@@ -1,4 +1,4 @@
-namespace FileStorage
+namespace FileStorage.EmailMessaging
 {
     public class WeatherForecast
     {

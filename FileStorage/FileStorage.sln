@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorage", "FileStorage\FileStorage.csproj", "{725CD581-AF99-4F06-805F-76387A1E7DC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorage.Main", "FileStorage\FileStorage.Main.csproj", "{725CD581-AF99-4F06-805F-76387A1E7DC3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorage.Web", "FileStorageApiGateway\FileStorage.Web.csproj", "{28D09F35-9552-417E-A4AA-A24B558FCB74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{22049CF7-54A1-43EF-916D-629EC5EE021E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStorage.Tests", "FileStorage.Tests\FileStorage.Tests.csproj", "{6A6AE8B6-73E1-479F-9CAF-1752083ED493}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStorage.EmailMessaging", "FileStorage.EmailMessaging\FileStorage.EmailMessaging.csproj", "{175945C0-1303-4EF8-879F-4405206E3550}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +27,20 @@ Global
 		{28D09F35-9552-417E-A4AA-A24B558FCB74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28D09F35-9552-417E-A4AA-A24B558FCB74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28D09F35-9552-417E-A4AA-A24B558FCB74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A6AE8B6-73E1-479F-9CAF-1752083ED493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A6AE8B6-73E1-479F-9CAF-1752083ED493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A6AE8B6-73E1-479F-9CAF-1752083ED493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A6AE8B6-73E1-479F-9CAF-1752083ED493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{175945C0-1303-4EF8-879F-4405206E3550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{175945C0-1303-4EF8-879F-4405206E3550}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{175945C0-1303-4EF8-879F-4405206E3550}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{175945C0-1303-4EF8-879F-4405206E3550}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6A6AE8B6-73E1-479F-9CAF-1752083ED493} = {22049CF7-54A1-43EF-916D-629EC5EE021E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0301D028-3944-47E4-946D-BD9D1574C9AC}

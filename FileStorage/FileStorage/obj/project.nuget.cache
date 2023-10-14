@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9UY9URf4w2JXwoahg8hBuD4zZZRkZXBFZubIXyHpx0dqOuWlly5+qdZZ5S5DJSSUXmWmsh4NFbXO1wAgbkfepw==",
+  "dgSpecHash": "SZJoqrjjGBzM/AxNEcm2k4mCKHLt5zQNmaLfoz0U9P9tIwwUd7OpToAUxsYUGwmebcHoEXkTrcE0penLL1Zx7A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.csproj",
+  "projectFilePath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\aspnetcore.healthchecks.npgsql\\7.1.0\\aspnetcore.healthchecks.npgsql.7.1.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\aspnetcore.healthchecks.ui.client\\7.1.0\\aspnetcore.healthchecks.ui.client.7.1.0.nupkg.sha512",

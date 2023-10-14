@@ -11864,9 +11864,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.csproj",
-      "projectName": "FileStorage",
-      "projectPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.csproj",
+      "projectUniqueName": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
+      "projectName": "FileStorage.Main",
+      "projectPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
       "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\obj\\",
       "projectStyle": "PackageReference",

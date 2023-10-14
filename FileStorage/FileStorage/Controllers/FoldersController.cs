@@ -737,7 +737,7 @@ namespace FileStorage.Controllers
             {
                 return NotFound();
             }
-            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == token && x.IsDeleted == false);
+            var currentFolder = await _context.Folders.Include(x => x.AccessType).FirstOrDefaultAsync(x => x.Token == token && x.IsDeleted == false);
             if (currentFolder == null)
             {
                 return NotFound();
