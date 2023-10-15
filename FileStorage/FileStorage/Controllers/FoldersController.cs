@@ -819,15 +819,14 @@ namespace FileStorage.Controllers
             }
 
             // If user authorized
-            int? userId = null;
-            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
             {
-                userId = userIdResult;
+                return NotFound();
             }
 
             // (don't) Require auth and access check || owner check
             if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
-                (currentFolder.AccessType.RequireAuth == false || userId != null) && currentFolder.AccessType.CanEdit == true))
+                currentFolder.AccessType.RequireAuth == false && currentFolder.AccessType.CanEdit == true))
             {
                 _context.Remove(currentFolder);
                 await _context.SaveChangesAsync();

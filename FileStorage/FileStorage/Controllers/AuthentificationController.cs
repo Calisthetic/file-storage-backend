@@ -104,16 +104,6 @@ namespace FileStorage.Controllers
 
             };
 
-            // Add permissions
-            //if (user.Division != null)
-            //{
-            //    foreach (var permission in user.Division.PermissionsOfDivisions)
-            //    {
-            //        if (permission.Permission.PermissionName != null)
-            //            claims.Add(new Claim(ClaimTypes.Role, permission.Permission.PermissionName));
-            //    }
-            //}
-
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(claims),

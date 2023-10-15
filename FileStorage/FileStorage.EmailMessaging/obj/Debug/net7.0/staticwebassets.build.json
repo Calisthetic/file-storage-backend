@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "N8HQy1bb9pHhDR+J19sJ/NZAhw69L9eb64s97uKhE6g=",
+  "Source": "FileStorage.EmailMessaging",
+  "BasePath": "_content/FileStorage.EmailMessaging",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
