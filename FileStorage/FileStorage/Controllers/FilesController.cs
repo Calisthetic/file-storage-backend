@@ -11,6 +11,7 @@ using MapsterMapper;
 using Mapster;
 using System.Diagnostics;
 using System.IO.Compression;
+using FileStorage.Main.Models.Incoming.File;
 
 namespace FileStorage.Controllers
 {
@@ -271,6 +272,43 @@ namespace FileStorage.Controllers
                 (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanEdit == true))
             {
                 currentFile.IsDeleted = true;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        // PATCH: api/files/path/{id}
+        [HttpPatch("path/{id}")]
+        public async Task<IActionResult> PatchFilesPath(int id, FilePatchPathDto folderData)
+        {
+            if (_context.Files == null)
+            {
+                return NotFound();
+            }
+            var currentFile = await _context.Files.Include(x => x.Folder).FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            var currentFolder = await _context.Folders.FirstOrDefaultAsync(x => x.Token == folderData.ToFolderToken && x.IsDeleted == false);
+            if (currentFile == null || currentFolder == null)
+            {
+                return NotFound();
+            }
+
+            // If user authorized
+            int? userId = null;
+            if (int.TryParse(_userService.GetUserId(), out int userIdResult))
+            {
+                userId = userIdResult;
+            }
+
+            // (don't) Require auth and access check || owner check
+            if (userId == currentFile.Folder?.UserId || (userId == currentFile.UserId && currentFile.FolderId == null) ||
+                (currentFile.Folder != null && currentFile.Folder.AccessType != null &&
+                (currentFile.Folder.AccessType.RequireAuth == false || userId != null) && currentFile.Folder.AccessType.CanEdit == true))
+            {
+                currentFile.FolderId = currentFolder.Id;
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
