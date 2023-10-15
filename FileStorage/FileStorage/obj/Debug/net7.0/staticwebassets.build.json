@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "0rbAN/lgnwdpjbM/drRtpz6rzV4XebvDDDMDVQfITZI=",
-  "Source": "FileStorage",
-  "BasePath": "_content/FileStorage",
+  "Hash": "qF22QzMYLOon+FqROeNlMZ4RjcBtZ3R6Neu3VUnqj6w=",
+  "Source": "FileStorage.Main",
+  "BasePath": "_content/FileStorage.Main",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
