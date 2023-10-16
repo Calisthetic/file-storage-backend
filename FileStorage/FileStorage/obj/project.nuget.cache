@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "SZJoqrjjGBzM/AxNEcm2k4mCKHLt5zQNmaLfoz0U9P9tIwwUd7OpToAUxsYUGwmebcHoEXkTrcE0penLL1Zx7A==",
+  "dgSpecHash": "ZEFwPHzmELRVRODP5vqsr0VNsjavimBtBmJDcAJ9W50HijX4HfmfClInl5ZskSd5T/+xqRptrqAwnvmLbjpsxA==",
   "success": true,
   "projectFilePath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\admin\\.nuget\\packages\\asp.versioning.abstractions\\7.0.0\\asp.versioning.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\asp.versioning.http\\7.1.0\\asp.versioning.http.7.1.0.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\asp.versioning.mvc\\7.1.0\\asp.versioning.mvc.7.1.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\aspnetcore.healthchecks.npgsql\\7.1.0\\aspnetcore.healthchecks.npgsql.7.1.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\aspnetcore.healthchecks.ui.client\\7.1.0\\aspnetcore.healthchecks.ui.client.7.1.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\aspnetcore.healthchecks.ui.core\\7.0.0\\aspnetcore.healthchecks.ui.core.7.0.0.nupkg.sha512",
@@ -64,7 +67,6 @@
     "C:\\Users\\admin\\.nuget\\packages\\mapster.dependencyinjection\\1.0.1\\mapster.dependencyinjection.1.0.1.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\mapster.efcore\\5.1.1\\mapster.efcore.5.1.1.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.12\\microsoft.aspnetcore.authentication.jwtbearer.7.0.12.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning\\5.1.0\\microsoft.aspnetcore.mvc.versioning.5.1.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.12\\microsoft.aspnetcore.openapi.7.0.12.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\6.0.11\\microsoft.aspnetcore.razor.language.6.0.11.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",

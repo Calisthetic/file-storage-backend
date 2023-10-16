@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorage.Web", "FileStor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{22049CF7-54A1-43EF-916D-629EC5EE021E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStorage.Tests", "FileStorage.Tests\FileStorage.Tests.csproj", "{6A6AE8B6-73E1-479F-9CAF-1752083ED493}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorage.Tests", "FileStorage.Tests\FileStorage.Tests.csproj", "{6A6AE8B6-73E1-479F-9CAF-1752083ED493}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStorage.EmailMessaging", "FileStorage.EmailMessaging\FileStorage.EmailMessaging.csproj", "{175945C0-1303-4EF8-879F-4405206E3550}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorage.EmailMessaging", "FileStorage.EmailMessaging\FileStorage.EmailMessaging.csproj", "{175945C0-1303-4EF8-879F-4405206E3550}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileStorage.Feedback", "FileStorage.Feedback\FileStorage.Feedback.csproj", "{43FD0E0B-C77C-4D0C-A6C0-10005236DB27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{175945C0-1303-4EF8-879F-4405206E3550}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{175945C0-1303-4EF8-879F-4405206E3550}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{175945C0-1303-4EF8-879F-4405206E3550}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43FD0E0B-C77C-4D0C-A6C0-10005236DB27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43FD0E0B-C77C-4D0C-A6C0-10005236DB27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43FD0E0B-C77C-4D0C-A6C0-10005236DB27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43FD0E0B-C77C-4D0C-A6C0-10005236DB27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

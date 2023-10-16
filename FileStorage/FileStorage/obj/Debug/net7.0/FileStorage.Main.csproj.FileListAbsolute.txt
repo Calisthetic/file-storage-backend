@@ -16,7 +16,6 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Mapster.DependencyInjection.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Mapster.EFCore.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -259,3 +258,6 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStorage.Main.pdb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStorage.Main.genruntimeconfig.cache
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\ref\FileStorage.Main.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Asp.Versioning.Abstractions.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Asp.Versioning.Http.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Asp.Versioning.Mvc.dll

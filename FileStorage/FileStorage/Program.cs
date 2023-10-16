@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using FileStorage.Data;
 using FileStorage.Jobs;
 using FileStorage.Services;
@@ -70,7 +71,6 @@ builder.Services.AddApiVersioning(options =>
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.DefaultApiVersion = new ApiVersion(1, 0);
     options.ReportApiVersions = true;
-    options.UseApiBehavior = true;
 });
 
 // Schedule jobs

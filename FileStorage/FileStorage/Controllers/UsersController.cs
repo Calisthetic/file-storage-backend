@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FileStorage.Models.Incoming.User;
 using FileStorage.Services;
+using Asp.Versioning;
 
 namespace FileStorage.Controllers
 {
