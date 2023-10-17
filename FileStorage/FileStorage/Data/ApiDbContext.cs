@@ -32,7 +32,6 @@ namespace FileStorage.Data
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<ViewOfFile> ViewsOfFiles { get; set; }
         public virtual DbSet<ViewOfFolder> ViewsOfFolders { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -272,20 +271,6 @@ namespace FileStorage.Data
                 entity.HasOne(d => d.User).WithMany(p => p.ViewsOfFolders)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_ViewsOfFolders_Users");
-            });
-
-            modelBuilder.Entity<Question>(entity =>
-            {
-                entity.Property(e => e.Text).HasColumnType("text");
-                entity.Property(e => e.Answer).HasColumnType("text");
-
-                entity.Property(e => e.CreatedAt).HasColumnType("timestamp");
-                entity.Property(e => e.RespondedAt).HasColumnType("timestamp");
-
-                entity.HasOne(d => d.User).WithMany()
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Questions_Users");
             });
         }
     }

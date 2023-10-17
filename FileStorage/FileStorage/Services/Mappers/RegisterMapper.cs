@@ -95,9 +95,6 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.Files, r => r.Files.Adapt<List<FileTreeDto>>())
                 .Map(d => d.Folders, r => r.InverseUpperFolder.Adapt<List<FolderTreeDto>>())
                 .RequireDestinationMemberSource(true);
-
-            // Questions
-            config.NewConfig<Question, QuestionInfoDto>().RequireDestinationMemberSource(true);
         }
     }
 }
