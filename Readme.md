@@ -35,3 +35,9 @@ Add-Migration ""
 ```bash
 Update-Database
 ```
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlServer(_configuration.GetSection("ConnectionStrings:DatabaseConnection").Value!);
+
+```bash
+Scaffold-DbContext "Data Source=DESKTOP-GJJERNN;Initial Catalog=FileStorageFeedback;Integrated Security=True;TrustServerCertificate=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models/Db -force
+```

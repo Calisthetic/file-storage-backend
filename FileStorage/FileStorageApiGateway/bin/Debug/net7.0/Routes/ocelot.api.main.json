@@ -19,6 +19,26 @@
         "PATCH",
         "OPTIONS"
       ]
+    },
+    {
+      "SwaggerKey": "api/feedback",
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": "7139"
+        }
+      ],
+      "UpstreamPathTemplate": "/api/feedback/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH",
+        "OPTIONS"
+      ]
     }
   ]
 }
