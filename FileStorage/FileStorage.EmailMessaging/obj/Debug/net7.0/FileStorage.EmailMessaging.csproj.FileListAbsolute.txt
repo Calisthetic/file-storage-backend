@@ -31,3 +31,8 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMe
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\FileStorage.EmailMessaging.pdb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\FileStorage.EmailMessaging.genruntimeconfig.cache
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\ref\FileStorage.EmailMessaging.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\bin\Debug\net7.0\BouncyCastle.Cryptography.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\bin\Debug\net7.0\MailKit.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\bin\Debug\net7.0\MimeKit.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\bin\Debug\net7.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
