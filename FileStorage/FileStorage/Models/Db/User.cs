@@ -24,6 +24,10 @@ public class User : BaseEntity
 
     public bool IsImageExists { get; set; }
 
+    public string? VerifyCode { get; set; }
+
+    public bool IsVerify { get; set; }
+
     public virtual ICollection<Action> Actions { get; set; } = new List<Action>();
 
     public virtual ICollection<DownloadOfFile> DownloadsOfFiles { get; set; } = new List<DownloadOfFile>();

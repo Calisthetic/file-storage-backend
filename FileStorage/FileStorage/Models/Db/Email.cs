@@ -6,6 +6,8 @@ public class Email : BaseEntity
 
     public int UserId { get; set; }
 
+    public string? VerifyCode { get; set; }
+
     public bool IsVerify { get; set; }
 
     public virtual User User { get; set; } = null!;
