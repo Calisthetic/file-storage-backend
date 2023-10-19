@@ -84,6 +84,7 @@ namespace FileStorage.Controllers
 
         // PATCH: api/questions
         [HttpPatch("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> PatchQuestion(int id, string answer)
         {
             if (_context.Questions == null)

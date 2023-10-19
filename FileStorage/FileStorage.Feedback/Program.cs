@@ -106,6 +106,17 @@ builder.Services.AddMappings();
 // Response compression
 builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
 
+// CORS
+var MyAllowSpecificOrigins = "MyPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000", "https://file-storage-frontend.vercel.app").AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -132,5 +143,7 @@ app.MapHealthChecks("/healthz", new Microsoft.AspNetCore.Diagnostics.HealthCheck
 app.UseMiddleware<ExceptionHandingMiddleware>();
 
 app.UseResponseCompression();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.Run();

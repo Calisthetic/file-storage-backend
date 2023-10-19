@@ -52,8 +52,8 @@ namespace FileStorage.Feedback.Controllers
         }
 
         // PATCH: api/bugs/5
-        // Remove later
         [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> PutBug(int id, BugPatchStatusDto data)
         {
             if (_context.Bugs == null)
