@@ -77,7 +77,20 @@ namespace FileStorage.Controllers
             {
                 return NotFound();
             }
+            var t = 0;
+            int item = 12 / t;
             return Ok(await _context.ViewsOfFiles.Where(x => x.UserId == 1).OrderBy(x => x.FileId).ToListAsync());
+        }
+
+        // GET: api/Files
+        [HttpGet("logs")]
+        public async Task<IActionResult> GetLogs()
+        {
+            if (_context.FileTypes == null)
+            {
+                return NotFound();
+            }
+            return Ok();//await _context.Logs.ToListAsync());
         }
     }
 }

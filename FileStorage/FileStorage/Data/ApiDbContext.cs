@@ -190,12 +190,14 @@ namespace FileStorage.Data
 
             modelBuilder.Entity<Log>(entity =>
             {
-                entity.Property(e => e.Exception).HasColumnType("text");
-                entity.Property(e => e.Level).HasColumnType("text");
                 entity.Property(e => e.Message).HasColumnType("text");
                 entity.Property(e => e.MessageTemplate).HasColumnType("text");
-                entity.Property(e => e.Properties).HasColumnType("text");
-                entity.Property(e => e.TimeStamp).HasColumnType("timestamp");
+                entity.Property(e => e.Level).HasMaxLength(50);
+                entity.Property(e => e.RaiseDate).HasColumnType("timestamp with time zone");
+                entity.Property(e => e.Exception).HasColumnType("text");
+                entity.Property(e => e.Properties).HasColumnType("jsonb");
+                entity.Property(e => e.PropsTest).HasColumnType("jsonb");
+                entity.Property(e => e.MachineName).HasColumnType("text");
             });
 
             modelBuilder.Entity<SharedFolder>(entity =>

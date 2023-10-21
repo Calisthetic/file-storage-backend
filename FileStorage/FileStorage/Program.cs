@@ -6,15 +6,18 @@ using FileStorage.Services.Mappers;
 using FileStorage.Utils;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NpgsqlTypes;
 using Quartz;
+using Serilog.Sinks.PostgreSQL;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Serilog.Sinks.PostgreSQL.ColumnWriters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,6 +99,26 @@ builder.Services.AddQuartz(q =>
 // Health check
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DatabaseConnection")!);
+
+// Serilog to PortgreSQL
+IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
+{
+    { "message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
+    { "message_template", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
+    { "level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
+    { "raise_date", new TimestampColumnWriter(NpgsqlDbType.TimestampTz) },
+    { "exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
+    { "properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
+    { "props_test", new PropertiesColumnWriter(NpgsqlDbType.Jsonb) },
+    { "machine_name", new SinglePropertyColumnWriter("MachineName", PropertyWriteMethod.ToString, NpgsqlDbType.Text, "l") }
+};
+var logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("DatabaseConnection")!.ToString(), "logs", columnWriters, needAutoCreateTable: true)
+    .CreateLogger();
+Log.Information("Start!"); 
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 // Read user claims
 builder.Services.AddHttpContextAccessor();

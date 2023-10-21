@@ -2,7 +2,7 @@
 
 public partial class AccessType : BaseEntity
 {
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public bool CanDownload { get; set; }
 

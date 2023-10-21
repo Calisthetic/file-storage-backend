@@ -261,3 +261,14 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Asp.Versioning.Abstractions.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Asp.Versioning.Http.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Asp.Versioning.Mvc.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.AspNetCore.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.File.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.PeriodicBatching.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.Postgresql.Alternative.dll

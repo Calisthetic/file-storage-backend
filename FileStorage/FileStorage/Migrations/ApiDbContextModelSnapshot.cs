@@ -455,11 +455,15 @@ namespace FileStorage.Migrations
                         .HasColumnName("exception");
 
                     b.Property<string>("Level")
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("level");
 
+                    b.Property<string>("MachineName")
+                        .HasColumnType("text")
+                        .HasColumnName("machine_name");
+
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("message");
 
@@ -468,12 +472,16 @@ namespace FileStorage.Migrations
                         .HasColumnName("message_template");
 
                     b.Property<string>("Properties")
-                        .HasColumnType("text")
+                        .HasColumnType("jsonb")
                         .HasColumnName("properties");
 
-                    b.Property<DateTime?>("TimeStamp")
-                        .HasColumnType("timestamp")
-                        .HasColumnName("time_stamp");
+                    b.Property<string>("PropsTest")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("props_test");
+
+                    b.Property<DateTime?>("RaiseDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("raise_date");
 
                     b.HasKey("Id")
                         .HasName("pk_logs");
