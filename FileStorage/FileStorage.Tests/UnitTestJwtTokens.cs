@@ -33,10 +33,13 @@ namespace FileStorage.Tests
         [Fact]
         public async void TestHmacSha256NormalJwt_Expect200()
         {
+            // arrange
             _client.DefaultRequestHeaders.Accept.Add(
                  new MediaTypeWithQualityHeaderValue("application/json"));
             _client.DefaultRequestHeaders.Add("Authorization", _jwtTokens[0]);
+            // act
             var response = await _client.SendAsync(_request);
+            // assert
             Assert.Equal(200, (int)response.StatusCode);
         }
 

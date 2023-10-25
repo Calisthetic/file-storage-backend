@@ -120,6 +120,7 @@ namespace FileStorage.Data
 
                 entity.HasOne(d => d.User).WithMany(p => p.Emails)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Emails_Users");
             });
 

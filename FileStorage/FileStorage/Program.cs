@@ -18,6 +18,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
+using FileStorage.Main.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,7 +94,17 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
     .ForJob(jobKey)
     .WithIdentity($"{jobKey}-trigger")
-    .WithCronSchedule(builder.Configuration.GetSection("CalculateUsageJob:CronSchedule").Value ?? "0 0 * * * ?"));
+    .WithCronSchedule(builder.Configuration.GetSection("Jobs:CalculateUsageJob:CronSchedule").Value ?? "0 0 0 * * ?"));
+
+    // Delete users
+    var jobKey1 = new JobKey(nameof(DeleteUnverifiedUsersJob));
+
+    q.AddJob<DeleteUnverifiedUsersJob>(opts => opts.WithIdentity(jobKey1));
+
+    q.AddTrigger(opts => opts
+    .ForJob(jobKey1)
+    .WithIdentity($"{jobKey1}-trigger")
+    .WithCronSchedule(builder.Configuration.GetSection("Jobs:DeleteUnverifiedUsersJob:CronSchedule").Value ?? "0 0 * * * ?"));
 });
 
 // Health check
@@ -144,8 +155,7 @@ var dbConfig = new DatabaseConfig();
 builder.Configuration.GetSection("DatabaseConfig").Bind(dbConfig);
 
 // DB context
-builder.Services.AddEntityFrameworkNpgsql()
-    .AddDbContext<ApiDbContext>(opt => {
+builder.Services.AddDbContext<ApiDbContext>(opt => {
         opt.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"), action =>
         {
             action.CommandTimeout(dbConfig.TimeoutTime);

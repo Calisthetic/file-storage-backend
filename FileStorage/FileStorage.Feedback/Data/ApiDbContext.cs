@@ -25,11 +25,6 @@ public partial class ApiDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AppPart>(entity =>
-        {
-            entity.Property(e => e.Name).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<Bug>(entity =>
         {
             entity.Property(e => e.Text).HasMaxLength(50);
