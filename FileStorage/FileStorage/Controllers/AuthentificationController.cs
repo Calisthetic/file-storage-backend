@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace FileStorage.Controllers
 {
@@ -100,14 +101,13 @@ namespace FileStorage.Controllers
 
             // Send email
             var client = new HttpClient();
-            var values = new Dictionary<string, string>
-            {
-                { "email", newEmail.Name },
-                { "url", "https://file-storage-frontend.vercel.app/verify/user/" + verifyCode }
-            };
 
-            var content = new FormUrlEncodedContent(values);
-            var response = await client.PostAsync("http://www.example.com/recepticle.aspx", content);
+            var data = new StringContent(JsonSerializer.Serialize(new { email = newEmail.Name, url = "https://file-storage-frontend.vercel.app/verify/user/" + verifyCode }), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("https://localhost:7009/api/messages/register", data);
+            if (!response.IsSuccessStatusCode)
+            {
+                return BadRequest();
+            }
 
             return Ok(await GenerateToken(newUser));
         }

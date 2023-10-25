@@ -271,12 +271,3 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedbac
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.AspNetCore.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.Formatting.Compact.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.Settings.Configuration.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.Sinks.Console.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.Sinks.Debug.dll
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\Serilog.Sinks.File.dll
