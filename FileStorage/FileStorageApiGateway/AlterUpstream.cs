@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace FileStorageApiGateway
+namespace FileStorage.Web
 {
     public class AlterUpstream
     {

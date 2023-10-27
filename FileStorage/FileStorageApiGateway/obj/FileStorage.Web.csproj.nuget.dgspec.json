@@ -56,6 +56,14 @@
               "target": "Package",
               "version": "[7.0.12, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.13, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[7.0.6, )"
+            },
             "Ocelot": {
               "target": "Package",
               "version": "[20.0.0, )"
@@ -63,6 +71,18 @@
             "Ocelot.Provider.Polly": {
               "target": "Package",
               "version": "[20.0.0, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Serilog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Serilog.Sinks.Postgresql.Alternative": {
+              "target": "Package",
+              "version": "[3.5.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

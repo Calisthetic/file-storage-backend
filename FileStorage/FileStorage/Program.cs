@@ -3,7 +3,6 @@ using FileStorage.Data;
 using FileStorage.Jobs;
 using FileStorage.Services;
 using FileStorage.Services.Mappers;
-using FileStorage.Utils;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +18,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
 using FileStorage.Main.Jobs;
+using FileStorage.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,26 +111,6 @@ builder.Services.AddQuartz(q =>
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DatabaseConnection")!);
 
-// Serilog to PortgreSQL
-IDictionary<string, ColumnWriterBase> columnWriters = new Dictionary<string, ColumnWriterBase>
-{
-    { "message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
-    { "message_template", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
-    { "level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
-    { "raise_date", new TimestampColumnWriter(NpgsqlDbType.TimestampTz) },
-    { "exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
-    { "properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
-    { "props_test", new PropertiesColumnWriter(NpgsqlDbType.Jsonb) },
-    { "machine_name", new SinglePropertyColumnWriter("MachineName", PropertyWriteMethod.ToString, NpgsqlDbType.Text, "l") }
-};
-var logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("DatabaseConnection")!.ToString(), "logs", columnWriters, needAutoCreateTable: true)
-    .CreateLogger();
-Log.Information("Start!"); 
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
-
 // Read user claims
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -176,17 +156,6 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
     opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // null
 });
 
-// CORS
-var MyAllowSpecificOrigins = "MyPolicy";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:3000", "https://file-storage-frontend.vercel.app").AllowAnyHeader().AllowAnyMethod();
-        });
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -213,7 +182,5 @@ app.MapHealthChecks("/healthz", new Microsoft.AspNetCore.Diagnostics.HealthCheck
 app.UseMiddleware<ExceptionHandingMiddleware>();
 
 app.UseResponseCompression();
-
-app.UseCors(MyAllowSpecificOrigins);
 
 app.Run();

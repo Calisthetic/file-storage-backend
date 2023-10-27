@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 
-namespace FileStorage.Utils
+namespace FileStorage.Middleware
 {
     public class ExceptionHandingMiddleware
     {
