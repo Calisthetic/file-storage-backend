@@ -1,5 +1,6 @@
 using FileStorage.Web;
 using FileStorage.Web.Middleware;
+using Microsoft.AspNetCore.Http.Features;
 using MMLib.SwaggerForOcelot.DependencyInjection;
 using NpgsqlTypes;
 using Ocelot.DependencyInjection;
@@ -68,6 +69,17 @@ Log.Information("Start!");
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
+// Remove max upload limit
+builder.Services.Configure<FormOptions>(options =>
+{
+    // Set the limit to 512 MB
+    options.MultipartBodyLengthLimit = 524288000;
+});
+builder.WebHost.ConfigureKestrel((context, options) =>
+{
+    options.Limits.MaxRequestBodySize = 524288000;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -75,7 +87,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
 }
-
 
 app.UseHttpsRedirection();
 

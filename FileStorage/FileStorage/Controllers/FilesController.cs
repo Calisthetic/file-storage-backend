@@ -146,6 +146,9 @@ namespace FileStorage.Controllers
         // POST: api/files
         [HttpPost]
         [ActionName(nameof(PostFile))]
+        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
+        [DisableRequestSizeLimit]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> PostFile([FromForm] FileCreateDto filesData)
         {
             if (_context.Files == null)
@@ -213,8 +216,8 @@ namespace FileStorage.Controllers
                     var newFile = new Models.Db.File()
                     {
                         Name = file.FileName,
-                        FolderId = currentFolder?.Id,
-                        UserId = userId ?? currentFolder.UserId,
+                        FolderId = currentFolder != null ? currentFolder.Id : null,
+                        UserId = userId ?? (currentFolder != null ? currentFolder.UserId : 1),
                         FileTypeId = currentFileType.Id,
                         FileSize = file.Length,
                         IsDeleted = false,

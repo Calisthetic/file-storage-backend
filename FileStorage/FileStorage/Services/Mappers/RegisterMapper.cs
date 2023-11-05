@@ -25,7 +25,7 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.IsElected, r => r.ElectedFolders.Count != 0)
                 .Map(d => d.AccessType, r => r.AccessType == null ? null : r.AccessType.Name)
                 .Map(d => d.Size, r => r.IsDeleted ? 0 : 0)
-                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
+                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, r.CreatedAt.ToString().Length).Replace('T', ' '))
                 .RequireDestinationMemberSource(true);
             config.NewConfig<ViewOfFolder, FolderInfoDto>()
                 .Map(d => d.Token, r => r.Folder.Token)
@@ -37,7 +37,7 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.IsElected, r => r.Folder.ElectedFolders.Count != 0)
                 .Map(d => d.AccessType, r => r.Folder.AccessType == null ? null : r.Folder.AccessType.Name)
                 .Map(d => d.Size, r => r.Folder.IsDeleted ? 0 : 0)
-                .Map(d => d.CreatedAt, r => r.Folder.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
+                .Map(d => d.CreatedAt, r => r.Folder.CreatedAt.ToString().Substring(0, r.CreatedAt.ToString().Length).Replace('T', ' '))
                 .RequireDestinationMemberSource(true);
 
             // Files
@@ -47,7 +47,7 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.Views, r => r.ViewsOfFiles.Count == 0 ? 0 : r.ViewsOfFiles.Count - 1)
                 .Map(d => d.FileType, r => r.FileType.Name)
                 .Map(d => d.IsElected, r => r.ElectedFiles.Count != 0)
-                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
+                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, r.CreatedAt.ToString().Length).Replace('T', ' '))
                 .RequireDestinationMemberSource(true);
             config.NewConfig<Models.Db.File, FileWithFolderInfoDto>()
                 .Map(d => d.FolderName, r => r.Folder == null ? "Main" : r.Folder.Name)
@@ -57,7 +57,7 @@ namespace FileStorage.Services.Mappers
                 .Map(d => d.Views, r => r.ViewsOfFiles.Count == 0 ? 0 : r.ViewsOfFiles.Count - 1)
                 .Map(d => d.FileType, r => r.FileType.Name)
                 .Map(d => d.IsElected, r => r.ElectedFiles.Count != 0)
-                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, 19).Replace('T', ' '))
+                .Map(d => d.CreatedAt, r => r.CreatedAt.ToString().Substring(0, r.CreatedAt.ToString().Length).Replace('T', ' '))
                 .RequireDestinationMemberSource(true);
 
             // Elected

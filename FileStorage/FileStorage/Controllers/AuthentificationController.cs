@@ -38,7 +38,7 @@ namespace FileStorage.Controllers
 
             // Search by (email || username) && password
             var existUser = await _context.Users.Include(x => x.PrimaryEmail)
-                .FirstOrDefaultAsync(x => (x.Username == user.Login || (x.PrimaryEmail != null && x.PrimaryEmail.Name == user.Login)) && x.Password == user.Password);
+                .FirstOrDefaultAsync(x => (x.Username == user.Login || (x.PrimaryEmail != null && x.PrimaryEmail.Name == user.Login)) && x.Password == user.Password && x.IsVerify == true);
             if (existUser == null)
                 return NotFound();
 
@@ -53,7 +53,7 @@ namespace FileStorage.Controllers
                 return new JsonResult("Something went wrong") { StatusCode = 500 };
 
             var existUser = await _context.Users.Include(x => x.PrimaryEmail)
-                .FirstOrDefaultAsync(x => x.PrimaryEmail != null && x.PrimaryEmail.Name == user.Email && x.Password == user.Password);
+                .FirstOrDefaultAsync(x => x.PrimaryEmail != null && x.PrimaryEmail.Name == user.Email && x.Password == user.Password && x.IsVerify == true);
             if (existUser != null)
             {
                 return BadRequest(new { Message = "User already exists" });
@@ -153,10 +153,10 @@ namespace FileStorage.Controllers
         [HttpPatch("verify/{code}")]
         public async Task<IActionResult> VerifyUserSignup(string code)
         {
-            var currentUser = await _context.Users.Include(x => x.PrimaryEmail).FirstOrDefaultAsync(x => x.VerifyCode == code);
-            if (currentUser == null || currentUser.PrimaryEmail is null)
+            var currentUser = await _context.Users.Include(x => x.PrimaryEmail).FirstOrDefaultAsync(x => x.VerifyCode == code && x.IsVerify == false);
+            if (currentUser == null || currentUser.PrimaryEmail == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             currentUser.IsVerify = true;

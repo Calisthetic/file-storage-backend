@@ -8,17 +8,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using NpgsqlTypes;
 using Quartz;
-using Serilog.Sinks.PostgreSQL;
-using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Serilog.Sinks.PostgreSQL.ColumnWriters;
 using FileStorage.Main.Jobs;
 using FileStorage.Middleware;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -156,6 +154,17 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
     opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // null
 });
 
+// Remove max upload limit
+builder.Services.Configure<FormOptions>(options =>
+{
+    // Set the limit to 512 MB
+    options.MultipartBodyLengthLimit = 524288000;
+});
+builder.WebHost.ConfigureKestrel((context, options) =>
+{
+    options.Limits.MaxRequestBodySize = 524288000;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -179,7 +188,7 @@ app.MapHealthChecks("/healthz", new Microsoft.AspNetCore.Diagnostics.HealthCheck
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.UseMiddleware<ExceptionHandingMiddleware>();
+//app.UseMiddleware<ExceptionHandingMiddleware>();
 
 app.UseResponseCompression();
 

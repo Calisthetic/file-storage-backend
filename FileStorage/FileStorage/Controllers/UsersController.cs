@@ -29,57 +29,29 @@ namespace FileStorage.Controllers
             _userService = userService;
         }
 
-        // GET: api/users
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetUsers()
-        {
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
-            return await _mapper.From(_context.Users.Include(x => x.PrimaryEmail)).ProjectToType<UserInfoDto>().ToListAsync();
-        }
-        // GET: api/users
-        [HttpGet("test")]
+        [HttpGet("usage")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetUsersTest()
+        public async Task<IActionResult> GetUserUsage()
         {
-            if (_context.Users == null)
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
             {
-                return NotFound();
-            }
-            return await _mapper.From(_context.Users.Include(x => x.PrimaryEmail)).ProjectToType<UserInfoDto>().ToListAsync();
-        }
-
-        // GET: api/users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
-        {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
+                return Unauthorized();
             }
 
-            return user;
+            var size = await _context.Files.Where(x => (x.Folder != null && x.Folder.UserId == userId) || (x.UserId == userId && x.FolderId == null)).SumAsync(x => x.FileSize);
+            return Ok(new { Size = size });
         }
 
         [HttpPatch("profile")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PathUserProfile(UserPatchProfileDto newData)
         {
-
             if (!int.TryParse(_userService.GetUserId(), out int userId))
             {
                 return Unauthorized();
             }
 
-            var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId && x.IsVerify == true);
             if (currentUser == null)
             {
                 return Unauthorized();
@@ -111,7 +83,7 @@ namespace FileStorage.Controllers
                 return BadRequest("Wrong date type");
             }
 
-            var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId && x.IsVerify == true);
             if (currentUser == null)
             {
                 return Unauthorized();

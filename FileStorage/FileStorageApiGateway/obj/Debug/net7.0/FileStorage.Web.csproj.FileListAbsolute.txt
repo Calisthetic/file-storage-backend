@@ -98,3 +98,4 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGatew
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\Serilog.Sinks.Postgresql.Alternative.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\web.config

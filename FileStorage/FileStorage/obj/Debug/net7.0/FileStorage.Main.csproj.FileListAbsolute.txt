@@ -272,3 +272,4 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.File.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.PeriodicBatching.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.Postgresql.Alternative.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\web.config
