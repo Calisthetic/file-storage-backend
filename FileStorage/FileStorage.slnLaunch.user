@@ -1,0 +1,23 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Name": "FileStorage\\FileStorage.Main.csproj",
+        "Action": "Start"
+      },
+      {
+        "Name": "FileStorageApiGateway\\FileStorage.Web.csproj",
+        "Action": "Start"
+      },
+      {
+        "Name": "FileStorage.EmailMessaging\\FileStorage.EmailMessaging.csproj",
+        "Action": "Start"
+      },
+      {
+        "Name": "FileStorage.Feedback\\FileStorage.Feedback.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

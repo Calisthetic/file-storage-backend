@@ -77,7 +77,6 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedbac
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\staticwebassets.development.json
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\scopedcss\bundle\FileStorage.Feedback.styles.css
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\FileStorage.Feedback.csproj.CopyComplete
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\FileStorage.Feedback.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\refint\FileStorage.Feedback.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\FileStorage.Feedback.pdb
@@ -271,3 +270,5 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedbac
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\bin\Debug\net7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\FileStorage.Feedback.sourcelink.json
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Feedback\obj\Debug\net7.0\FileStor.DAD5AAC1.Up2Date

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj": {}
+    "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj": {
+    "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
+        "projectUniqueName": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
         "projectName": "FileStorage.Main",
-        "projectPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
+        "projectPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\obj\\",
+        "outputPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -38,6 +38,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -114,7 +119,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[7.0.10, )"
+              "version": "[7.0.12, )"
             },
             "Npgsql": {
               "target": "Package",
@@ -176,7 +181,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

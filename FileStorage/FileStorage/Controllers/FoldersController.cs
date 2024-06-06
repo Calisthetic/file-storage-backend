@@ -827,6 +827,8 @@ namespace FileStorage.Controllers
             if (userId == currentFolder.UserId || (currentFolder.AccessType != null &&
                 currentFolder.AccessType.RequireAuth == false && currentFolder.AccessType.CanEdit == true))
             {
+                var filesInside = _context.Files.Where(x => x.FolderId == currentFolder.Id).ToList();
+                _context.RemoveRange(filesInside);
                 _context.Remove(currentFolder);
                 await _context.SaveChangesAsync();
                 return NoContent();

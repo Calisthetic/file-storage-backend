@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "e10PP8VVSAxrm2qIJtGrC0+GwHTvwLPEROGGaxZyWY0AHIklAy2IdqT5pYHC/XV8s/qyjiESbuGoy7KUJvJdFg==",
+  "dgSpecHash": "0+8dAzlzma5Vp2tSnlrVCSX4pIwEHlCq8pBMowsMRdW16+FlKoJhfBSAB2carbR+ExYGXd/jmjoOHMR4/RSz+A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage.EmailMessaging\\FileStorage.EmailMessaging.csproj",
+  "projectFilePath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage.EmailMessaging\\FileStorage.EmailMessaging.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\mailkit\\4.2.0\\mailkit.4.2.0.nupkg.sha512",

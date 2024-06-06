@@ -58,7 +58,7 @@ namespace FileStorage.Controllers
                 ).ProjectToType<FolderInfoDto>().ToListAsync();
 
                 var files = await _mapper.From(
-                    _context.Files.Where(x => x.UserId == userId && x.FolderId == null && x.IsDeleted == true)
+                    _context.Files.Where(x => x.UserId == userId && x.IsDeleted == true)
                     .Include(x => x.DownloadsOfFiles)
                     .Include(x => x.ViewsOfFiles.Where(x => x.UserId != userId))
                     .Include(x => x.ElectedFiles.Where(x => x.UserId == userId))

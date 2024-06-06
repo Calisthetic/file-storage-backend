@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZHqBtq2rkuM5Z/SHzhvPRpNa782cNMdxjk5f3BXOanZofRIcB8RkQLjfCuHcBQFqlfy3lTRxVHwYxq+u+NZpHQ==",
+  "dgSpecHash": "SsqjDXCdpBT5GcFWzTbr7B+yXYqexYbpjBRCvxh7oFSkv49Gd/QIr5t9ojI6kuD4cz4OdICFkl80xHOXXdnIKw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj",
+  "projectFilePath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\asp.versioning.abstractions\\7.0.0\\asp.versioning.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\asp.versioning.http\\7.1.0\\asp.versioning.http.7.1.0.nupkg.sha512",

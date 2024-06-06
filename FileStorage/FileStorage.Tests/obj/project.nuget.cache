@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "j6ZMpxUZxMarFd9qVfRsMm7lrBhWyd16xkpLkwQbKc6sDvDetFZHvabN3wfHpJLC+/cAzQ7cF4Nd8xuOvAgwaw==",
+  "dgSpecHash": "7JBBweNrfDAOVUG/u29ByS+BUlA5HERt32KxPA88+/BQYX5iyNcpqZLtyI6UUZ5wDmemMqqmiDxjOsIXq7K05Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage.Tests\\FileStorage.Tests.csproj",
+  "projectFilePath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage.Tests\\FileStorage.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.codecoverage\\17.7.2\\microsoft.codecoverage.17.7.2.nupkg.sha512",

@@ -25,7 +25,6 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMe
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\staticwebassets.development.json
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\scopedcss\bundle\FileStorage.EmailMessaging.styles.css
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\FileStorage.EmailMessaging.csproj.CopyComplete
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\FileStorage.EmailMessaging.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\refint\FileStorage.EmailMessaging.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\FileStorage.EmailMessaging.pdb
@@ -36,3 +35,5 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMe
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\bin\Debug\net7.0\MimeKit.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\bin\Debug\net7.0\System.Security.Cryptography.Pkcs.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\FileStorage.EmailMessaging.sourcelink.json
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.EmailMessaging\obj\Debug\net7.0\FileStor.8AA4A2E7.Up2Date

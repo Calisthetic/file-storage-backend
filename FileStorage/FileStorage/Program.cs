@@ -46,9 +46,9 @@ var tokenValidationParameter = new TokenValidationParameters()
 {
     ValidateIssuerSigningKey = true,
     IssuerSigningKey = new SymmetricSecurityKey(key),
-    ValidateIssuer = false, // for dev
-    ValidateAudience = false, // for dev
-    RequireExpirationTime = false, // no refresh tokens
+    ValidateIssuer = false,
+    ValidateAudience = false,
+    RequireExpirationTime = false,
     ValidateLifetime = false,
     ClockSkew = TimeSpan.Zero,
 };
@@ -188,7 +188,7 @@ app.MapHealthChecks("/healthz", new Microsoft.AspNetCore.Diagnostics.HealthCheck
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-//app.UseMiddleware<ExceptionHandingMiddleware>();
+app.UseMiddleware<ExceptionHandingMiddleware>();
 
 app.UseResponseCompression();
 

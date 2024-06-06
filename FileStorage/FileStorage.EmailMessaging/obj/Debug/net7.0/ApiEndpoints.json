@@ -1,0 +1,18 @@
+[
+  {
+    "ContainingType": "FileStorage.EmailMessaging.Controllers.MessagesController",
+    "Method": "PostMessage",
+    "RelativePath": "api/messages/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "data",
+        "Type": "FileStorage.EmailMessaging.Models.Incoming.MessageRegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

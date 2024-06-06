@@ -252,7 +252,6 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\staticwebassets.development.json
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\scopedcss\bundle\FileStorage.Main.styles.css
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStorage.Main.csproj.CopyComplete
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStorage.Main.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\refint\FileStorage.Main.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStorage.Main.pdb
@@ -273,3 +272,5 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Deb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.PeriodicBatching.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\Serilog.Sinks.Postgresql.Alternative.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\bin\Debug\net7.0\web.config
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStorage.Main.sourcelink.json
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage\obj\Debug\net7.0\FileStor.07933268.Up2Date

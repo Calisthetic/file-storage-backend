@@ -6960,11 +6960,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\FileStorage.Web.csproj",
+      "projectUniqueName": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\FileStorage.Web.csproj",
       "projectName": "FileStorage.Web",
-      "projectPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\FileStorage.Web.csproj",
+      "projectPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\FileStorage.Web.csproj",
       "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\obj\\",
+      "outputPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6991,6 +6991,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -7061,8 +7066,20 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Npgsql' 7.0.6 has a known high severity vulnerability, https://github.com/advisories/GHSA-x9vc-6hfv-hg8c",
+      "libraryId": "Npgsql",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
 }

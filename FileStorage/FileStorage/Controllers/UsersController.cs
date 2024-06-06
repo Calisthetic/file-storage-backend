@@ -42,6 +42,19 @@ namespace FileStorage.Controllers
             return Ok(new { Size = size });
         }
 
+        [HttpGet("info")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<UserInfoDto>> GetUserInfo()
+        {
+            if (!int.TryParse(_userService.GetUserId(), out int userId))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _context.Users.Include(x => x.PrimaryEmail).FirstOrDefaultAsync(x => x.Id == userId);
+            return user == null ? NotFound() : Ok(user.Adapt<UserInfoDto>());
+        }
+
         [HttpPatch("profile")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PathUserProfile(UserPatchProfileDto newData)

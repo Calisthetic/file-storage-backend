@@ -24,7 +24,7 @@
           "Microsoft.EntityFrameworkCore.Tools": "7.0.12",
           "Microsoft.IdentityModel.JsonWebTokens": "7.0.3",
           "Microsoft.IdentityModel.Tokens": "7.0.3",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.10",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.12",
           "Npgsql": "7.0.6",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.11",
           "Quartz.Extensions.DependencyInjection": "3.7.0",
@@ -1219,7 +1219,7 @@
           }
         }
       },
-      "Microsoft.DotNet.Scaffolding.Shared/7.0.10": {
+      "Microsoft.DotNet.Scaffolding.Shared/7.0.12": {
         "dependencies": {
           "Humanizer": "2.14.1",
           "Microsoft.CodeAnalysis.CSharp.Features": "4.4.0",
@@ -1228,8 +1228,8 @@
         },
         "runtime": {
           "lib/net7.0/Microsoft.DotNet.Scaffolding.Shared.dll": {
-            "assemblyVersion": "7.0.10.0",
-            "fileVersion": "7.0.1023.46102"
+            "assemblyVersion": "7.0.12.0",
+            "fileVersion": "7.0.1224.11208"
           }
         }
       },
@@ -1487,92 +1487,92 @@
           }
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration/7.0.10": {
+      "Microsoft.VisualStudio.Web.CodeGeneration/7.0.12": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "7.0.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore": "7.0.10"
+          "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore": "7.0.12"
         },
         "runtime": {
           "lib/net7.0/Microsoft.VisualStudio.Web.CodeGeneration.dll": {
-            "assemblyVersion": "7.0.10.0",
-            "fileVersion": "7.0.1023.46102"
+            "assemblyVersion": "7.0.12.0",
+            "fileVersion": "7.0.1224.11208"
           }
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Core/7.0.10": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Core/7.0.12": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "7.0.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "7.0.10",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "7.0.12",
           "Newtonsoft.Json": "13.0.1"
         },
         "runtime": {
           "lib/net7.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll": {
-            "assemblyVersion": "7.0.10.0",
-            "fileVersion": "7.0.1023.46102"
+            "assemblyVersion": "7.0.12.0",
+            "fileVersion": "7.0.1224.11208"
           }
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design/7.0.10": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design/7.0.12": {
         "dependencies": {
-          "Microsoft.DotNet.Scaffolding.Shared": "7.0.10",
-          "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "7.0.10"
+          "Microsoft.DotNet.Scaffolding.Shared": "7.0.12",
+          "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": "7.0.12"
         },
         "runtime": {
           "lib/net7.0/dotnet-aspnet-codegenerator-design.dll": {
-            "assemblyVersion": "7.0.10.0",
-            "fileVersion": "7.0.1023.46102"
+            "assemblyVersion": "7.0.12.0",
+            "fileVersion": "7.0.1224.11208"
           }
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/7.0.10": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/7.0.12": {
         "dependencies": {
-          "Microsoft.DotNet.Scaffolding.Shared": "7.0.10",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Core": "7.0.10"
+          "Microsoft.DotNet.Scaffolding.Shared": "7.0.12",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Core": "7.0.12"
         },
         "runtime": {
           "lib/net7.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll": {
-            "assemblyVersion": "7.0.10.0",
-            "fileVersion": "7.0.1023.46102"
+            "assemblyVersion": "7.0.12.0",
+            "fileVersion": "7.0.1224.11208"
           }
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Templating/7.0.10": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Templating/7.0.12": {
         "dependencies": {
           "Microsoft.AspNetCore.Razor.Language": "6.0.11",
           "Microsoft.CodeAnalysis.CSharp": "4.4.0",
           "Microsoft.CodeAnalysis.Razor": "6.0.11",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Utils": "7.0.10"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Utils": "7.0.12"
         },
         "runtime": {
           "lib/net7.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll": {
-            "assemblyVersion": "7.0.10.0",
-            "fileVersion": "7.0.1023.46102"
+            "assemblyVersion": "7.0.12.0",
+            "fileVersion": "7.0.1224.11208"
           }
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGeneration.Utils/7.0.10": {
+      "Microsoft.VisualStudio.Web.CodeGeneration.Utils/7.0.12": {
         "dependencies": {
           "Microsoft.Build": "17.3.2",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.4.0",
-          "Microsoft.DotNet.Scaffolding.Shared": "7.0.10",
+          "Microsoft.DotNet.Scaffolding.Shared": "7.0.12",
           "Newtonsoft.Json": "13.0.1"
         },
         "runtime": {
           "lib/net7.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll": {
-            "assemblyVersion": "7.0.10.0",
-            "fileVersion": "7.0.1023.46102"
+            "assemblyVersion": "7.0.12.0",
+            "fileVersion": "7.0.1224.11208"
           }
         }
       },
-      "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/7.0.10": {
+      "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/7.0.12": {
         "dependencies": {
-          "Microsoft.DotNet.Scaffolding.Shared": "7.0.10",
-          "Microsoft.VisualStudio.Web.CodeGeneration": "7.0.10"
+          "Microsoft.DotNet.Scaffolding.Shared": "7.0.12",
+          "Microsoft.VisualStudio.Web.CodeGeneration": "7.0.12"
         },
         "runtime": {
           "lib/net7.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll": {
-            "assemblyVersion": "7.0.10.0",
-            "fileVersion": "7.0.1023.46102"
+            "assemblyVersion": "7.0.12.0",
+            "fileVersion": "7.0.1224.11208"
           }
         }
       },
@@ -3411,12 +3411,12 @@
       "path": "microsoft.diasymreader/1.4.0",
       "hashPath": "microsoft.diasymreader.1.4.0.nupkg.sha512"
     },
-    "Microsoft.DotNet.Scaffolding.Shared/7.0.10": {
+    "Microsoft.DotNet.Scaffolding.Shared/7.0.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-m6+MmjRbregd3+KzzUZHl6JA9C0KD9GC4WnQ9YpfP7fx6187HGhRVX2ctwVUmp6vY9LHtZ8+WEJG2Eu0G4J8OQ==",
-      "path": "microsoft.dotnet.scaffolding.shared/7.0.10",
-      "hashPath": "microsoft.dotnet.scaffolding.shared.7.0.10.nupkg.sha512"
+      "sha512": "sha512-p6NxvJNQy6+6imSO0HkRKPqwOhRUIbAkW78qFLIAvbasuh9vbcJKbO+gBks0phHBu4xVse0n7rdOxvp+DM+kbA==",
+      "path": "microsoft.dotnet.scaffolding.shared/7.0.12",
+      "hashPath": "microsoft.dotnet.scaffolding.shared.7.0.12.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore/7.0.12": {
       "type": "package",
@@ -3649,54 +3649,54 @@
       "path": "microsoft.openapi/1.4.3",
       "hashPath": "microsoft.openapi.1.4.3.nupkg.sha512"
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration/7.0.10": {
+    "Microsoft.VisualStudio.Web.CodeGeneration/7.0.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-woqv1Q8JABOO5Asr9A9DPBglKIFjnq+/Mc8HItMpVDXAYTq0l2VG4Jzvk6UG5XBbK4xgvM0+vFRmOaXx/HOVBw==",
-      "path": "microsoft.visualstudio.web.codegeneration/7.0.10",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.7.0.10.nupkg.sha512"
+      "sha512": "sha512-PtklpPK9F+VKE+fkrsrT///HQ8B8vheianprB9wQLNASH4O/IXDzf4LDRRDFhyofW8RSSf3eujsmu+s74CylKA==",
+      "path": "microsoft.visualstudio.web.codegeneration/7.0.12",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.7.0.12.nupkg.sha512"
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Core/7.0.10": {
+    "Microsoft.VisualStudio.Web.CodeGeneration.Core/7.0.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-UTRU0EtlkVI7ii5BQ3u8azoCTsdUMRtkMLlTG9XS7cps/kCeHia4Cn96Hwq+G37lk/eEzl1fPWgwuMX4MC9yfA==",
-      "path": "microsoft.visualstudio.web.codegeneration.core/7.0.10",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.core.7.0.10.nupkg.sha512"
+      "sha512": "sha512-g1LXpZjFXUT1xLMNP66UCsbr1FTSUFgffaCpXgHTSgJvqTxRVRWz8g9VMaCKDMs+I3HrdTk3k4Eyv6CbParb5Q==",
+      "path": "microsoft.visualstudio.web.codegeneration.core/7.0.12",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.core.7.0.12.nupkg.sha512"
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Design/7.0.10": {
+    "Microsoft.VisualStudio.Web.CodeGeneration.Design/7.0.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-A9zDdvXjB6Kg0bbYKNBN9SjquGRpxeQo5oD1LGsrHRjGRPn00QHTrAGJI9NGQNgBc7CIi4LKHMsTgxVL77w3WA==",
-      "path": "microsoft.visualstudio.web.codegeneration.design/7.0.10",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.design.7.0.10.nupkg.sha512"
+      "sha512": "sha512-qTWYdxikSxuDYVX5WEf6nnEzxB01uKbAqwKz6hDEKn46GxixqSCpFPUyP5poqEuoPfL/wtIAIqfsZeipJzgFzA==",
+      "path": "microsoft.visualstudio.web.codegeneration.design/7.0.12",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.design.7.0.12.nupkg.sha512"
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/7.0.10": {
+    "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore/7.0.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-wgmdnxD3SQyfvDIYk5JEz6A30hosAkHcb00ozmy02sxj5gxy9DXi5tBcFocIXMFlbvXRfSo/qyy/yF3pNq3hCQ==",
-      "path": "microsoft.visualstudio.web.codegeneration.entityframeworkcore/7.0.10",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.entityframeworkcore.7.0.10.nupkg.sha512"
+      "sha512": "sha512-8YOZppLvbATiZZBh9fn55pqdiN9cepsReszIvUzrbrGjLRDlcNwhtpgHAP77a7tVzuCavs8O8ak1jg3umcJI6w==",
+      "path": "microsoft.visualstudio.web.codegeneration.entityframeworkcore/7.0.12",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.entityframeworkcore.7.0.12.nupkg.sha512"
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Templating/7.0.10": {
+    "Microsoft.VisualStudio.Web.CodeGeneration.Templating/7.0.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-4ljx3V6hjdiy1n2UApGQiXx1u7RBB89uyT6zg/R1lziwh/vVXKMwokpg9MdH9r+YNrW3tPE7CbRlo3bSiXC/mg==",
-      "path": "microsoft.visualstudio.web.codegeneration.templating/7.0.10",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.templating.7.0.10.nupkg.sha512"
+      "sha512": "sha512-XEolQ6OAihwhx0QiIWrqDbX1lXh1U2YQ33EcsPKvpzkIe+zZ7/eUGJAQELuAUYxMrPGNOZgNLYV2pelZoi2lcQ==",
+      "path": "microsoft.visualstudio.web.codegeneration.templating/7.0.12",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.templating.7.0.12.nupkg.sha512"
     },
-    "Microsoft.VisualStudio.Web.CodeGeneration.Utils/7.0.10": {
+    "Microsoft.VisualStudio.Web.CodeGeneration.Utils/7.0.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-0lcG9iu5HGOBdTd3Mn3Pb+Vj824fLTU20GQgefDUgV3+asn7gpWV7/SMSPvgROnpllDHMGjBL78d00bcNRciLA==",
-      "path": "microsoft.visualstudio.web.codegeneration.utils/7.0.10",
-      "hashPath": "microsoft.visualstudio.web.codegeneration.utils.7.0.10.nupkg.sha512"
+      "sha512": "sha512-uH/d7udY6eefM3uGBaPK0vzO6daJ0x6EKbaEPzNj6WVlVmNIpeu2uyPvMylasEek4E+7rKR170Q4o9tMCdCi2Q==",
+      "path": "microsoft.visualstudio.web.codegeneration.utils/7.0.12",
+      "hashPath": "microsoft.visualstudio.web.codegeneration.utils.7.0.12.nupkg.sha512"
     },
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/7.0.10": {
+    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc/7.0.12": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-0F5Ud5wkphBc5CW9lOkGiQbWgapqT7BmwCo4CuL8NuOtti/8ZN5OwI1miHWKdnKajEyovTs3sV1jxp39hy6XKg==",
-      "path": "microsoft.visualstudio.web.codegenerators.mvc/7.0.10",
-      "hashPath": "microsoft.visualstudio.web.codegenerators.mvc.7.0.10.nupkg.sha512"
+      "sha512": "sha512-Yw48qBzGmQsX9Mj1rCQuOSnO590wF/OGuLSVX5FEdaED36+qlAtRVFDb48oL7O5HZEDyR0kln3+y1tgewxM3oA==",
+      "path": "microsoft.visualstudio.web.codegenerators.mvc/7.0.12",
+      "hashPath": "microsoft.visualstudio.web.codegenerators.mvc.7.0.12.nupkg.sha512"
     },
     "Microsoft.Win32.Primitives/4.3.0": {
       "type": "package",

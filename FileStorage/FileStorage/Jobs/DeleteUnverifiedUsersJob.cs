@@ -19,8 +19,10 @@ public class DeleteUnverifiedUsersJob : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         _logger.LogInformation("Unverified users have been deleted");
-        await _context.Users.Where(x => x.IsVerify == false && x.CreatedAt < DateTime.Now.AddHours(-1)).ExecuteUpdateAsync(s => s.SetProperty(x => x.PrimaryEmailId, (int?)null));
-        await _context.Users.Where(x => x.IsVerify == false && x.CreatedAt < DateTime.Now.AddHours(-1)).ExecuteDeleteAsync();
+        await _context.Users.Where(x => x.IsVerify == false && 
+        x.CreatedAt < DateTime.Now.AddHours(-1)).ExecuteUpdateAsync(s => s.SetProperty(x => x.PrimaryEmailId, (int?)null));
+        await _context.Users.Where(x => x.IsVerify == false && 
+        x.CreatedAt < DateTime.Now.AddHours(-1)).ExecuteDeleteAsync();
         
         return;
     }

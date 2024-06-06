@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hliyaN+Q4oS3zF8uXtfm97XgQQ+FMjB7E7XhKDHj7IC6CI8fZoisg0MDkSvtLXAwqLgpJgiPDc3HMPTjJcWh7Q==",
+  "dgSpecHash": "EWXrE7rwEHqgHfUufkXTt4pwamjHTODBJJp5sNkGSZ1GS2rMwhlWHYqcdlb8fb93ikH44EQp5/fmSKhyUhFqgQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
+  "projectFilePath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\asp.versioning.abstractions\\7.0.0\\asp.versioning.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\asp.versioning.http\\7.1.0\\asp.versioning.http.7.1.0.nupkg.sha512",
@@ -84,7 +84,7 @@
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.codeanalysis.scripting.common\\4.4.0\\microsoft.codeanalysis.scripting.common.4.4.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.codeanalysis.workspaces.common\\4.4.0\\microsoft.codeanalysis.workspaces.common.4.4.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.diasymreader\\1.4.0\\microsoft.diasymreader.1.4.0.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.dotnet.scaffolding.shared\\7.0.10\\microsoft.dotnet.scaffolding.shared.7.0.10.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.dotnet.scaffolding.shared\\7.0.12\\microsoft.dotnet.scaffolding.shared.7.0.12.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.12\\microsoft.entityframeworkcore.7.0.12.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.12\\microsoft.entityframeworkcore.abstractions.7.0.12.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.12\\microsoft.entityframeworkcore.analyzers.7.0.12.nupkg.sha512",
@@ -118,13 +118,13 @@
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\7.0.10\\microsoft.visualstudio.web.codegeneration.7.0.10.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.core\\7.0.10\\microsoft.visualstudio.web.codegeneration.core.7.0.10.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.design\\7.0.10\\microsoft.visualstudio.web.codegeneration.design.7.0.10.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.entityframeworkcore\\7.0.10\\microsoft.visualstudio.web.codegeneration.entityframeworkcore.7.0.10.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.templating\\7.0.10\\microsoft.visualstudio.web.codegeneration.templating.7.0.10.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.utils\\7.0.10\\microsoft.visualstudio.web.codegeneration.utils.7.0.10.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegenerators.mvc\\7.0.10\\microsoft.visualstudio.web.codegenerators.mvc.7.0.10.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\7.0.12\\microsoft.visualstudio.web.codegeneration.7.0.12.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.core\\7.0.12\\microsoft.visualstudio.web.codegeneration.core.7.0.12.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.design\\7.0.12\\microsoft.visualstudio.web.codegeneration.design.7.0.12.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.entityframeworkcore\\7.0.12\\microsoft.visualstudio.web.codegeneration.entityframeworkcore.7.0.12.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.templating\\7.0.12\\microsoft.visualstudio.web.codegeneration.templating.7.0.12.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.utils\\7.0.12\\microsoft.visualstudio.web.codegeneration.utils.7.0.12.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.visualstudio.web.codegenerators.mvc\\7.0.12\\microsoft.visualstudio.web.codegenerators.mvc.7.0.12.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
@@ -260,5 +260,36 @@
     "C:\\Users\\admin\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Microsoft.IdentityModel.JsonWebTokens' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52",
+      "libraryId": "Microsoft.IdentityModel.JsonWebTokens",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Npgsql' 7.0.6 has a known high severity vulnerability, https://github.com/advisories/GHSA-x9vc-6hfv-hg8c",
+      "libraryId": "Npgsql",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.IdentityModel.Tokens.Jwt' 7.0.3 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52",
+      "libraryId": "System.IdentityModel.Tokens.Jwt",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    }
+  ]
 }

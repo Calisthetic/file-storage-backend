@@ -75,7 +75,6 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGatew
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\staticwebassets.development.json
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\scopedcss\bundle\FileStorage.Web.styles.css
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\FileStorage.Web.csproj.CopyComplete
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\FileStorage.Web.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\refint\FileStorage.Web.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\FileStorage.Web.pdb
@@ -99,3 +98,5 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGatew
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\bin\Debug\net7.0\web.config
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\FileStorage.Web.sourcelink.json
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorageApiGateway\obj\Debug\net7.0\FileStor.03153051.Up2Date

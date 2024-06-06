@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj": {}
+    "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj": {
+    "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj",
+        "projectUniqueName": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj",
         "projectName": "FileStorage.Feedback",
-        "projectPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj",
+        "projectPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\FileStorage.Feedback.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\obj\\",
+        "outputPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage.Feedback\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -38,6 +38,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -136,7 +141,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

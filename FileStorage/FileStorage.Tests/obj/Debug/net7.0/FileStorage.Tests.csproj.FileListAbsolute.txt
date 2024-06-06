@@ -91,9 +91,10 @@ C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\o
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStorage.Tests.AssemblyInfoInputs.cache
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStorage.Tests.AssemblyInfo.cs
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStorage.Tests.csproj.CoreCompileInputs.cache
-C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStorage.Tests.csproj.CopyComplete
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStorage.Tests.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\refint\FileStorage.Tests.dll
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStorage.Tests.pdb
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStorage.Tests.genruntimeconfig.cache
 C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\ref\FileStorage.Tests.dll
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStorage.Tests.sourcelink.json
+C:\Users\admin\Source\Repos\file-storage-backend\FileStorage\FileStorage.Tests\obj\Debug\net7.0\FileStor.E6F090C5.Up2Date
