@@ -165,6 +165,17 @@ builder.WebHost.ConfigureKestrel((context, options) =>
     options.Limits.MaxRequestBodySize = 524288000;
 });
 
+// CORS
+//var MyAllowSpecificOrigins = "MyPolicy";
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(name: MyAllowSpecificOrigins,
+//        policy =>
+//        {
+//            policy.WithOrigins("http://localhost:3000", "https://file-storage-frontend.vercel.app").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+//        });
+//});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -181,6 +192,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Added
+//app.UseCors(MyAllowSpecificOrigins);
+
 app.UseAuthentication();
 
 app.MapHealthChecks("/healthz", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions

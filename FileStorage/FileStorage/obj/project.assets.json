@@ -12477,7 +12477,7 @@
       "projectName": "FileStorage.Main",
       "projectPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage\\FileStorage.Main.csproj",
       "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorage\\obj\\",
+      "outputPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorage\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

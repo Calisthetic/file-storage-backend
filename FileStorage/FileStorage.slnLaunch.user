@@ -8,15 +8,18 @@
       },
       {
         "Name": "FileStorageApiGateway\\FileStorage.Web.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": ""
       },
       {
         "Name": "FileStorage.EmailMessaging\\FileStorage.EmailMessaging.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": ""
       },
       {
         "Name": "FileStorage.Feedback\\FileStorage.Feedback.csproj",
-        "Action": "Start"
+        "Action": "Start",
+        "DebugTarget": ""
       }
     ]
   }

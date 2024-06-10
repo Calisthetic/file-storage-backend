@@ -6964,7 +6964,7 @@
       "projectName": "FileStorage.Web",
       "projectPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\FileStorage.Web.csproj",
       "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\obj\\",
+      "outputPath": "C:\\Users\\admin\\Source\\Repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

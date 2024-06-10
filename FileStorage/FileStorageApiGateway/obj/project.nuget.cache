@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "EQTngG1iABPSHZ/fmL/0/pbVFhOHikQEuAngwlQAvaWZS7cuZRh8Qmywv4n4T0fb7VzsO+WiIX90716Xnnt+eg==",
+  "dgSpecHash": "Ou1wJh/EFSV7dR14Ud0XPzKeYJ3UbTYCIe+85LL78VBprwUBWRUEl230KhH2OreQkTV5rsyJ4//LqkdydX5qhg==",
   "success": true,
   "projectFilePath": "C:\\Users\\admin\\source\\repos\\file-storage-backend\\FileStorage\\FileStorageApiGateway\\FileStorage.Web.csproj",
   "expectedPackageFiles": [

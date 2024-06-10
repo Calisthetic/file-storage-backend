@@ -44,7 +44,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000", "https://file-storage-frontend.vercel.app").AllowAnyHeader().AllowAnyMethod();
+            policy.WithOrigins("http://localhost:3000", "https://*.vercel.app", "https://file-storage-frontend.vercel.app", "https://file-storage-frontend.vercel.app/")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin()
+            .SetIsOriginAllowed(x => true)
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
         });
 });
 

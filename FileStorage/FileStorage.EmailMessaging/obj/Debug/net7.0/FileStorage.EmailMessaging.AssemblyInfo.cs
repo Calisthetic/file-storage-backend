@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FileStorage.EmailMessaging")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aabf779004c8bfbc19d04444dd3002449cacf371")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8d56778cd823a38a359fd5e8603c5ee38a138fec")]
 [assembly: System.Reflection.AssemblyProductAttribute("FileStorage.EmailMessaging")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FileStorage.EmailMessaging")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
